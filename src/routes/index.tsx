@@ -19,6 +19,7 @@ import {
   MessageCircle,
   MoonStar,
   Phone,
+  ShieldAlert,
   ShieldCheck,
   Sparkles,
   Users,
@@ -115,7 +116,7 @@ function ActionLink({
   className?: string;
 }) {
   const styles = {
-    primary: "bg-action text-action-foreground shadow-action hover:bg-action-hover",
+    primary: "bg-gradient-to-r from-primary via-action to-primary animate-chroma text-white shadow-premium hover:shadow-[0_0_20px_rgba(var(--action),0.4)] border border-white/20 backdrop-blur-md",
     outline: "border border-hero-border bg-hero-glass text-hero-foreground backdrop-blur-md hover:bg-hero-glass-hover",
     whatsapp: "bg-whatsapp text-whatsapp-foreground hover:bg-whatsapp-hover",
   };
@@ -125,7 +126,7 @@ function ActionLink({
       className={`group relative overflow-hidden inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-bold transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${styles[variant]} ${className}`}
     >
       {variant === "primary" && (
-        <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+        <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
       )}
       <span className="relative flex items-center gap-2">{children}</span>
     </a>
@@ -135,11 +136,17 @@ function ActionLink({
 function Brand({ light = false }: { light?: boolean }) {
   return (
     <a href="#top" className={`flex items-center gap-3 ${light ? "text-hero-foreground" : "text-foreground"}`} aria-label="العودة إلى أعلى الصفحة">
-      <span className="grid size-11 shrink-0 place-items-center rounded-md bg-action text-action-foreground shadow-action">
+      <span className="grid size-11 shrink-0 place-items-center rounded-md bg-gradient-to-br from-action to-primary text-action-foreground shadow-action">
         <ShieldCheck className="size-6" strokeWidth={2.3} />
       </span>
       <span className="min-w-0 leading-tight">
-        <strong className="block truncate font-display text-lg">Ababneh Security</strong>
+        <strong className="flex items-center gap-2 truncate font-display text-lg">
+          Ababneh Security
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
+            <span className="relative inline-flex size-2 rounded-full bg-red-600" />
+          </span>
+        </strong>
         <span className={`block text-[11px] ${light ? "text-hero-muted" : "text-muted-foreground"}`}>أنظمة حماية متكاملة</span>
       </span>
     </a>
@@ -183,6 +190,22 @@ function Index() {
           fetchPriority="high"
           className="absolute inset-0 h-full w-full object-cover object-[72%_center]"
         />
+        
+        {/* CCTV Viewfinder overlay */}
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-8 opacity-25 mix-blend-overlay sm:p-16">
+          <div className="flex justify-between">
+            <div className="size-8 sm:size-16 border-l-2 border-t-2 border-white" />
+            <div className="size-8 sm:size-16 border-r-2 border-t-2 border-white" />
+          </div>
+          <div className="flex justify-between">
+            <div className="size-8 sm:size-16 border-b-2 border-l-2 border-white" />
+            <div className="size-8 sm:size-16 border-b-2 border-r-2 border-white" />
+          </div>
+        </div>
+        
+        {/* Radar/Scanline overlay */}
+        <div className="pointer-events-none absolute left-0 top-0 z-10 h-1 w-full animate-scanline bg-action shadow-[0_0_15px_rgba(var(--action),0.8)]" />
+        
         <div className="absolute inset-0 bg-hero-overlay" />
 
         <header className="relative z-20 border-b border-hero-border">
@@ -385,11 +408,18 @@ function Index() {
                 </div>
                 <p className="mt-2 text-[11px] font-semibold text-action transition-all duration-300">{resolutionHint}</p>
               </div>
-              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-md border border-border bg-background p-4">
-                <div className="min-w-0"><label htmlFor="alarm" className="block font-bold">نظام إنذار ذكي</label><span className="text-sm text-muted-foreground">Hikvision AX PRO لاسلكي</span></div>
-                <button id="alarm" type="button" role="switch" aria-checked={alarm} onClick={() => setAlarm((value) => !value)} className={`relative h-7 w-13 shrink-0 rounded-full transition-all duration-300 ${alarm ? "bg-action shadow-[0_0_12px_rgba(var(--action),0.6)]" : "bg-muted-foreground/35"}`} aria-label="إضافة نظام إنذار ذكي">
-                  <span className={`absolute top-1 size-5 rounded-full bg-background shadow-sm transition-all ${alarm ? "right-7" : "right-1"}`} />
-                </button>
+              <div>
+                <div className={`grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-md border p-4 transition-colors ${alarm ? "border-red-500/50 bg-red-500/5" : "border-border bg-background"}`}>
+                  <div className="min-w-0"><label htmlFor="alarm" className="block font-bold">نظام إنذار ذكي</label><span className="text-sm text-muted-foreground">Hikvision AX PRO لاسلكي</span></div>
+                  <button id="alarm" type="button" role="switch" aria-checked={alarm} onClick={() => setAlarm((value) => !value)} className={`relative h-7 w-13 shrink-0 rounded-full transition-all duration-300 ${alarm ? "bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.6)]" : "bg-muted-foreground/35"}`} aria-label="إضافة نظام إنذار ذكي">
+                    <span className={`absolute top-1 size-5 rounded-full bg-background shadow-sm transition-all ${alarm ? "right-7" : "right-1"}`} />
+                  </button>
+                </div>
+                <div className={`mt-2 overflow-hidden transition-all duration-500 ${alarm ? "max-h-10 opacity-100" : "max-h-0 opacity-0"}`}>
+                  <p className="flex items-center gap-2 px-1 text-xs font-bold text-red-500">
+                    <ShieldAlert className="size-4 animate-pulse" /> تم تأمين النظام (System Armed)
+                  </p>
+                </div>
               </div>
             </div>
             <div className="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">

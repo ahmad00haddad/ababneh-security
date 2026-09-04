@@ -126,6 +126,26 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes chroma {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@utility animate-chroma {
+  background-size: 200% 200%;
+  animation: chroma 4s ease infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+@utility animate-scanline {
+  animation: scanline 6s linear infinite;
+}
+
 @media (max-width: 640px) {
   .bg-hero-overlay { background: linear-gradient(180deg, oklch(0.12 0.06 252 / 50%) 0%, oklch(0.12 0.06 252 / 92%) 64%, oklch(0.12 0.06 252 / 98%) 100%); }
 }
