@@ -162,6 +162,8 @@ function Index() {
     return base + (cameras * unit) + (alarm ? 185 : 0);
   }, [alarm, cameras, resolution]);
 
+  const cameraHint = cameras <= 4 ? "مثالي للشقق والمكاتب الصغيرة" : cameras <= 8 ? "ممتاز للفلل والمحلات التجارية" : "مصمم للمستودعات والشركات الكبيرة";
+
   const quoteMessage = encodeURIComponent(
     `مرحباً، أريد عرض سعر لنظام مكوّن من ${cameras} كاميرات بدقة ${resolution}${alarm ? " مع نظام إنذار AX PRO" : ""}. السعر التقديري ${estimate} د.أ.`,
   );
@@ -326,7 +328,7 @@ function Index() {
               <div>
                 <div className="mb-4 flex items-center justify-between"><label htmlFor="camera-count" className="font-bold">عدد الكاميرات</label><output htmlFor="camera-count" className="grid min-w-12 place-items-center rounded-md bg-primary px-3 py-1.5 font-display text-lg font-black text-primary-foreground">{cameras}</output></div>
                 <input id="camera-count" aria-label="عدد الكاميرات" type="range" min="1" max="16" value={cameras} onChange={(event) => setCameras(Number(event.target.value))} className="w-full accent-primary" />
-                <div className="mt-2 flex justify-between text-xs text-muted-foreground"><span>1 كاميرا</span><span>16 كاميرا</span></div>
+                <div className="mt-2 flex justify-between text-xs text-muted-foreground"><span>1 كاميرا</span><span className="font-semibold text-action transition-all duration-300">{cameraHint}</span><span>16 كاميرا</span></div>
               </div>
               <div>
                 <label htmlFor="resolution" className="mb-3 block font-bold">دقة الكاميرا</label>
@@ -339,13 +341,13 @@ function Index() {
               </div>
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-md border border-border bg-background p-4">
                 <div className="min-w-0"><label htmlFor="alarm" className="block font-bold">نظام إنذار ذكي</label><span className="text-sm text-muted-foreground">Hikvision AX PRO لاسلكي</span></div>
-                <button id="alarm" type="button" role="switch" aria-checked={alarm} onClick={() => setAlarm((value) => !value)} className={`relative h-7 w-13 shrink-0 rounded-full transition-colors ${alarm ? "bg-action" : "bg-muted-foreground/35"}`} aria-label="إضافة نظام إنذار ذكي">
+                <button id="alarm" type="button" role="switch" aria-checked={alarm} onClick={() => setAlarm((value) => !value)} className={`relative h-7 w-13 shrink-0 rounded-full transition-all duration-300 ${alarm ? "bg-action shadow-[0_0_12px_rgba(var(--action),0.6)]" : "bg-muted-foreground/35"}`} aria-label="إضافة نظام إنذار ذكي">
                   <span className={`absolute top-1 size-5 rounded-full bg-background shadow-sm transition-all ${alarm ? "right-7" : "right-1"}`} />
                 </button>
               </div>
             </div>
             <div className="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
-              <div><span className="text-xs text-muted-foreground">السعر التقديري يبدأ من</span><div className="font-display text-3xl font-black text-primary">{estimate} <span className="text-base">د.أ</span></div></div>
+              <div><span className="text-xs text-muted-foreground">السعر التقديري يبدأ من</span><div className="font-display text-3xl font-black text-primary">{estimate} <span className="text-base">د.أ</span></div><p className="mt-1 max-w-[200px] text-[10px] text-muted-foreground/80 leading-tight">*يشمل الأجهزة، التركيب، هارد ديسك، وكفالة حقيقية.</p></div>
               <ActionLink href={`${whatsappBase}${quoteMessage}`}>احصل على السعر فوراً <ArrowLeft className="size-4" /></ActionLink>
             </div>
           </div>
@@ -384,10 +386,15 @@ function Index() {
         <div className="mx-auto flex max-w-7xl flex-col gap-2 pt-7 text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between"><p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p><p className="flex items-center gap-2"><LockKeyhole className="size-3" /> خصوصيتك وأمانك أولويتنا</p></div>
       </footer>
 
-      <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} aria-label="تواصل عبر واتساب" className="fixed bottom-5 right-5 z-50 grid size-14 place-items-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-whatsapp transition-transform hover:scale-110 sm:bottom-7 sm:right-7 sm:size-16">
-        <span className="absolute inset-0 animate-ping rounded-full bg-whatsapp opacity-20" />
-        <MessageCircle className="relative size-7" fill="currentColor" />
-      </a>
+      <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 sm:bottom-7 sm:right-7">
+        <div className="animate-bounce rounded-t-xl rounded-bl-xl rounded-br-sm border border-border bg-card/90 px-3 py-2 text-xs font-bold text-card-foreground shadow-lg backdrop-blur-md">
+          تحتاج مساعدة؟ تواصل معنا 👋
+        </div>
+        <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} aria-label="تواصل عبر واتساب" className="group grid size-14 place-items-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-whatsapp transition-all hover:scale-110 sm:size-16">
+          <span className="absolute inset-0 animate-ping rounded-full bg-whatsapp opacity-30 duration-1000" />
+          <MessageCircle className="relative size-7 transition-transform group-hover:rotate-12 group-hover:scale-110" fill="currentColor" />
+        </a>
+      </div>
     </main>
   );
 }
