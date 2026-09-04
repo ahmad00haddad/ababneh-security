@@ -27,7 +27,9 @@ import {
   Zap,
 } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
-import heroImage from "../assets/security-hero.jpg";
+import heroMan from "../assets/hero-man.jpg";
+import cameraCloseup from "../assets/camera-closeup.jpg";
+import camerasCluster from "../assets/cameras-cluster.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -196,8 +198,8 @@ function Index() {
     <main id="top" dir="rtl" className="overflow-x-hidden bg-background text-foreground">
       <section className="relative min-h-[92svh] overflow-hidden bg-hero text-hero-foreground">
         <img
-          src={heroImage}
-          alt="كاميرا مراقبة حديثة تحمي منزلاً ذكياً في المساء"
+          src={heroMan}
+          alt="فني أنظمة حماية ذكية وكاميرا مراقبة"
           width={1920}
           height={1088}
           fetchPriority="high"
@@ -348,7 +350,7 @@ function Index() {
             </ul>
           </div>
           <div className="group relative aspect-video overflow-hidden rounded-2xl border border-border shadow-2xl sm:aspect-[4/3] lg:aspect-square">
-            <img src={heroImage} alt="فني تركيب كاميرات" className="h-full w-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105" />
+            <img src={cameraCloseup} alt="كاميرا مراقبة دقيقة عالية الوضوح" className="h-full w-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105" />
             <div className="absolute inset-0 bg-primary/20 mix-blend-multiply pointer-events-none" />
             
             {/* Live REC Indicator */}
@@ -414,6 +416,9 @@ function Index() {
             <div className="mt-8 flex items-center gap-4">
               <span className="grid size-12 shrink-0 place-items-center rounded-md bg-primary text-primary-foreground"><Users className="size-6" /></span>
               <div><strong className="block">استشارة مجانية من خبير</strong><span className="text-sm text-muted-foreground">نساعدك في اختيار الزوايا والتغطية المناسبة</span></div>
+            </div>
+            <div className="mt-10 overflow-hidden rounded-xl border border-border">
+              <img src={camerasCluster} alt="مجموعة كاميرات مراقبة حديثة" className="h-64 w-full object-cover grayscale transition-all duration-700 hover:grayscale-0 hover:scale-105" />
             </div>
           </div>
 
