@@ -24,6 +24,8 @@ import {
   ShieldCheck,
   Sparkles,
   Users,
+  Volume2,
+  VolumeX,
   X,
   Zap,
 } from "lucide-react";
@@ -203,6 +205,7 @@ function Index() {
   const [resolution, setResolution] = useState("2MP ColorVu");
   const [alarm, setAlarm] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     const handler = (e: any) => {
@@ -251,14 +254,26 @@ function Index() {
       <div className="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-5 animate-noise bg-[url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')]"></div>
       
       <section className="relative min-h-[92svh] overflow-hidden bg-hero text-hero-foreground">
-        <img
-          src={heroMan}
-          alt="فني أنظمة حماية ذكية وكاميرا مراقبة"
-          width={1920}
-          height={1088}
-          fetchPriority="high"
+        <video
+          autoPlay
+          loop
+          muted={isMuted}
+          playsInline
+          poster={heroMan}
           className="absolute inset-0 h-full w-full object-cover object-[72%_center]"
-        />
+        >
+          {/* Fallback local path, user needs to put hero-video.mp4 in public or assets */}
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
+        
+        {/* Audio Mute Toggle Button */}
+        <button
+          onClick={() => setIsMuted(!isMuted)}
+          className="absolute bottom-5 left-5 z-40 grid size-12 place-items-center rounded-full border border-hero-border bg-background/50 text-hero-foreground backdrop-blur-md transition-colors hover:bg-background/80 sm:bottom-10 sm:left-10"
+          aria-label={isMuted ? "تشغيل الصوت" : "كتم الصوت"}
+        >
+          {isMuted ? <VolumeX className="size-5" /> : <Volume2 className="size-5" />}
+        </button>
         
         {/* CCTV Viewfinder overlay */}
         <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-8 opacity-25 mix-blend-overlay sm:p-16">
