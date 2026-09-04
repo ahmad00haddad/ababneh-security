@@ -19,6 +19,7 @@ import {
   MessageCircle,
   MoonStar,
   Phone,
+  Settings,
   ShieldAlert,
   ShieldCheck,
   Sparkles,
@@ -26,7 +27,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, useEffect, type ReactNode } from "react";
 import heroMan from "../assets/hero-man.jpg";
 import cameraCloseup from "../assets/camera-closeup.jpg";
 import camerasCluster from "../assets/cameras-cluster.jpg";
@@ -173,6 +174,28 @@ function Index() {
   const [cameras, setCameras] = useState(4);
   const [resolution, setResolution] = useState("2MP ColorVu");
   const [alarm, setAlarm] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+      }
+    } else {
+      alert("للحصول على أفضل تجربة، استخدم 'إضافة إلى الشاشة الرئيسية' من إعدادات متصفحك.");
+    }
+  };
 
   const estimate = useMemo(() => {
     let base = 60; // التكلفة الأساسية (جهاز التسجيل، التركيب الأساسي، هارد ديسك)
@@ -544,16 +567,16 @@ function Index() {
               <a href="#" aria-label="إنستغرام" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action"><Instagram className="size-4" /></a>
             </div>
             {/* PWA Install Button (Contextual Hint for Mobile Users) */}
-            <button className="mt-6 flex w-full max-w-[200px] items-center justify-between rounded-md border border-action/30 bg-action/10 px-4 py-2 text-sm font-bold text-action transition-colors hover:bg-action/20">
+            <button onClick={handleInstallClick} className="mt-6 flex w-full max-w-[200px] items-center justify-between rounded-md border border-action/30 bg-action/10 px-4 py-2 text-sm font-bold text-action transition-colors hover:bg-action/20">
               تثبيت التطبيق (PWA) <ChevronDown className="size-4 -rotate-90" />
             </button>
           </div>
         </div>
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 pt-7 text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between"><p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p><p className="flex items-center gap-2"><LockKeyhole className="size-3" /> خصوصيتك وأمانك أولويتنا</p></div>
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 pt-7 text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between pb-24 sm:pb-0"><p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p><p className="flex items-center gap-2"><LockKeyhole className="size-3" /> خصوصيتك وأمانك أولويتنا</p></div>
       </footer>
 
-      <div className="fixed bottom-5 right-5 z-50 sm:bottom-7 sm:right-7">
-        <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-background/60 pl-2 pr-6 text-foreground shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-background/80 hover:shadow-emerald-500/20 sm:h-16">
+      <div className="fixed bottom-24 right-5 z-50 sm:bottom-7 sm:right-7">
+        <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50, 50, 50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-background/60 pl-2 pr-6 text-foreground shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-background/80 hover:shadow-emerald-500/20 sm:h-16">
           <div className="relative grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 text-white shadow-lg sm:size-12">
             <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-40 duration-1000" />
             <MessageCircle className="relative size-5 transition-transform group-hover:rotate-12 group-hover:scale-110 sm:size-6" fill="currentColor" />
@@ -564,6 +587,30 @@ function Index() {
           </div>
         </a>
       </div>
+
+      {/* Mobile Bottom App Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-border bg-background/90 pb-safe backdrop-blur-xl sm:hidden">
+        <a href="#top" onClick={() => navigator.vibrate?.(50)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-action">
+          <ShieldCheck className="size-5" />
+          <span className="text-[10px] font-bold">الرئيسية</span>
+        </a>
+        <a href="#packages" onClick={() => navigator.vibrate?.(50)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-action">
+          <Zap className="size-5" />
+          <span className="text-[10px] font-bold">الباقات</span>
+        </a>
+        <a href="#custom" onClick={() => navigator.vibrate?.(50)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-action">
+          <Settings className="size-5" />
+          <span className="text-[10px] font-bold">حاسبة</span>
+        </a>
+        <a 
+          href={whatsappBase} 
+          onClick={() => navigator.vibrate?.([50, 50, 50])}
+          className="flex flex-col items-center gap-1 text-action hover:text-action-hover"
+        >
+          <MessageCircle className="size-5" />
+          <span className="text-[10px] font-bold">تواصل</span>
+        </a>
+      </nav>
     </main>
   );
 }
