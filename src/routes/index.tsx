@@ -296,7 +296,7 @@ function Index() {
         {/* CCTV Static Noise Overlay */}
         <div className="pointer-events-none fixed inset-0 z-[49] mix-blend-overlay opacity-5 bg-[url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')]"></div>
 
-        <section className="relative overflow-hidden bg-hero text-hero-foreground" style={{ minHeight: "min(92svh, max(56.25vw, 420px))" }}>
+        <section className="relative min-h-[56.25vw] overflow-hidden bg-hero text-hero-foreground sm:min-h-[92svh]">
         <video
           autoPlay
           loop
@@ -318,7 +318,7 @@ function Index() {
         </button>
         
         {/* CCTV Viewfinder overlay */}
-        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-8 opacity-25 mix-blend-overlay sm:p-16">
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-8 opacity-20 mix-blend-overlay sm:p-16">
           <div className="flex justify-between">
             <div className="size-8 sm:size-16 border-l-2 border-t-2 border-white" />
             <div className="size-8 sm:size-16 border-r-2 border-t-2 border-white" />
@@ -329,7 +329,7 @@ function Index() {
           </div>
         </div>
         
-        {/* Radar/Scanline overlay */}
+        {/* Scanline */}
         <div className="pointer-events-none absolute left-0 top-0 z-10 h-1 w-full animate-scanline bg-action shadow-[0_0_15px_rgba(var(--action),0.8)]" />
         
         <div className="absolute inset-0 bg-hero-overlay" />
@@ -373,11 +373,13 @@ function Index() {
           )}
         </header>
 
-        {/* Hero content - bottom anchored, staggered reveal */}
-        <div className="relative z-10 mx-auto flex h-[calc(100%-5rem)] max-w-7xl flex-col justify-end px-5 pb-8 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24">
-          {/* Badge */}
-          <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-hero-border bg-hero-glass px-4 py-2 text-xs font-bold text-hero-muted backdrop-blur-lg sm:text-sm"
-               style={{ animation: "reveal 0.7s 0.2s ease-out both" }}>
+        {/* Hero content — bottom-left anchored, stagger fires AFTER preloader */}
+        <div className="relative z-10 mx-auto flex h-[calc(56.25vw-5rem)] max-w-7xl flex-col justify-end px-5 pb-8 sm:h-[calc(92svh-5rem)] sm:px-8 sm:pb-24 lg:px-12">
+          {/* Badge — appears at 0.5s */}
+          <div
+            className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-hero-border bg-hero-glass px-4 py-2 text-xs font-bold text-hero-muted backdrop-blur-lg sm:text-sm"
+            style={appReady ? { animation: "reveal 0.8s 0.5s ease-out both" } : { opacity: 0 }}
+          >
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-action opacity-70" />
               <span className="relative inline-flex size-2 rounded-full bg-action" />
@@ -385,17 +387,21 @@ function Index() {
             حماية متصلة على مدار الساعة
           </div>
 
-          {/* H1 */}
-          <h1 className="max-w-xl font-display text-3xl font-black leading-[1.2] sm:text-5xl lg:text-6xl"
-              style={{ animation: "reveal 0.8s 0.6s ease-out both", opacity: 0 }}>
+          {/* H1 — appears at 2.5s */}
+          <h1
+            className="max-w-2xl font-display text-3xl font-black leading-[1.2] sm:text-5xl lg:text-6xl xl:text-7xl"
+            style={appReady ? { animation: "reveal 1s 2.5s ease-out both" } : { opacity: 0 }}
+          >
             أنظمة حماية متطورة
             <br />
             <span className="text-action">لأمان عائلتك وعملك</span>
           </h1>
 
-          {/* CTA row */}
-          <div className="mt-5 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
-               style={{ animation: "reveal 0.7s 1.2s ease-out both", opacity: 0 }}>
+          {/* CTA — appears at 5.5s */}
+          <div
+            className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
+            style={appReady ? { animation: "reveal 0.8s 5.5s ease-out both" } : { opacity: 0 }}
+          >
             <ActionLink href="#packages" variant="primary" className="w-full sm:w-auto">
               عرض الباقات <ArrowLeft className="size-4" />
             </ActionLink>
