@@ -382,17 +382,17 @@ function Index() {
                 <div className="pointer-events-none absolute bottom-3 right-3 size-6 border-b-2 border-r-2 border-action opacity-0 transition-all duration-300 group-hover:bottom-0 group-hover:right-0 group-hover:opacity-100" />
 
                 {item.featured && <div className="absolute left-0 top-0 rounded-br-lg bg-action px-4 py-2 text-xs font-black text-action-foreground">الأكثر طلباً</div>}
-                <span className={`text-sm font-bold ${item.featured ? "text-primary-soft" : "text-primary"}`}>{item.label}</span>
+                <span className={`text-sm font-bold ${item.featured ? "text-primary-foreground opacity-80" : "text-primary"}`}>{item.label}</span>
                 <h3 className="mt-3 font-display text-2xl font-black sm:text-3xl">{item.name}</h3>
                 <div className="mt-7 flex items-end gap-2">
-                  <strong className={`font-display text-6xl font-black ${item.featured ? "text-action" : "text-primary"}`}>{item.price}</strong>
-                  <span className={`pb-2 text-sm ${item.featured ? "text-primary-soft" : "text-muted-foreground"}`}>د.أ / شامل التركيب</span>
+                  <strong className={`font-display text-6xl font-black ${item.featured ? "text-primary-foreground" : "text-primary"}`}>{item.price}</strong>
+                  <span className={`pb-2 text-sm ${item.featured ? "text-primary-foreground opacity-80" : "text-muted-foreground"}`}>د.أ / شامل التركيب</span>
                 </div>
-                <ul className={`my-8 space-y-4 border-y py-7 ${item.featured ? "border-primary-border" : "border-border"}`}>
+                <ul className={`my-8 space-y-4 border-y py-7 ${item.featured ? "border-white/20" : "border-border"}`}>
                   {item.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm sm:text-base">
-                      <span className={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full ${item.featured ? "bg-action text-action-foreground" : "bg-accent text-primary"}`}><Check className="size-3" strokeWidth={3} /></span>
-                      {feature}
+                    <li key={feature} className="flex items-center gap-3 text-sm">
+                      <span className={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full ${item.featured ? "bg-white text-primary" : "bg-accent text-primary"}`}><Check className="size-3" strokeWidth={3} /></span>
+                      <span className={item.featured ? "text-primary-foreground" : "text-card-foreground"}>{feature}</span>
                     </li>
                   ))}
                 </ul>
