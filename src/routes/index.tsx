@@ -29,7 +29,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
-import { useMemo, useState, useEffect, type ReactNode } from "react";
+import { useMemo, useState, useEffect, useRef, type ReactNode } from "react";
 import heroMan from "../assets/hero-man.jpg";
 import cameraCloseup from "../assets/camera-closeup.jpg";
 import camerasCluster from "../assets/cameras-cluster.jpg";
@@ -247,6 +247,23 @@ function Index() {
   const [alarm, setAlarm] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [pwaToast, setPwaToast] = useState(false);
+
+  // Refs for video elements — needed to fix iOS muted state bug
+  const desktopVideoRef = useRef<HTMLVideoElement>(null);
+  const mobileVideoRef = useRef<HTMLVideoElement>(null);
+
+  // Fix: React does NOT update the `muted` DOM attribute after initial render on iOS.
+  // We must use a ref to set it directly, then call .play() to prevent freezing.
+  useEffect(() => {
+    [desktopVideoRef, mobileVideoRef].forEach((ref) => {
+      if (ref.current) {
+        ref.current.muted = isMuted;
+        // Re-trigger play to prevent iOS freeze after unmute
+        ref.current.play().catch(() => {});
+      }
+    });
+  }, [isMuted]);
 
   useEffect(() => {
     const handler = (e: any) => {
@@ -265,7 +282,8 @@ function Index() {
         setDeferredPrompt(null);
       }
     } else {
-      alert("للحصول على أفضل تجربة، استخدم 'إضافة إلى الشاشة الرئيسية' من إعدادات متصفحك.");
+      setPwaToast(true);
+      setTimeout(() => setPwaToast(false), 4000);
     }
   };
 
@@ -292,6 +310,13 @@ function Index() {
   return (
     <>
       {!appReady && <Preloader onComplete={() => setAppReady(true)} />}
+      {/* PWA Toast — replaces alert() */}
+      {pwaToast && (
+        <div className="fixed bottom-24 right-4 z-[200] max-w-xs rounded-xl border border-action/30 bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-2xl sm:bottom-8 sm:right-8" dir="rtl">
+          <p className="text-action mb-1">📲 تثبيت التطبيق</p>
+          <p className="text-muted-foreground text-xs leading-5">افتح قائمة المتصفح ← اختر "إضافة إلى الشاشة الرئيسية"</p>
+        </div>
+      )}
       <main id="top" dir="rtl" className={`relative bg-background text-foreground ${!appReady ? "h-screen overflow-hidden" : "overflow-x-hidden"}`}>
         {/* ====== HERO: MOBILE LAYOUT (video first, then text below) ====== */}
         <section className="block bg-hero text-hero-foreground sm:hidden">
@@ -319,7 +344,7 @@ function Index() {
 
           {/* Mobile Video — full width, natural ratio, no cropping */}
           <div className="relative w-full bg-black">
-            <video autoPlay loop muted={isMuted} playsInline poster={heroMan} className="w-full aspect-video object-contain">
+            <video ref={mobileVideoRef} autoPlay loop muted playsInline poster={heroMan} className="w-full aspect-video object-contain">
               <source src="/hero-video.mp4" type="video/mp4" />
             </video>
             <div className="pointer-events-none absolute left-0 top-0 h-px w-full animate-scanline bg-action" />
@@ -357,7 +382,7 @@ function Index() {
         {/* ====== HERO: DESKTOP LAYOUT (full-screen video + overlaid text) ====== */}
         <section className="relative hidden min-h-[92svh] overflow-hidden bg-hero text-hero-foreground sm:block">
           {/* Desktop background video */}
-          <video autoPlay loop muted={isMuted} playsInline poster={heroMan} className="absolute inset-0 h-full w-full object-cover object-center">
+          <video ref={desktopVideoRef} autoPlay loop muted playsInline poster={heroMan} className="absolute inset-0 h-full w-full object-cover object-center">
             <source src="/hero-video.mp4" type="video/mp4" />
           </video>
 
