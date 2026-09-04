@@ -50,7 +50,7 @@ export const Route = createFileRoute("/")({
 });
 
 // قم بوضع رقم هاتف المبيعات هنا (بدون أصفار بالبداية وبدون علامة +) مثال للأردن: 962790000000
-const whatsappNumber = "";
+const whatsappNumber = "962788757801";
 const whatsappBase = `https://wa.me/${whatsappNumber}?text=`;
 
 const services = [
@@ -378,7 +378,7 @@ function Index() {
       <footer id="contact" className="bg-footer px-5 pb-8 pt-16 text-footer-foreground sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-10 border-b border-footer-border pb-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr]">
           <div><Brand light /><p className="mt-5 max-w-sm text-sm leading-7 text-footer-muted">نحمي المنازل والأعمال بحلول مراقبة وإنذار ذكية، وتركيب نهتم فيه بأدق التفاصيل.</p></div>
-          <div><h3 className="font-bold">تواصل معنا</h3><div className="mt-5 space-y-4 text-sm text-footer-muted"><a className="flex items-center gap-3 hover:text-footer-foreground" href={whatsappBase}><MessageCircle className="size-4 text-action" /> تواصل معنا عبر واتساب</a><p className="flex items-center gap-3"><MapPin className="size-4 text-action" /> عمّان، الأردن</p></div></div>
+          <div><h3 className="font-bold">تواصل معنا</h3><div className="mt-5 space-y-4 text-sm text-footer-muted"><a className="flex items-center gap-3 hover:text-footer-foreground" href={whatsappBase}><MessageCircle className="size-4 text-action" /> تواصل معنا عبر واتساب</a><p className="flex items-center gap-3"><Phone className="size-4 text-action" /> <span dir="ltr">+962 7 8875 7801</span></p><p className="flex items-center gap-3"><Users className="size-4 text-action" /> بإدارة: علي عبابنة</p><p className="flex items-center gap-3"><MapPin className="size-4 text-action" /> عمّان، الأردن</p></div></div>
           <div><h3 className="font-bold">ساعات العمل</h3><div className="mt-5 flex items-start gap-3 text-sm text-footer-muted"><Clock3 className="mt-0.5 size-4 text-action" /><p>السبت – الخميس<br /><span className="mt-1 block text-footer-foreground">9:00 صباحاً – 7:00 مساءً</span></p></div><div className="mt-6 flex gap-2"><a href="#" aria-label="فيسبوك" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action"><Facebook className="size-4" /></a><a href="#" aria-label="إنستغرام" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action"><Instagram className="size-4" /></a></div></div>
         </div>
         <div className="mx-auto flex max-w-7xl flex-col gap-2 pt-7 text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between"><p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p><p className="flex items-center gap-2"><LockKeyhole className="size-3" /> خصوصيتك وأمانك أولويتنا</p></div>
