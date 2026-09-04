@@ -199,7 +199,48 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
   );
 }
 
+function Preloader({ onComplete }: { onComplete: () => void }) {
+  const [progress, setProgress] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    let current = 0;
+    const interval = setInterval(() => {
+      current += Math.floor(Math.random() * 15) + 5;
+      if (current >= 100) {
+        current = 100;
+        clearInterval(interval);
+        setTimeout(() => {
+          setIsVisible(false);
+          setTimeout(onComplete, 500); // Wait for fade out
+        }, 300);
+      }
+      setProgress(current);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [onComplete]);
+
+  if (!isVisible && progress === 100) return null;
+
+  return (
+    <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background text-foreground transition-opacity duration-500 ${isVisible ? "opacity-100" : "opacity-0"}`}>
+       <div className="absolute inset-0 bg-hero-overlay opacity-50" />
+       <div className="pointer-events-none fixed inset-0 z-10 mix-blend-overlay opacity-10 animate-noise bg-[url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')]"></div>
+       <div className="relative z-20 flex flex-col items-center">
+         <LogoMark className="mb-8 size-16 text-action animate-pulse" />
+         <div className="font-mono text-5xl font-black tracking-tighter text-action">{progress}%</div>
+         <div className="mt-4 text-xs font-bold tracking-widest text-muted-foreground uppercase animate-pulse">Initializing System...</div>
+         <div className="mt-8 h-1 w-48 overflow-hidden rounded-full bg-border">
+           <div className="h-full bg-action transition-all duration-100" style={{ width: `${progress}%` }} />
+         </div>
+       </div>
+    </div>
+  );
+}
+
 function Index() {
+  const [appReady, setAppReady] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [cameras, setCameras] = useState(4);
   const [resolution, setResolution] = useState("2MP ColorVu");
@@ -249,8 +290,10 @@ function Index() {
   );
 
   return (
-    <main id="top" dir="rtl" className="relative overflow-x-hidden bg-background text-foreground">
-      {/* CCTV Static Noise Overlay */}
+    <>
+      {!appReady && <Preloader onComplete={() => setAppReady(true)} />}
+      <main id="top" dir="rtl" className={`relative bg-background text-foreground ${!appReady ? "h-screen overflow-hidden" : "overflow-x-hidden"}`}>
+        {/* CCTV Static Noise Overlay */}
       <div className="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-5 animate-noise bg-[url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')]"></div>
       
       <section className="relative min-h-[92svh] overflow-hidden bg-hero text-hero-foreground">
@@ -659,6 +702,7 @@ function Index() {
         </a>
       </nav>
     </main>
+    </>
   );
 }
 
