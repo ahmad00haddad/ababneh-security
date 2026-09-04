@@ -106,7 +106,7 @@
 }
 
 @utility bg-hero-overlay {
-  background: linear-gradient(90deg, oklch(0.12 0.06 252 / 32%) 0%, oklch(0.13 0.065 252 / 77%) 52%, oklch(0.12 0.06 252 / 96%) 100%);
+  background: linear-gradient(90deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 52%, rgba(0,0,0,0.9) 100%);
 }
 
 @utility section-kicker {
@@ -193,7 +193,7 @@
 }
 
 @media (max-width: 640px) {
-  .bg-hero-overlay { background: linear-gradient(180deg, oklch(0.12 0.06 252 / 50%) 0%, oklch(0.12 0.06 252 / 92%) 64%, oklch(0.12 0.06 252 / 98%) 100%); }
+  .bg-hero-overlay { background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 64%, rgba(0,0,0,0.95) 100%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
