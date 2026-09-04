@@ -374,32 +374,33 @@ function Index() {
           )}
         </header>
 
-        <div className="relative z-10 mx-auto flex min-h-[calc(92svh-5rem)] max-w-7xl items-center px-5 py-16 sm:px-8 lg:px-12">
-          <div className="max-w-3xl animate-reveal">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-hero-border bg-hero-glass px-4 py-2 text-xs font-bold text-hero-muted backdrop-blur-lg sm:text-sm">
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-action opacity-70" />
-                <span className="relative inline-flex size-2 rounded-full bg-action" />
-              </span>
-              حماية متصلة على مدار الساعة
-            </div>
-            <h1 className="max-w-3xl font-display text-4xl font-black leading-[1.25] sm:text-5xl lg:text-7xl">
-              أنظمة حماية متطورة<br />
-              <span className="text-action">لأمان عائلتك وعملك</span>
-            </h1>
-            <div className="mt-6 max-w-2xl font-mono text-sm leading-8 text-hero-muted sm:text-base">
-              <span className="text-action">{">"}</span> شاهد كل التفاصيل بألوان حقيقية ليلاً مع تقنية ColorVu، وابقَ مطمئناً مع مراقبة ذكية ودعم فني سريع على مدار الساعة.<span className="animate-pulse font-bold text-action">_</span>
-            </div>
-            <div className="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-              <ActionLink href="#packages" variant="primary" className="w-full sm:w-auto">
-                عرض الباقات <ArrowLeft className="size-4" />
-              </ActionLink>
-            </div>
-            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-semibold text-hero-muted sm:text-sm">
-              <span className="flex items-center gap-2"><Check className="size-4 text-action" /> كشف ميداني مجاني</span>
-              <span className="flex items-center gap-2"><Check className="size-4 text-action" /> تركيب احترافي ونظيف</span>
-              <span className="flex items-center gap-2"><Check className="size-4 text-action" /> كفالة موثقة</span>
-            </div>
+        {/* Hero content - bottom anchored, staggered reveal */}
+        <div className="relative z-10 mx-auto flex min-h-[calc(92svh-5rem)] max-w-7xl flex-col justify-end px-5 pb-14 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24">
+          {/* Badge */}
+          <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-hero-border bg-hero-glass px-4 py-2 text-xs font-bold text-hero-muted backdrop-blur-lg sm:text-sm"
+               style={{ animation: "reveal 0.7s 0.2s ease-out both" }}>
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-action opacity-70" />
+              <span className="relative inline-flex size-2 rounded-full bg-action" />
+            </span>
+            حماية متصلة على مدار الساعة
+          </div>
+
+          {/* H1 */}
+          <h1 className="max-w-xl font-display text-4xl font-black leading-[1.2] sm:text-5xl lg:text-6xl"
+              style={{ animation: "reveal 0.8s 0.6s ease-out both", opacity: 0 }}>
+            أنظمة حماية متطورة
+            <br />
+            <span className="text-action">لأمان عائلتك وعملك</span>
+          </h1>
+
+          {/* CTA row */}
+          <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
+               style={{ animation: "reveal 0.7s 1.2s ease-out both", opacity: 0 }}>
+            <ActionLink href="#packages" variant="primary" className="w-full sm:w-auto">
+              عرض الباقات <ArrowLeft className="size-4" />
+            </ActionLink>
+            <span className="text-xs text-hero-muted">كشف ميداني مجاني · تركيب احترافي · كفالة موثقة</span>
           </div>
         </div>
       </section>
