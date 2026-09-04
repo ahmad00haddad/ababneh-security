@@ -85,7 +85,7 @@ const packages = [
     features: [
       "3 كاميرات Hikvision / Dahua (تصوير ملون)",
       "جهاز تسجيل DVR بأربع قنوات",
-      "قرص تخزين 1 تيرابايت (WD Purple)",
+      "قرص تخزين 1 تيرابايت (يكفي لتسجيل 15-30 يوم)",
       "تركيب وبرمجة كاملة (كفالة حقيقية)",
     ],
   },
@@ -97,7 +97,7 @@ const packages = [
     features: [
       "3 كاميرات Hikvision / Dahua (تصوير ملون)",
       "جهاز تسجيل DVR بدقة 5MP",
-      "قرص تخزين 1 تيرابايت (WD Purple)",
+      "قرص تخزين 1 تيرابايت (يكفي لتسجيل 15-30 يوم)",
       "تركيب وبرمجة كاملة (كفالة حقيقية)",
     ],
   },
@@ -122,9 +122,12 @@ function ActionLink({
   return (
     <a
       href={href}
-      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-bold transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${styles[variant]} ${className}`}
+      className={`group relative overflow-hidden inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-bold transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${styles[variant]} ${className}`}
     >
-      {children}
+      {variant === "primary" && (
+        <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+      )}
+      <span className="relative flex items-center gap-2">{children}</span>
     </a>
   );
 }
@@ -163,6 +166,7 @@ function Index() {
   }, [alarm, cameras, resolution]);
 
   const cameraHint = cameras <= 4 ? "مثالي للشقق والمكاتب الصغيرة" : cameras <= 8 ? "ممتاز للفلل والمحلات التجارية" : "مصمم للمستودعات والشركات الكبيرة";
+  const resolutionHint = resolution === "2MP ColorVu" ? "وضوح ممتاز للمراقبة العامة" : resolution === "5MP ColorVu" ? "دقة عالية للوجوه ولوحات السيارات" : "أقصى دقة للمنشآت الحساسة";
 
   const quoteMessage = encodeURIComponent(
     `مرحباً، أريد عرض سعر لنظام مكوّن من ${cameras} كاميرات بدقة ${resolution}${alarm ? " مع نظام إنذار AX PRO" : ""}. السعر التقديري ${estimate} د.أ.`,
@@ -239,11 +243,14 @@ function Index() {
             <p className="mt-6 max-w-2xl text-base leading-8 text-hero-muted sm:text-lg">
               شاهد كل التفاصيل بألوان حقيقية ليلاً مع تقنية ColorVu، وابقَ مطمئناً مع مراقبة ذكية ودعم فني سريع على مدار الساعة.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <ActionLink href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد حجز كشف مجاني")}`}>
-                احجز كشفاً مجانياً <ArrowLeft className="size-4" />
-              </ActionLink>
-              <ActionLink href="#packages" variant="outline">
+            <div className="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+              <div className="flex w-full flex-col gap-2 sm:w-auto">
+                <ActionLink href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد حجز كشف مجاني")}`} className="w-full sm:w-auto">
+                  احجز كشفاً مجانياً <ArrowLeft className="size-4" />
+                </ActionLink>
+                <span className="text-center text-[10px] text-hero-muted opacity-80 sm:text-right">بدون التزام مالي - كشف الموقع مجاني بالكامل</span>
+              </div>
+              <ActionLink href="#packages" variant="outline" className="w-full sm:w-auto">
                 عرض الباقات
               </ActionLink>
             </div>
@@ -338,6 +345,7 @@ function Index() {
                   </select>
                   <ChevronDown className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 </div>
+                <p className="mt-2 text-[11px] font-semibold text-action transition-all duration-300">{resolutionHint}</p>
               </div>
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-md border border-border bg-background p-4">
                 <div className="min-w-0"><label htmlFor="alarm" className="block font-bold">نظام إنذار ذكي</label><span className="text-sm text-muted-foreground">Hikvision AX PRO لاسلكي</span></div>
