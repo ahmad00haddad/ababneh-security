@@ -287,11 +287,6 @@ function Index() {
               <a className="transition-colors hover:text-hero-foreground" href="#services">خدماتنا</a>
               <a className="transition-colors hover:text-hero-foreground" href="#contact">تواصل معنا</a>
             </nav>
-            <div className="hidden lg:block">
-              <ActionLink href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد حجز كشف مجاني")}`} variant="primary">
-                <Phone className="size-4" /> احجز كشفاً مجانياً
-              </ActionLink>
-            </div>
             <button
               type="button"
               onClick={() => setMenuOpen((value) => !value)}
@@ -338,14 +333,8 @@ function Index() {
               <span className="text-action">{">"}</span> شاهد كل التفاصيل بألوان حقيقية ليلاً مع تقنية ColorVu، وابقَ مطمئناً مع مراقبة ذكية ودعم فني سريع على مدار الساعة.<span className="animate-pulse font-bold text-action">_</span>
             </div>
             <div className="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-              <div className="flex w-full flex-col gap-2 sm:w-auto">
-                <ActionLink href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد حجز كشف مجاني")}`} className="w-full sm:w-auto">
-                  احجز كشفاً مجانياً <ArrowLeft className="size-4" />
-                </ActionLink>
-                <span className="text-center text-[10px] text-hero-muted opacity-80 sm:text-right">بدون التزام مالي - كشف الموقع مجاني بالكامل</span>
-              </div>
-              <ActionLink href="#packages" variant="outline" className="w-full sm:w-auto">
-                عرض الباقات
+              <ActionLink href="#packages" variant="primary" className="w-full sm:w-auto">
+                عرض الباقات <ArrowLeft className="size-4" />
               </ActionLink>
             </div>
             <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-semibold text-hero-muted sm:text-sm">
