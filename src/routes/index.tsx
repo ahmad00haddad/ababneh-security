@@ -80,7 +80,7 @@ const packages = [
   {
     name: "باقة 2 ميجابكسل ColorVu",
     label: "الاقتصادية",
-    price: 150,
+    price: 165,
     featured: false,
     features: [
       "3 كاميرات Hikvision / Dahua (تصوير ملون)",
@@ -92,7 +92,7 @@ const packages = [
   {
     name: "باقة 5 ميجابكسل ColorVu",
     label: "الأكثر طلباً",
-    price: 190,
+    price: 199,
     featured: true,
     features: [
       "3 كاميرات Hikvision / Dahua (تصوير ملون)",
@@ -153,14 +153,14 @@ function Index() {
   const [alarm, setAlarm] = useState(false);
 
   const estimate = useMemo(() => {
-    let base = 60; // التكلفة الأساسية (جهاز التسجيل، التركيب، هارد ديسك)
-    let unit = 30; // تكلفة الكاميرا الواحدة
+    let base = 60; // التكلفة الأساسية (جهاز التسجيل، التركيب الأساسي، هارد ديسك)
+    let unit = 35; // تكلفة الكاميرا الواحدة مع هامش ربح وتمديداتها
     if (resolution === "5MP ColorVu") {
-      base = 70;
-      unit = 40;
+      base = 64;
+      unit = 45;
     } else if (resolution === "IP 4K") {
-      base = 150; // أجهزة شبكية NVR مكلفة أكثر
-      unit = 60;
+      base = 150; // أجهزة شبكية NVR متقدمة
+      unit = 80;
     }
     return base + (cameras * unit) + (alarm ? 185 : 0);
   }, [alarm, cameras, resolution]);
