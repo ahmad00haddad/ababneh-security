@@ -278,9 +278,9 @@ function Index() {
               أنظمة حماية متطورة<br />
               <span className="text-action">لأمان عائلتك وعملك</span>
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-hero-muted sm:text-lg">
-              شاهد كل التفاصيل بألوان حقيقية ليلاً مع تقنية ColorVu، وابقَ مطمئناً مع مراقبة ذكية ودعم فني سريع على مدار الساعة.
-            </p>
+            <div className="mt-6 max-w-2xl font-mono text-sm leading-8 text-hero-muted sm:text-base">
+              <span className="text-action">{">"}</span> شاهد كل التفاصيل بألوان حقيقية ليلاً مع تقنية ColorVu، وابقَ مطمئناً مع مراقبة ذكية ودعم فني سريع على مدار الساعة.<span className="animate-pulse font-bold text-action">_</span>
+            </div>
             <div className="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
               <div className="flex w-full flex-col gap-2 sm:w-auto">
                 <ActionLink href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد حجز كشف مجاني")}`} className="w-full sm:w-auto">
@@ -347,9 +347,19 @@ function Index() {
               <li className="flex items-center gap-3"><Check className="size-5 text-action" /> مشاريع منجزة في كافة محافظات المملكة.</li>
             </ul>
           </div>
-          <div className="relative aspect-video overflow-hidden rounded-2xl border border-border shadow-2xl sm:aspect-[4/3] lg:aspect-square">
-            <img src={heroImage} alt="فني تركيب كاميرات" className="h-full w-full object-cover grayscale transition-all duration-1000 hover:grayscale-0 hover:scale-105" />
+          <div className="group relative aspect-video overflow-hidden rounded-2xl border border-border shadow-2xl sm:aspect-[4/3] lg:aspect-square">
+            <img src={heroImage} alt="فني تركيب كاميرات" className="h-full w-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105" />
             <div className="absolute inset-0 bg-primary/20 mix-blend-multiply pointer-events-none" />
+            
+            {/* Live REC Indicator */}
+            <div className="absolute left-4 top-4 flex items-center gap-2 rounded bg-background/80 px-2 py-1 font-mono text-[10px] text-foreground backdrop-blur-sm">
+              <span className="size-2 animate-ping rounded-full bg-red-500" />
+              <span>REC | 03:42:01:99</span>
+            </div>
+
+            {/* Bounding Box on Hover */}
+            <div className="absolute left-1/4 top-1/4 h-1/2 w-1/2 border-2 border-action opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
             <div className="absolute bottom-6 right-6 rounded-lg bg-background/90 p-4 shadow-xl backdrop-blur-md">
               <div className="font-display text-3xl font-black text-action">+500</div>
               <div className="text-sm font-bold text-foreground">مشروع منجز بنجاح</div>
@@ -363,7 +373,14 @@ function Index() {
           <SectionHeading eyebrow="باقات جاهزة" title="حماية موثوقة، بسعر واضح" text="اختر الدقة التي تناسبك. جميع الباقات تشمل الأجهزة الأصلية والتركيب والبرمجة الكاملة." />
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
             {packages.map((item) => (
-              <article key={item.name} className={`relative overflow-hidden rounded-lg border p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-8 ${item.featured ? "border-primary bg-primary text-primary-foreground shadow-premium" : "border-border bg-card text-card-foreground shadow-card"}`}>
+              <article key={item.name} className={`group relative overflow-hidden rounded-lg border p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-8 ${item.featured ? "border-primary bg-primary text-primary-foreground shadow-premium" : "border-border bg-card text-card-foreground shadow-card"}`}>
+                
+                {/* Micro-interaction: Targeting Brackets */}
+                <div className="pointer-events-none absolute left-3 top-3 size-6 border-l-2 border-t-2 border-action opacity-0 transition-all duration-300 group-hover:left-0 group-hover:top-0 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute right-3 top-3 size-6 border-r-2 border-t-2 border-action opacity-0 transition-all duration-300 group-hover:right-0 group-hover:top-0 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute bottom-3 left-3 size-6 border-b-2 border-l-2 border-action opacity-0 transition-all duration-300 group-hover:bottom-0 group-hover:left-0 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute bottom-3 right-3 size-6 border-b-2 border-r-2 border-action opacity-0 transition-all duration-300 group-hover:bottom-0 group-hover:right-0 group-hover:opacity-100" />
+
                 {item.featured && <div className="absolute left-0 top-0 rounded-br-lg bg-action px-4 py-2 text-xs font-black text-action-foreground">الأكثر طلباً</div>}
                 <span className={`text-sm font-bold ${item.featured ? "text-primary-soft" : "text-primary"}`}>{item.label}</span>
                 <h3 className="mt-3 font-display text-2xl font-black sm:text-3xl">{item.name}</h3>
@@ -514,7 +531,18 @@ function Index() {
         <div className="mx-auto grid max-w-7xl gap-10 border-b border-footer-border pb-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr]">
           <div><Brand light /><p className="mt-5 max-w-sm text-sm leading-7 text-footer-muted">نحمي المنازل والأعمال بحلول مراقبة وإنذار ذكية، وتركيب نهتم فيه بأدق التفاصيل.</p></div>
           <div><h3 className="font-bold">تواصل معنا</h3><div className="mt-5 space-y-4 text-sm text-footer-muted"><a className="flex items-center gap-3 hover:text-footer-foreground" href={whatsappBase}><MessageCircle className="size-4 text-action" /> تواصل معنا عبر واتساب</a><p className="flex items-center gap-3"><Phone className="size-4 text-action" /> <span dir="ltr">+962 7 8875 7801</span></p><p className="flex items-center gap-3"><Users className="size-4 text-action" /> بإدارة: علي عبابنة</p><p className="flex items-center gap-3"><MapPin className="size-4 text-action" /> عمّان، الأردن</p></div></div>
-          <div><h3 className="font-bold">ساعات العمل</h3><div className="mt-5 flex items-start gap-3 text-sm text-footer-muted"><Clock3 className="mt-0.5 size-4 text-action" /><p>السبت – الخميس<br /><span className="mt-1 block text-footer-foreground">9:00 صباحاً – 7:00 مساءً</span></p></div><div className="mt-6 flex gap-2"><a href="#" aria-label="فيسبوك" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action"><Facebook className="size-4" /></a><a href="#" aria-label="إنستغرام" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action"><Instagram className="size-4" /></a></div></div>
+          <div>
+            <h3 className="font-bold">ساعات العمل</h3>
+            <div className="mt-5 flex items-start gap-3 text-sm text-footer-muted"><Clock3 className="mt-0.5 size-4 text-action" /><p>السبت – الخميس<br /><span className="mt-1 block text-footer-foreground">9:00 صباحاً – 7:00 مساءً</span></p></div>
+            <div className="mt-6 flex gap-2">
+              <a href="#" aria-label="فيسبوك" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action"><Facebook className="size-4" /></a>
+              <a href="#" aria-label="إنستغرام" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action"><Instagram className="size-4" /></a>
+            </div>
+            {/* PWA Install Button (Contextual Hint for Mobile Users) */}
+            <button className="mt-6 flex w-full max-w-[200px] items-center justify-between rounded-md border border-action/30 bg-action/10 px-4 py-2 text-sm font-bold text-action transition-colors hover:bg-action/20">
+              تثبيت التطبيق (PWA) <ChevronDown className="size-4 -rotate-90" />
+            </button>
+          </div>
         </div>
         <div className="mx-auto flex max-w-7xl flex-col gap-2 pt-7 text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between"><p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p><p className="flex items-center gap-2"><LockKeyhole className="size-3" /> خصوصيتك وأمانك أولويتنا</p></div>
       </footer>
