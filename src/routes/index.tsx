@@ -189,6 +189,7 @@ function Index() {
           <div className="mx-auto grid min-h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 sm:px-8 lg:px-12">
             <Brand light />
             <nav className="hidden items-center gap-8 text-sm font-semibold text-hero-muted lg:flex" aria-label="التنقل الرئيسي">
+              <a className="transition-colors hover:text-hero-foreground" href="#about">من نحن</a>
               <a className="transition-colors hover:text-hero-foreground" href="#packages">الباقات</a>
               <a className="transition-colors hover:text-hero-foreground" href="#custom">كوّن نظامك</a>
               <a className="transition-colors hover:text-hero-foreground" href="#services">خدماتنا</a>
@@ -213,6 +214,7 @@ function Index() {
             <nav className="border-t border-hero-border bg-hero-glass px-5 py-4 backdrop-blur-xl lg:hidden" aria-label="قائمة الهاتف">
               <div className="mx-auto grid max-w-7xl gap-1">
                 {[
+                  ["من نحن", "#about"],
                   ["الباقات", "#packages"],
                   ["كوّن نظامك", "#custom"],
                   ["خدماتنا", "#services"],
@@ -281,6 +283,42 @@ function Index() {
               </span>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section aria-label="العلامات التجارية المعتمدة" className="border-b border-border bg-background py-10 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-5 text-center sm:px-8 lg:px-12">
+          <p className="text-sm font-semibold text-muted-foreground mb-6">نعتمد أفضل العلامات التجارية العالمية لضمان الجودة العالية</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 opacity-70 grayscale sm:gap-16">
+            <span className="font-display text-2xl font-black text-foreground">HIKVISION</span>
+            <span className="font-display text-2xl font-black text-foreground">alhua</span>
+            <span className="font-display text-xl font-bold text-foreground">Western Digital</span>
+            <span className="font-display text-2xl font-black text-foreground">EZVIZ</span>
+            <span className="font-display text-2xl font-black text-foreground">ZKTeco</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" className="scroll-mt-20 border-b border-border bg-surface px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
+          <div>
+            <span className="section-kicker">من نحن</span>
+            <h2 className="mt-4 font-display text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">خبرة تمتد لسنوات في السوق الأردني</h2>
+            <p className="mt-5 text-base leading-8 text-muted-foreground">نحن في <strong>Ababneh Security</strong> نؤمن بأن الأمان ليس مجرد كاميرات تُعلق على الحائط، بل هو منظومة متكاملة تبدأ من دراسة الموقع بعناية، اختيار المعدات الأصلية، وانتهاءً بتركيب احترافي لا يشوه ديكور المكان.</p>
+            <ul className="mt-8 space-y-4 font-semibold">
+              <li className="flex items-center gap-3"><Check className="size-5 text-action" /> فريق هندسي وفني متخصص.</li>
+              <li className="flex items-center gap-3"><Check className="size-5 text-action" /> سرعة في الاستجابة وخدمة ما بعد البيع.</li>
+              <li className="flex items-center gap-3"><Check className="size-5 text-action" /> مشاريع منجزة في كافة محافظات المملكة.</li>
+            </ul>
+          </div>
+          <div className="relative aspect-video overflow-hidden rounded-2xl border border-border shadow-2xl sm:aspect-[4/3] lg:aspect-square">
+            <img src={heroImage} alt="فني تركيب كاميرات" className="h-full w-full object-cover grayscale transition-all duration-1000 hover:grayscale-0 hover:scale-105" />
+            <div className="absolute inset-0 bg-primary/20 mix-blend-multiply pointer-events-none" />
+            <div className="absolute bottom-6 right-6 rounded-lg bg-background/90 p-4 shadow-xl backdrop-blur-md">
+              <div className="font-display text-3xl font-black text-action">+500</div>
+              <div className="text-sm font-bold text-foreground">مشروع منجز بنجاح</div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -373,6 +411,50 @@ function Index() {
                 <p className="mt-3 text-sm leading-7 text-muted-foreground">{text}</p>
                 <a href={`${whatsappBase}${encodeURIComponent(`مرحباً، أريد الاستفسار عن ${title}`)}`} className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary">استفسر الآن <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" /></a>
               </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-surface px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading eyebrow="قطاعات نخدمها" title="حماية مصممة خصيصاً لكل بيئة" text="سواء كنت تبحث عن تأمين منزلك وعائلتك، أو حماية بضائعك وموظفيك، لدينا الحل الأمثل." />
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { title: "الفلل والمنازل", desc: "أنظمة أنيقة ومخفية تحافظ على جمال الديكور وتوفر حماية محيطية كاملة.", icon: Home },
+              { title: "المحلات والصيدليات", desc: "كاميرات قراءة العملات وتغطية الكاشير مع تسجيل صوتي عالي النقاء.", icon: Building2 },
+              { title: "المكاتب والشركات", desc: "تحكم بدخول الموظفين بالبصمة وأنظمة مراقبة قابلة للربط بالإدارة.", icon: Users },
+              { title: "المستودعات والمصانع", desc: "كاميرات ليلية بمدى طويل وأنظمة إنذار لاسلكية لتغطية المساحات الشاسعة.", icon: Zap },
+            ].map((sector) => (
+              <div key={sector.title} className="rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
+                <sector.icon className="size-8 text-primary" />
+                <h3 className="mt-4 font-display text-lg font-bold">{sector.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{sector.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+        <div className="mx-auto max-w-3xl">
+          <SectionHeading eyebrow="الأسئلة الشائعة" title="كل ما تحتاج معرفته قبل التركيب" text="إجابات شفافة على أكثر الأسئلة التي تهمك." />
+          <div className="mt-12 space-y-4">
+            {[
+              { q: "هل السعر يشمل التركيب والأسلاك؟", a: "نعم، جميع الباقات لدينا تشمل التركيب الاحترافي، البرمجة، والتمديدات القياسية اللازمة." },
+              { q: "كم مدة الكفالة؟ وماذا تغطي؟", a: "نوفر كفالة حقيقية لمدة عامين (24 شهراً) على الكاميرات وأجهزة التسجيل ضد العيوب المصنعية مع استبدال فوري." },
+              { q: "هل يمكنني مشاهدة الكاميرات من هاتفي؟", a: "بالتأكيد! نقوم بربط النظام بالإنترنت وبرمجته على هواتف جميع أفراد العائلة لتتمكن من المراقبة من أي مكان في العالم." },
+              { q: "كم يوماً يسجل الهارد ديسك؟", a: "نستخدم أقراص تخزين مخصصة للمراقبة (مثل WD Purple). قرص 1 تيرابايت يكفي لتسجيل 15 إلى 30 يوماً حسب الحركة، ويمكن زيادة السعة حسب الطلب." },
+            ].map((faq, i) => (
+              <details key={i} className="group rounded-lg border border-border bg-surface [&_summary::-webkit-details-marker]:hidden">
+                <summary className="flex cursor-pointer items-center justify-between p-5 font-bold text-foreground outline-none">
+                  {faq.q}
+                  <ChevronDown className="size-5 transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="border-t border-border p-5 text-sm leading-7 text-muted-foreground">
+                  {faq.a}
+                </div>
+              </details>
             ))}
           </div>
         </div>
