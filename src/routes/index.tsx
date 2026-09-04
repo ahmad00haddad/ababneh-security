@@ -247,18 +247,18 @@ function Index() {
       <section aria-label="مزايا الخدمة" className="border-b border-border bg-surface">
         <div className="mx-auto grid max-w-7xl grid-cols-2 px-5 sm:px-8 lg:grid-cols-4 lg:px-12">
           {[
-            [ShieldCheck, "كفالة حقيقية سنتين", "راحة بال مضمونة"],
-            [BadgeCheck, "فنيون معتمدون", "تركيب بمعايير احترافية"],
-            [MoonStar, "تصوير ملون ليلاً", "تفاصيل واضحة 24/7"],
-            [Headphones, "دعم فني سريع", "نحن معك بعد التركيب"],
-          ].map(([Icon, title, text], index) => (
-            <div key={String(title)} className={`flex items-center gap-3 py-6 sm:gap-4 lg:px-6 ${index % 2 === 0 ? "border-l border-border" : ""} ${index > 1 ? "border-t border-border lg:border-t-0" : ""}`}>
+            { icon: ShieldCheck, title: "كفالة حقيقية سنتين", text: "راحة بال مضمونة" },
+            { icon: BadgeCheck, title: "فنيون معتمدون", text: "تركيب بمعايير احترافية" },
+            { icon: MoonStar, title: "تصوير ملون ليلاً", text: "تفاصيل واضحة 24/7" },
+            { icon: Headphones, title: "دعم فني سريع", text: "نحن معك بعد التركيب" },
+          ].map(({ icon: Icon, title, text }, index) => (
+            <div key={title} className={`flex items-center gap-3 py-6 sm:gap-4 lg:px-6 ${index % 2 === 0 ? "border-l border-border" : ""} ${index > 1 ? "border-t border-border lg:border-t-0" : ""}`}>
               <span className="grid size-10 shrink-0 place-items-center rounded-md bg-accent text-primary sm:size-12">
                 <Icon className="size-5 sm:size-6" />
               </span>
               <span className="min-w-0">
-                <strong className="block text-sm sm:text-base">{String(title)}</strong>
-                <span className="mt-1 hidden text-xs text-muted-foreground sm:block">{String(text)}</span>
+                <strong className="block text-sm sm:text-base">{title}</strong>
+                <span className="mt-1 hidden text-xs text-muted-foreground sm:block">{text}</span>
               </span>
             </div>
           ))}
