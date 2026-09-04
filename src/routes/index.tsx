@@ -49,7 +49,9 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const whatsappBase = "https://wa.me/?text=";
+// قم بوضع رقم هاتف المبيعات هنا (بدون أصفار بالبداية وبدون علامة +) مثال للأردن: 962790000000
+const whatsappNumber = "";
+const whatsappBase = `https://wa.me/${whatsappNumber}?text=`;
 
 const services = [
   {
@@ -81,10 +83,10 @@ const packages = [
     price: 150,
     featured: false,
     features: [
-      "3 كاميرات Hikvision DS-2CE10DF3T-F",
+      "3 كاميرات Hikvision / Dahua (تصوير ملون)",
       "جهاز تسجيل DVR بأربع قنوات",
-      "قرص تخزين 1 تيرابايت",
-      "تركيب وبرمجة كاملة",
+      "قرص تخزين 1 تيرابايت (WD Purple)",
+      "تركيب وبرمجة كاملة (كفالة حقيقية)",
     ],
   },
   {
@@ -93,10 +95,10 @@ const packages = [
     price: 190,
     featured: true,
     features: [
-      "3 كاميرات Hikvision DS-2CE12HFT-F",
+      "3 كاميرات Hikvision / Dahua (تصوير ملون)",
       "جهاز تسجيل DVR بدقة 5MP",
-      "قرص تخزين 1 تيرابايت",
-      "تركيب وبرمجة كاملة",
+      "قرص تخزين 1 تيرابايت (WD Purple)",
+      "تركيب وبرمجة كاملة (كفالة حقيقية)",
     ],
   },
 ];
@@ -148,8 +150,16 @@ function Index() {
   const [alarm, setAlarm] = useState(false);
 
   const estimate = useMemo(() => {
-    const unit = resolution === "IP 4K" ? 72 : resolution === "5MP ColorVu" ? 52 : 39;
-    return 55 + cameras * unit + (alarm ? 185 : 0);
+    let base = 60; // التكلفة الأساسية (جهاز التسجيل، التركيب، هارد ديسك)
+    let unit = 30; // تكلفة الكاميرا الواحدة
+    if (resolution === "5MP ColorVu") {
+      base = 70;
+      unit = 40;
+    } else if (resolution === "IP 4K") {
+      base = 150; // أجهزة شبكية NVR مكلفة أكثر
+      unit = 60;
+    }
+    return base + (cameras * unit) + (alarm ? 185 : 0);
   }, [alarm, cameras, resolution]);
 
   const quoteMessage = encodeURIComponent(
