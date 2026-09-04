@@ -293,122 +293,137 @@ function Index() {
     <>
       {!appReady && <Preloader onComplete={() => setAppReady(true)} />}
       <main id="top" dir="rtl" className={`relative bg-background text-foreground ${!appReady ? "h-screen overflow-hidden" : "overflow-x-hidden"}`}>
-        {/* CCTV Static Noise Overlay */}
-        <div className="pointer-events-none fixed inset-0 z-[49] mix-blend-overlay opacity-5 bg-[url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')]"></div>
+        {/* ====== HERO: MOBILE LAYOUT (video first, then text below) ====== */}
+        <section className="block bg-hero text-hero-foreground sm:hidden">
+          {/* Mobile Header */}
+          <header className="relative z-20 border-b border-hero-border">
+            <div className="grid min-h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5">
+              <Brand light />
+              <button
+                type="button"
+                onClick={() => setMenuOpen((v) => !v)}
+                className="grid size-10 place-items-center rounded-md border border-hero-border bg-hero-glass text-hero-foreground"
+                aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+              >
+                {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+              </button>
+            </div>
+            {menuOpen && (
+              <nav className="border-t border-hero-border bg-hero-glass px-5 py-3 backdrop-blur-xl">
+                {[["من نحن","#about"],["الباقات","#packages"],["كوّن نظامك","#custom"],["خدماتنا","#services"],["تواصل معنا","#contact"]].map(([label, href]) => (
+                  <a key={href} href={href} onClick={() => setMenuOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold text-hero-muted hover:bg-hero-glass-hover hover:text-hero-foreground">{label}</a>
+                ))}
+              </nav>
+            )}
+          </header>
 
-        <section className="relative min-h-[56.25vw] overflow-hidden bg-hero text-hero-foreground sm:min-h-[92svh]">
-        <video
-          autoPlay
-          loop
-          muted={isMuted}
-          playsInline
-          poster={heroMan}
-          className="absolute inset-0 h-full w-full object-contain sm:object-cover sm:object-center"
-        >
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
-        
-        {/* Audio Mute Toggle Button */}
-        <button
-          onClick={() => setIsMuted(!isMuted)}
-          className="absolute bottom-5 left-5 z-40 grid size-11 place-items-center rounded-full border border-hero-border bg-background/50 text-hero-foreground backdrop-blur-md transition-colors hover:bg-background/80 sm:bottom-10 sm:left-10"
-          aria-label={isMuted ? "تشغيل الصوت" : "كتم الصوت"}
-        >
-          {isMuted ? <VolumeX className="size-5" /> : <Volume2 className="size-5" />}
-        </button>
-        
-        {/* CCTV Viewfinder overlay */}
-        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-8 opacity-20 mix-blend-overlay sm:p-16">
-          <div className="flex justify-between">
-            <div className="size-8 sm:size-16 border-l-2 border-t-2 border-white" />
-            <div className="size-8 sm:size-16 border-r-2 border-t-2 border-white" />
-          </div>
-          <div className="flex justify-between">
-            <div className="size-8 sm:size-16 border-b-2 border-l-2 border-white" />
-            <div className="size-8 sm:size-16 border-b-2 border-r-2 border-white" />
-          </div>
-        </div>
-        
-        {/* Scanline */}
-        <div className="pointer-events-none absolute left-0 top-0 z-10 h-1 w-full animate-scanline bg-action shadow-[0_0_15px_rgba(var(--action),0.8)]" />
-        
-        <div className="absolute inset-0 bg-hero-overlay" />
-
-        <header className="relative z-20 border-b border-hero-border">
-          <div className="mx-auto grid min-h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 sm:px-8 lg:px-12">
-            <Brand light />
-            <nav className="hidden items-center gap-8 text-sm font-semibold text-hero-muted lg:flex" aria-label="التنقل الرئيسي">
-              <a className="transition-colors hover:text-hero-foreground" href="#about">من نحن</a>
-              <a className="transition-colors hover:text-hero-foreground" href="#packages">الباقات</a>
-              <a className="transition-colors hover:text-hero-foreground" href="#custom">كوّن نظامك</a>
-              <a className="transition-colors hover:text-hero-foreground" href="#services">خدماتنا</a>
-              <a className="transition-colors hover:text-hero-foreground" href="#contact">تواصل معنا</a>
-            </nav>
+          {/* Mobile Video — full width, natural ratio, no cropping */}
+          <div className="relative w-full bg-black">
+            <video autoPlay loop muted={isMuted} playsInline poster={heroMan} className="w-full aspect-video object-contain">
+              <source src="/hero-video.mp4" type="video/mp4" />
+            </video>
+            <div className="pointer-events-none absolute left-0 top-0 h-px w-full animate-scanline bg-action" />
             <button
-              type="button"
-              onClick={() => setMenuOpen((value) => !value)}
-              className="grid size-11 place-items-center rounded-md border border-hero-border bg-hero-glass text-hero-foreground lg:hidden"
-              aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
-              aria-expanded={menuOpen}
+              onClick={() => setIsMuted(!isMuted)}
+              className="absolute bottom-3 left-3 grid size-9 place-items-center rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-md"
+              aria-label={isMuted ? "تشغيل الصوت" : "كتم الصوت"}
             >
-              {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+              {isMuted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
             </button>
           </div>
-          {menuOpen && (
-            <nav className="border-t border-hero-border bg-hero-glass px-5 py-4 backdrop-blur-xl lg:hidden" aria-label="قائمة الهاتف">
-              <div className="mx-auto grid max-w-7xl gap-1">
-                {[
-                  ["من نحن", "#about"],
-                  ["الباقات", "#packages"],
-                  ["كوّن نظامك", "#custom"],
-                  ["خدماتنا", "#services"],
-                  ["تواصل معنا", "#contact"],
-                ].map(([label, href]) => (
-                  <a key={href} href={href} onClick={() => setMenuOpen(false)} className="rounded-md px-3 py-3 text-sm font-semibold text-hero-muted hover:bg-hero-glass-hover hover:text-hero-foreground">
-                    {label}
-                  </a>
-                ))}
-              </div>
-            </nav>
-          )}
-        </header>
 
-        {/* Hero content — bottom-left anchored, stagger fires AFTER preloader */}
-        <div className="relative z-10 mx-auto flex h-[calc(56.25vw-5rem)] max-w-7xl flex-col justify-end px-5 pb-8 sm:h-[calc(92svh-5rem)] sm:px-8 sm:pb-24 lg:px-12">
-          {/* Badge — appears at 0.5s */}
-          <div
-            className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-hero-border bg-hero-glass px-4 py-2 text-xs font-bold text-hero-muted backdrop-blur-lg sm:text-sm"
-            style={appReady ? { animation: "reveal 0.8s 0.5s ease-out both" } : { opacity: 0 }}
-          >
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-action opacity-70" />
-              <span className="relative inline-flex size-2 rounded-full bg-action" />
-            </span>
-            حماية متصلة على مدار الساعة
+          {/* Mobile Text — below video */}
+          <div className="bg-hero px-5 py-8">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-hero-border bg-hero-glass px-4 py-2 text-xs font-bold text-hero-muted backdrop-blur-lg">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-action opacity-70" />
+                <span className="relative inline-flex size-2 rounded-full bg-action" />
+              </span>
+              حماية متصلة على مدار الساعة
+            </div>
+            <h1 className="mt-2 font-display text-3xl font-black leading-[1.2]">
+              أنظمة حماية متطورة<br />
+              <span className="text-action">لأمان عائلتك وعملك</span>
+            </h1>
+            <div className="mt-6 flex flex-col gap-3">
+              <ActionLink href="#packages" variant="primary" className="w-full">
+                عرض الباقات <ArrowLeft className="size-4" />
+              </ActionLink>
+              <p className="text-xs text-hero-muted">كشف ميداني مجاني · تركيب احترافي · كفالة موثقة</p>
+            </div>
           </div>
+        </section>
 
-          {/* H1 — appears at 2.5s */}
-          <h1
-            className="max-w-2xl font-display text-3xl font-black leading-[1.2] sm:text-5xl lg:text-6xl xl:text-7xl"
-            style={appReady ? { animation: "reveal 1s 2.5s ease-out both" } : { opacity: 0 }}
-          >
-            أنظمة حماية متطورة
-            <br />
-            <span className="text-action">لأمان عائلتك وعملك</span>
-          </h1>
+        {/* ====== HERO: DESKTOP LAYOUT (full-screen video + overlaid text) ====== */}
+        <section className="relative hidden min-h-[92svh] overflow-hidden bg-hero text-hero-foreground sm:block">
+          {/* Desktop background video */}
+          <video autoPlay loop muted={isMuted} playsInline poster={heroMan} className="absolute inset-0 h-full w-full object-cover object-center">
+            <source src="/hero-video.mp4" type="video/mp4" />
+          </video>
 
-          {/* CTA — appears at 5.5s */}
-          <div
-            className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
-            style={appReady ? { animation: "reveal 0.8s 5.5s ease-out both" } : { opacity: 0 }}
-          >
-            <ActionLink href="#packages" variant="primary" className="w-full sm:w-auto">
-              عرض الباقات <ArrowLeft className="size-4" />
-            </ActionLink>
-            <span className="text-xs text-hero-muted">كشف ميداني مجاني · تركيب احترافي · كفالة موثقة</span>
+          {/* Desktop overlays */}
+          <div className="absolute inset-0 bg-hero-overlay" />
+          <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-16 opacity-20 mix-blend-overlay">
+            <div className="flex justify-between">
+              <div className="size-16 border-l-2 border-t-2 border-white" />
+              <div className="size-16 border-r-2 border-t-2 border-white" />
+            </div>
+            <div className="flex justify-between">
+              <div className="size-16 border-b-2 border-l-2 border-white" />
+              <div className="size-16 border-b-2 border-r-2 border-white" />
+            </div>
           </div>
-        </div>
-      </section>
+          <div className="pointer-events-none absolute left-0 top-0 z-10 h-1 w-full animate-scanline bg-action shadow-[0_0_15px_rgba(var(--action),0.8)]" />
+
+          {/* Desktop Mute button */}
+          <button
+            onClick={() => setIsMuted(!isMuted)}
+            className="absolute bottom-10 left-10 z-40 grid size-12 place-items-center rounded-full border border-hero-border bg-background/50 text-hero-foreground backdrop-blur-md transition-colors hover:bg-background/80"
+            aria-label={isMuted ? "تشغيل الصوت" : "كتم الصوت"}
+          >
+            {isMuted ? <VolumeX className="size-5" /> : <Volume2 className="size-5" />}
+          </button>
+
+          {/* Desktop Header */}
+          <header className="relative z-20 border-b border-hero-border">
+            <div className="mx-auto grid min-h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-8 lg:px-12">
+              <Brand light />
+              <nav className="hidden items-center gap-8 text-sm font-semibold text-hero-muted lg:flex">
+                <a className="transition-colors hover:text-hero-foreground" href="#about">من نحن</a>
+                <a className="transition-colors hover:text-hero-foreground" href="#packages">الباقات</a>
+                <a className="transition-colors hover:text-hero-foreground" href="#custom">كوّن نظامك</a>
+                <a className="transition-colors hover:text-hero-foreground" href="#services">خدماتنا</a>
+                <a className="transition-colors hover:text-hero-foreground" href="#contact">تواصل معنا</a>
+              </nav>
+            </div>
+          </header>
+
+          {/* Desktop Text — bottom anchored, staggered after preloader */}
+          <div className="relative z-10 mx-auto flex h-[calc(92svh-5rem)] max-w-7xl flex-col justify-end px-8 pb-24 lg:px-12">
+            <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-hero-border bg-hero-glass px-4 py-2 text-sm font-bold text-hero-muted backdrop-blur-lg"
+                 style={appReady ? { animation: "reveal 0.8s 0.5s ease-out both" } : { opacity: 0 }}>
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-action opacity-70" />
+                <span className="relative inline-flex size-2 rounded-full bg-action" />
+              </span>
+              حماية متصلة على مدار الساعة
+            </div>
+
+            <h1 className="max-w-2xl font-display text-5xl font-black leading-[1.15] lg:text-6xl xl:text-7xl"
+                style={appReady ? { animation: "reveal 1s 2.5s ease-out both" } : { opacity: 0 }}>
+              أنظمة حماية متطورة<br />
+              <span className="text-action">لأمان عائلتك وعملك</span>
+            </h1>
+
+            <div className="mt-8 flex items-center gap-4"
+                 style={appReady ? { animation: "reveal 0.8s 5.5s ease-out both" } : { opacity: 0 }}>
+              <ActionLink href="#packages" variant="primary">
+                عرض الباقات <ArrowLeft className="size-4" />
+              </ActionLink>
+              <span className="text-sm text-hero-muted">كشف ميداني مجاني · تركيب احترافي · كفالة موثقة</span>
+            </div>
+          </div>
+        </section>
 
       <section aria-label="مزايا الخدمة" className="border-b border-border bg-surface">
         <div className="mx-auto grid max-w-7xl grid-cols-2 px-5 sm:px-8 lg:grid-cols-4 lg:px-12">
