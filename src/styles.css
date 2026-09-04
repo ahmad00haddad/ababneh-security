@@ -146,6 +146,23 @@
   animation: scanline 6s linear infinite;
 }
 
+@keyframes radar-scan {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(90deg); }
+  100% { transform: rotate(0deg); }
+}
+@utility animate-radar {
+  animation: radar-scan 4s ease-in-out infinite;
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@utility animate-slide-left {
+  animation: slide-in-left 1s ease-out forwards;
+}
+
 @media (max-width: 640px) {
   .bg-hero-overlay { background: linear-gradient(180deg, oklch(0.12 0.06 252 / 50%) 0%, oklch(0.12 0.06 252 / 92%) 64%, oklch(0.12 0.06 252 / 98%) 100%); }
 }

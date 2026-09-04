@@ -133,11 +133,24 @@ function ActionLink({
   );
 }
 
+function LogoMark({ className = "size-6" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      {/* Left half - slides in */}
+      <path d="M50 0 A50 50 0 0 0 50 100 Z" fill="currentColor" className="animate-slide-left origin-center" />
+      {/* Top right arc - radar scan effect */}
+      <path d="M50 0 A50 50 0 0 1 100 50 L75 50 A25 25 0 0 0 50 25 Z" fill="currentColor" className="animate-radar origin-center" />
+      {/* Bottom right dot - pulses like a recording indicator */}
+      <circle cx="75" cy="75" r="14" fill="currentColor" className="animate-pulse origin-center" />
+    </svg>
+  );
+}
+
 function Brand({ light = false }: { light?: boolean }) {
   return (
     <a href="#top" className={`flex items-center gap-3 ${light ? "text-hero-foreground" : "text-foreground"}`} aria-label="العودة إلى أعلى الصفحة">
-      <span className="grid size-11 shrink-0 place-items-center rounded-md bg-gradient-to-br from-action to-primary text-action-foreground shadow-action">
-        <ShieldCheck className="size-6" strokeWidth={2.3} />
+      <span className="grid size-11 shrink-0 place-items-center rounded-md bg-transparent text-action transition-transform hover:scale-110">
+        <LogoMark className="size-9" />
       </span>
       <span className="min-w-0 leading-tight">
         <strong className="flex items-center gap-2 truncate font-display text-lg">
