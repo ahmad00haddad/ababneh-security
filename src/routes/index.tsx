@@ -151,12 +151,12 @@ function LogoMark({ className = "size-6" }: { className?: string }) {
 
 function Brand({ light = false }: { light?: boolean }) {
   return (
-    <a href="#top" className={`flex items-center gap-3 ${light ? "text-hero-foreground" : "text-foreground"}`} aria-label="العودة إلى أعلى الصفحة">
+    <a href="#top" className={`group flex items-center gap-3 ${light ? "text-hero-foreground" : "text-foreground"}`} aria-label="العودة إلى أعلى الصفحة">
       <span className="grid size-11 shrink-0 place-items-center rounded-md bg-transparent text-action transition-transform hover:scale-110">
         <LogoMark className="size-9" />
       </span>
       <span className="min-w-0 leading-tight">
-        <strong className="flex items-center gap-2 truncate font-display text-lg">
+        <strong className="flex items-center gap-2 truncate font-display text-lg group-hover:animate-glitch">
           Ababneh Security
           <span className="relative flex size-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
@@ -166,6 +166,34 @@ function Brand({ light = false }: { light?: boolean }) {
         <span className={`block text-[11px] ${light ? "text-hero-muted" : "text-muted-foreground"}`}>أنظمة حماية متكاملة</span>
       </span>
     </a>
+  );
+}
+
+function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string }) {
+  const [unlocked, setUnlocked] = useState(false);
+  const handleSlide = (e: any) => {
+    if (e.target.value >= 99 && !unlocked) {
+      setUnlocked(true);
+      navigator.vibrate?.([100, 50, 100]); // Success vibration
+      onUnlock();
+    }
+  };
+  return (
+    <div className="relative h-14 w-full overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm font-bold text-muted-foreground">
+        {unlocked ? "تم تأكيد الاتصال" : text}
+      </div>
+      <input 
+        type="range" 
+        min="0" max="100" 
+        defaultValue="0"
+        onChange={handleSlide}
+        className="relative z-10 h-full w-full cursor-pointer appearance-none bg-transparent opacity-0"
+      />
+      <div className="pointer-events-none absolute left-1 top-1 bottom-1 aspect-square rounded-full bg-action grid place-items-center text-action-foreground shadow-md transition-all">
+        <LockKeyhole className="size-5" />
+      </div>
+    </div>
   );
 }
 
@@ -218,7 +246,10 @@ function Index() {
   );
 
   return (
-    <main id="top" dir="rtl" className="overflow-x-hidden bg-background text-foreground">
+    <main id="top" dir="rtl" className="relative overflow-x-hidden bg-background text-foreground">
+      {/* CCTV Static Noise Overlay */}
+      <div className="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-5 animate-noise bg-[url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')]"></div>
+      
       <section className="relative min-h-[92svh] overflow-hidden bg-hero text-hero-foreground">
         <img
           src={heroMan}
@@ -481,8 +512,20 @@ function Index() {
               </div>
             </div>
             <div className="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
-              <div><span className="text-xs text-muted-foreground">السعر التقديري يبدأ من</span><div className="font-display text-3xl font-black text-primary">{estimate} <span className="text-base">د.أ</span></div><p className="mt-1 max-w-[200px] text-[10px] text-muted-foreground/80 leading-tight">*يشمل الأجهزة، التركيب، هارد ديسك، وكفالة حقيقية.</p></div>
-              <ActionLink href={`${whatsappBase}${quoteMessage}`}>احصل على السعر فوراً <ArrowLeft className="size-4" /></ActionLink>
+              <div className="flex flex-col gap-4 rounded-lg border border-border bg-background p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+                <div><span className="text-xs text-muted-foreground">السعر التقديري يبدأ من</span><div className="font-display text-3xl font-black text-primary">{estimate} <span className="text-base">د.أ</span></div><p className="mt-1 max-w-[200px] text-[10px] text-muted-foreground/80 leading-tight">*يشمل الأجهزة، التركيب، هارد ديسك، وكفالة حقيقية.</p></div>
+                <div className="w-full sm:w-auto">
+                  <div className="block sm:hidden w-full">
+                    <SlideToUnlock 
+                      text="اسحب لطلب النظام" 
+                      onUnlock={() => window.location.href = `${whatsappBase}${quoteMessage}`} 
+                    />
+                  </div>
+                  <div className="hidden sm:block">
+                    <a href={`${whatsappBase}${quoteMessage}`} className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-action">تأكيد عبر واتساب <ArrowLeft className="size-4" /></a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
