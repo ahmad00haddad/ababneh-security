@@ -296,23 +296,22 @@ function Index() {
         {/* CCTV Static Noise Overlay */}
         <div className="pointer-events-none fixed inset-0 z-[49] mix-blend-overlay opacity-5 bg-[url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')]"></div>
 
-        <section className="relative min-h-[92svh] overflow-hidden bg-hero text-hero-foreground">
+        <section className="relative overflow-hidden bg-hero text-hero-foreground" style={{ minHeight: "min(92svh, max(56.25vw, 420px))" }}>
         <video
           autoPlay
           loop
           muted={isMuted}
           playsInline
           poster={heroMan}
-          className="absolute inset-0 h-full w-full object-cover object-[72%_center]"
+          className="absolute inset-0 h-full w-full object-contain sm:object-cover sm:object-center"
         >
-          {/* Fallback local path, user needs to put hero-video.mp4 in public or assets */}
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
         
         {/* Audio Mute Toggle Button */}
         <button
           onClick={() => setIsMuted(!isMuted)}
-          className="absolute bottom-5 left-5 z-40 grid size-12 place-items-center rounded-full border border-hero-border bg-background/50 text-hero-foreground backdrop-blur-md transition-colors hover:bg-background/80 sm:bottom-10 sm:left-10"
+          className="absolute bottom-5 left-5 z-40 grid size-11 place-items-center rounded-full border border-hero-border bg-background/50 text-hero-foreground backdrop-blur-md transition-colors hover:bg-background/80 sm:bottom-10 sm:left-10"
           aria-label={isMuted ? "تشغيل الصوت" : "كتم الصوت"}
         >
           {isMuted ? <VolumeX className="size-5" /> : <Volume2 className="size-5" />}
@@ -375,9 +374,9 @@ function Index() {
         </header>
 
         {/* Hero content - bottom anchored, staggered reveal */}
-        <div className="relative z-10 mx-auto flex min-h-[calc(92svh-5rem)] max-w-7xl flex-col justify-end px-5 pb-14 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24">
+        <div className="relative z-10 mx-auto flex h-[calc(100%-5rem)] max-w-7xl flex-col justify-end px-5 pb-8 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24">
           {/* Badge */}
-          <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-hero-border bg-hero-glass px-4 py-2 text-xs font-bold text-hero-muted backdrop-blur-lg sm:text-sm"
+          <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-hero-border bg-hero-glass px-4 py-2 text-xs font-bold text-hero-muted backdrop-blur-lg sm:text-sm"
                style={{ animation: "reveal 0.7s 0.2s ease-out both" }}>
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-action opacity-70" />
@@ -387,7 +386,7 @@ function Index() {
           </div>
 
           {/* H1 */}
-          <h1 className="max-w-xl font-display text-4xl font-black leading-[1.2] sm:text-5xl lg:text-6xl"
+          <h1 className="max-w-xl font-display text-3xl font-black leading-[1.2] sm:text-5xl lg:text-6xl"
               style={{ animation: "reveal 0.8s 0.6s ease-out both", opacity: 0 }}>
             أنظمة حماية متطورة
             <br />
@@ -395,7 +394,7 @@ function Index() {
           </h1>
 
           {/* CTA row */}
-          <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
+          <div className="mt-5 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
                style={{ animation: "reveal 0.7s 1.2s ease-out both", opacity: 0 }}>
             <ActionLink href="#packages" variant="primary" className="w-full sm:w-auto">
               عرض الباقات <ArrowLeft className="size-4" />
