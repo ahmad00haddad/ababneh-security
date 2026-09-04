@@ -305,8 +305,8 @@ function Index() {
                     </li>
                   ))}
                 </ul>
-                <ActionLink href={`${whatsappBase}${encodeURIComponent(`مرحباً، أريد طلب ${item.name} بسعر ${item.price} د.أ`)}`} variant={item.featured ? "primary" : "whatsapp"} className="w-full">
-                  <MessageCircle className="size-5" /> طلب عبر واتساب
+                <ActionLink href={`${whatsappBase}${encodeURIComponent(`مرحباً، أريد طلب ${item.name} بسعر ${item.price} د.أ`)}`} variant={item.featured ? "primary" : "outline"} className="w-full">
+                  <Check className="size-5" /> اختيار هذه الباقة
                 </ActionLink>
               </article>
             ))}
@@ -394,13 +394,16 @@ function Index() {
         <div className="mx-auto flex max-w-7xl flex-col gap-2 pt-7 text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between"><p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p><p className="flex items-center gap-2"><LockKeyhole className="size-3" /> خصوصيتك وأمانك أولويتنا</p></div>
       </footer>
 
-      <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 sm:bottom-7 sm:right-7">
-        <div className="animate-bounce rounded-t-xl rounded-bl-xl rounded-br-sm border border-border bg-card/90 px-3 py-2 text-xs font-bold text-card-foreground shadow-lg backdrop-blur-md">
-          تحتاج مساعدة؟ تواصل معنا 👋
-        </div>
-        <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} aria-label="تواصل عبر واتساب" className="group grid size-14 place-items-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-whatsapp transition-all hover:scale-110 sm:size-16">
-          <span className="absolute inset-0 animate-ping rounded-full bg-whatsapp opacity-30 duration-1000" />
-          <MessageCircle className="relative size-7 transition-transform group-hover:rotate-12 group-hover:scale-110" fill="currentColor" />
+      <div className="fixed bottom-5 right-5 z-50 sm:bottom-7 sm:right-7">
+        <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-background/60 pl-2 pr-6 text-foreground shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-background/80 hover:shadow-emerald-500/20 sm:h-16">
+          <div className="relative grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 text-white shadow-lg sm:size-12">
+            <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-40 duration-1000" />
+            <MessageCircle className="relative size-5 transition-transform group-hover:rotate-12 group-hover:scale-110 sm:size-6" fill="currentColor" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] font-medium text-muted-foreground">تحتاج استشارة؟</span>
+            <span className="text-sm font-bold tracking-wide">تحدث مع خبير</span>
+          </div>
         </a>
       </div>
     </main>
