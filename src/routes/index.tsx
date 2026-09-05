@@ -209,7 +209,8 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
     const rect = trackRef.current.getBoundingClientRect();
     const thumbW = 48; // 56px (h-14) - 8px (p-1 * 2)
     const trackW = rect.width - thumbW - 8;
-    const x = Math.max(0, Math.min(clientX - rect.left - thumbW / 2, trackW));
+    // RTL logic: distance from the RIGHT edge
+    const x = Math.max(0, Math.min(rect.right - clientX - thumbW / 2, trackW));
     const val = Math.round((x / trackW) * 100);
     
     setValue(val);
@@ -217,7 +218,6 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
       setUnlocked(true);
       navigator.vibrate?.([100, 50, 100]);
       setValue(100);
-      // Add delay so user visually sees the checkmark and text before redirecting
       setTimeout(() => {
         onUnlock();
       }, 800);
@@ -227,8 +227,8 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
   const onStart = (clientX: number) => {
     if (unlocked || !trackRef.current) return;
     const rect = trackRef.current.getBoundingClientRect();
-    // Only allow drag if starting on the left half of the slider
-    if (clientX - rect.left < rect.width / 2) {
+    // Only allow drag if starting on the RIGHT half of the slider (RTL)
+    if (rect.right - clientX < rect.width / 2) {
       startAllowed.current = true;
       handleMove(clientX);
     }
@@ -242,7 +242,7 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
   return (
     <div
       ref={trackRef}
-      dir="ltr"
+      dir="rtl"
       className="relative h-14 w-full select-none overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner cursor-pointer touch-none"
       onTouchStart={(e) => onStart(e.touches[0].clientX)}
       onTouchMove={(e) => handleMove(e.touches[0].clientX)}
@@ -255,14 +255,14 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
       onMouseUp={onEnd}
       onMouseLeave={onEnd}
     >
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm font-bold text-muted-foreground" dir="rtl">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm font-bold text-muted-foreground">
         {unlocked ? "✓ تم تأكيد الاتصال" : text}
       </div>
       <div
         className="pointer-events-none absolute top-1 bottom-1 aspect-square rounded-full bg-action grid place-items-center text-action-foreground shadow-md"
         style={{
-          left: `calc(4px + ${value}% * (100% - 56px) / 100)`,
-          transition: unlocked ? "none" : value === 0 ? "left 0.3s ease" : "none",
+          right: `calc(4px + ${value}% * (100% - 56px) / 100)`,
+          transition: unlocked ? "none" : value === 0 ? "right 0.3s ease" : "none",
         }}
       >
         {unlocked ? <Check className="size-5" /> : <LockKeyhole className="size-5" />}
