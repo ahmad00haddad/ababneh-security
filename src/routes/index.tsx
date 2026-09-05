@@ -9,6 +9,7 @@ import {
   ChevronDown,
   Clock3,
   Facebook,
+  Fingerprint,
   Headphones,
   Home,
   Instagram,
@@ -321,6 +322,40 @@ function Index() {
   const [isMuted, setIsMuted] = useState(true);
   const [pwaToast, setPwaToast] = useState(false);
 
+  // 10 Ideas: Interaction States
+  const [threats, setThreats] = useState(24051);
+  const [glitch, setGlitch] = useState(false);
+  const [fabText, setFabText] = useState("تحدث مع خبير");
+  const [fingerprint, setFingerprint] = useState(false);
+  const [scarcityHint, setScarcityHint] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const triggerGlitch = () => {
+    setGlitch(true);
+    setTimeout(() => setGlitch(false), 200);
+  };
+
+  useEffect(() => {
+    const i = setInterval(() => setThreats(p => p + Math.floor(Math.random() * 3)), 3500);
+    return () => clearInterval(i);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+      if (y > 3500) setFabText("طلب معاينة مجانية");
+      else if (y > 1500) setFabText("احسب تكلفة نظامك");
+      else setFabText("تحدث مع خبير");
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const t = setTimeout(() => setScarcityHint(true), 15000);
+    return () => clearTimeout(t);
+  }, []);
+
   // Refs for video elements — needed to fix iOS muted state bug
   const desktopVideoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
@@ -420,28 +455,51 @@ function Index() {
           </div>
         </div>
       )}
-      <main id="top" dir="rtl" className={`relative bg-background text-foreground ${!appReady ? "h-screen overflow-hidden" : "overflow-x-hidden"}`}>
-        {/* ====== UNIFIED HEADER ====== */}
-        <header className="relative z-50 border-b border-hero-border bg-hero text-hero-foreground">
-          <div className="mx-auto grid min-h-16 sm:min-h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 sm:px-8 lg:px-12">
-            <Brand light />
-            {/* Desktop Nav */}
-            <nav className="hidden items-center gap-8 text-sm font-semibold text-hero-muted lg:flex">
-              <a className="transition-colors hover:text-hero-foreground" href="#about">من نحن</a>
-              <a className="transition-colors hover:text-hero-foreground" href="#packages">الباقات</a>
-              <a className="transition-colors hover:text-hero-foreground" href="#custom">كوّن نظامك</a>
-              <a className="transition-colors hover:text-hero-foreground" href="#services">خدماتنا</a>
-              <a className="transition-colors hover:text-hero-foreground" href="#contact">تواصل معنا</a>
+      <main id="top" dir="rtl" className={`relative bg-background text-foreground ${!appReady ? "h-screen overflow-hidden" : "overflow-x-hidden"} ${glitch ? "animate-glitch brightness-150 contrast-125 saturate-0" : ""}`} onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}>
+        
+        {/* Full screen static glitch overlay */}
+        {glitch && (
+          <div className="pointer-events-none fixed inset-0 z-[9999] opacity-20 mix-blend-difference bg-[url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')]"></div>
+        )}
+
+        <header className="fixed left-0 right-0 top-0 z-50 border-b border-hero-border bg-hero-glass/95 backdrop-blur-md shadow-sm">
+          <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
+            <div className="flex items-center gap-3 text-hero-foreground">
+              <LogoMark className="size-8 sm:size-10 text-action" />
+              <div className="group relative">
+                <div className="absolute inset-0 bg-action/20 blur-md transition-opacity duration-300 group-hover:opacity-100 opacity-0" />
+                <h1 className="font-display text-xl sm:text-2xl font-black tracking-tight leading-none">Ababneh <span className="text-action">Security</span></h1>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-hero-muted group-hover:hidden">Commercial Scale</p>
+                <p className="hidden text-[10px] font-bold uppercase tracking-[0.1em] text-action group-hover:block transition-all duration-300">■ SECURE CONNECTION</p>
+              </div>
+            </div>
+            <nav className="hidden items-center gap-8 text-sm font-bold text-hero-muted lg:flex">
+              <a className="transition-colors hover:text-hero-foreground" href="#top" onClick={triggerGlitch}>الرئيسية</a>
+              <a className="transition-colors hover:text-hero-foreground" href="#packages" onClick={triggerGlitch}>باقات الحماية</a>
+              <a className="transition-colors hover:text-hero-foreground" href="#custom" onClick={triggerGlitch}>احسب تكلفتك</a>
+              <a className="transition-colors hover:text-hero-foreground" href="#contact" onClick={triggerGlitch}>تواصل معنا</a>
             </nav>
-            {/* Mobile Menu Button */}
-            <button
-              type="button"
-              onClick={() => setMenuOpen((v) => !v)}
-              className="grid size-10 sm:size-11 place-items-center rounded-md border border-hero-border bg-hero-glass text-hero-foreground lg:hidden"
-              aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
-            >
-              {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-            </button>
+            <div className="flex items-center gap-4 sm:gap-6">
+              
+              {/* Idea 6: Cyber Threat Counter */}
+              <div className="hidden lg:flex flex-col items-end gap-1 text-[9px] font-mono text-muted-foreground mr-4">
+                <span className="flex items-center gap-1.5"><ShieldAlert className="size-3 text-action animate-pulse" /> THREATS BLOCKED</span>
+                <span className="font-bold text-action tracking-widest">{threats.toLocaleString()}</span>
+              </div>
+
+              <a href="tel:0788757801" onClick={triggerGlitch} className="hidden items-center gap-2 text-sm font-bold text-hero-foreground transition-colors hover:text-action sm:flex">
+                <Phone className="size-4 text-action" /> 078 875 7801
+              </a>
+              <ActionLink href="#packages" onClick={triggerGlitch} className="hidden sm:inline-flex">عرض الباقات</ActionLink>
+              <button
+                type="button"
+                onClick={() => setMenuOpen((v) => !v)}
+                className="grid size-10 sm:size-11 place-items-center rounded-md border border-hero-border bg-hero-glass text-hero-foreground lg:hidden"
+                aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+              >
+                {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+              </button>
+            </div>
           </div>
           {/* Mobile Nav */}
           {menuOpen && (
@@ -454,7 +512,7 @@ function Index() {
         </header>
 
         {/* ====== HERO: MOBILE LAYOUT (video first, then text below) ====== */}
-        <section className="block bg-hero text-hero-foreground sm:hidden">
+        <section className="block bg-hero text-hero-foreground sm:hidden pt-16">
           {/* Mobile Video — full width, natural ratio, no cropping */}
           <div className="relative w-full bg-black">
             <CCTVTime className="absolute right-4 top-4 z-40" />
@@ -494,7 +552,7 @@ function Index() {
         </section>
 
         {/* ====== HERO: DESKTOP LAYOUT (full-screen video + overlaid text) ====== */}
-        <section className="relative hidden min-h-[calc(92svh-5rem)] overflow-hidden bg-hero text-hero-foreground sm:block">
+        <section className="relative hidden min-h-[100svh] pt-20 overflow-hidden bg-hero text-hero-foreground sm:block">
           <CCTVTime className="absolute right-10 top-10 z-40 text-sm" />
           {/* Desktop background video */}
           <video ref={desktopVideoRef} autoPlay loop muted playsInline poster={heroMan} className="absolute inset-0 h-full w-full object-cover object-center">
@@ -726,14 +784,26 @@ function Index() {
                   <div className="block sm:hidden w-full">
                     <SlideToUnlock 
                       text="اسحب لطلب النظام" 
-                      onUnlock={() => window.location.href = `${whatsappBase}${quoteMessage}`} 
+                      onUnlock={() => {
+                         setFingerprint(true);
+                         setTimeout(() => window.location.href = `${whatsappBase}${quoteMessage}`, 1000);
+                      }} 
                     />
                   </div>
                   <div className="hidden sm:block">
-                    <a href={`${whatsappBase}${quoteMessage}`} className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-action">تأكيد عبر واتساب <ArrowLeft className="size-4" /></a>
+                    <a href={`${whatsappBase}${quoteMessage}`} onClick={() => setFingerprint(true)} className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-action">
+                       {fingerprint ? "جاري التأكيد..." : "تأكيد عبر واتساب"} {fingerprint ? <Fingerprint className="size-4 animate-pulse text-action" /> : <ArrowLeft className="size-4" />}
+                    </a>
                   </div>
                 </div>
               </div>
+            </div>
+            
+            {/* Idea 8: Scarcity Hint */}
+            <div className={`overflow-hidden transition-all duration-700 ${scarcityHint ? "max-h-16 opacity-100 mt-4" : "max-h-0 opacity-0"}`}>
+               <div className="flex items-center justify-center gap-2 rounded bg-amber-500/10 py-2 text-xs font-bold text-amber-500">
+                  <Clock3 className="size-4 animate-pulse" /> فنيونا متاحون للتركيب غداً، احجز الآن لتثبيت السعر!
+               </div>
             </div>
           </div>
         </div>
@@ -915,15 +985,15 @@ function Index() {
           <span className="text-xs font-bold tracking-wide">اتصال سريع</span>
         </a>
         
-        {/* WhatsApp Button */}
+        {/* WhatsApp Button (Smart FAB) */}
         <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50, 50, 50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-background/60 pl-2 pr-6 text-foreground shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-background/80 hover:shadow-emerald-500/20 sm:h-16">
           <div className="relative grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 text-white shadow-lg sm:size-12">
             <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-40 duration-1000" />
             <MessageCircle className="relative size-5 transition-transform group-hover:rotate-12 group-hover:scale-110 sm:size-6" fill="currentColor" />
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] font-medium text-muted-foreground">تحتاج استشارة؟</span>
-            <span className="text-sm font-bold tracking-wide">تحدث مع خبير</span>
+            <span className="text-[10px] font-medium text-muted-foreground">تحتاج مساعدة؟</span>
+            <span className="text-sm font-bold tracking-wide transition-all duration-300">{fabText}</span>
           </div>
         </a>
       </div>
