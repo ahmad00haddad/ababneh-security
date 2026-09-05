@@ -200,58 +200,60 @@ function CCTVTime({ className = "" }: { className?: string }) {
 
 function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string }) {
   const [unlocked, setUnlocked] = useState(false);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(0); // 0 to 100
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
 
-  const handleSlide = (e: any) => {
-    const val = e.target.value;
+  const computeValue = (clientX: number) => {
+    if (!trackRef.current) return 0;
+    const rect = trackRef.current.getBoundingClientRect();
+    const thumbW = 48;
+    const trackW = rect.width - thumbW - 8; // 4px padding on each side
+    const x = Math.max(0, Math.min(clientX - rect.left - thumbW / 2, trackW));
+    return Math.round((x / trackW) * 100);
+  };
+
+  const onMove = (clientX: number) => {
+    if (!isDragging.current || unlocked) return;
+    const val = computeValue(clientX);
     setValue(val);
-    if (val >= 99 && !unlocked) {
+    if (val >= 98) {
+      isDragging.current = false;
       setUnlocked(true);
-      navigator.vibrate?.([100, 50, 100]); // Success vibration
+      navigator.vibrate?.([100, 50, 100]);
+      setValue(100);
       onUnlock();
     }
   };
 
-  const resetSlide = () => {
+  const onEnd = () => {
+    isDragging.current = false;
     if (!unlocked) setValue(0);
   };
 
   return (
-    <div className="relative h-14 w-full overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner">
-      <style>{`
-        .slide-input {
-          background: transparent;
-        }
-        .slide-input::-webkit-slider-thumb {
-          appearance: none;
-          width: 48px;
-          height: 48px;
-          cursor: pointer;
-          background: transparent;
-        }
-        .slide-input::-moz-range-thumb {
-          width: 48px;
-          height: 48px;
-          cursor: pointer;
-          border: none;
-          background: transparent;
-        }
-      `}</style>
+    <div
+      ref={trackRef}
+      className="relative h-14 w-full select-none overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner cursor-pointer"
+      style={{ touchAction: "none" }}
+      onPointerDown={(e) => {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        isDragging.current = true;
+        onMove(e.clientX);
+      }}
+      onPointerMove={(e) => onMove(e.clientX)}
+      onPointerUp={() => onEnd()}
+      onPointerCancel={() => onEnd()}
+    >
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm font-bold text-muted-foreground">
-        {unlocked ? "تم تأكيد الاتصال" : text}
+        {unlocked ? "✓ تم تأكيد الاتصال" : text}
       </div>
-      <input 
-        type="range" 
-        min="0" max="100" 
-        value={value}
-        onInput={handleSlide}
-        onMouseUp={resetSlide}
-        onTouchEnd={resetSlide}
-        className="slide-input relative z-10 h-full w-full cursor-pointer appearance-none touch-none"
-      />
-      <div 
-        className="pointer-events-none absolute top-1 bottom-1 aspect-square rounded-full bg-action grid place-items-center text-action-foreground shadow-md transition-all duration-75"
-        style={{ left: `calc(4px + ${value}% * (100% - 48px) / 100)` }}
+      <div
+        className="pointer-events-none absolute top-1 bottom-1 aspect-square rounded-full bg-action grid place-items-center text-action-foreground shadow-md"
+        style={{
+          left: `calc(4px + ${value}% * (100% - 56px) / 100)`,
+          transition: unlocked ? "none" : value === 0 ? "left 0.3s ease" : "none",
+        }}
       >
         {unlocked ? <Check className="size-5" /> : <LockKeyhole className="size-5" />}
       </div>
