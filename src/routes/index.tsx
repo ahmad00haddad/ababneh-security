@@ -218,6 +218,25 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
 
   return (
     <div className="relative h-14 w-full overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner">
+      <style>{`
+        .slide-input {
+          background: transparent;
+        }
+        .slide-input::-webkit-slider-thumb {
+          appearance: none;
+          width: 48px;
+          height: 48px;
+          cursor: pointer;
+          background: transparent;
+        }
+        .slide-input::-moz-range-thumb {
+          width: 48px;
+          height: 48px;
+          cursor: pointer;
+          border: none;
+          background: transparent;
+        }
+      `}</style>
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm font-bold text-muted-foreground">
         {unlocked ? "تم تأكيد الاتصال" : text}
       </div>
@@ -228,7 +247,7 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
         onInput={handleSlide}
         onMouseUp={resetSlide}
         onTouchEnd={resetSlide}
-        className="relative z-10 h-full w-full cursor-pointer appearance-none bg-transparent opacity-0 touch-none"
+        className="slide-input relative z-10 h-full w-full cursor-pointer appearance-none touch-none"
       />
       <div 
         className="pointer-events-none absolute top-1 bottom-1 aspect-square rounded-full bg-action grid place-items-center text-action-foreground shadow-md transition-all duration-75"
