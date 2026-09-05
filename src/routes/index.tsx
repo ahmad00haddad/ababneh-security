@@ -942,7 +942,7 @@ function Index() {
               <a className="flex items-center gap-3 hover:text-footer-foreground transition-colors" href={whatsappBase}><MessageCircle className="size-4 text-action" /> تواصل عبر واتساب</a>
               <a className="flex items-center gap-3 hover:text-footer-foreground transition-colors" href="tel:0788757801"><Phone className="size-4 text-action" /> <span dir="ltr">+962 7 8875 7801</span></a>
               <p className="flex items-center gap-3"><Users className="size-4 text-action" /> بإدارة: علي عبابنة</p>
-              <p className="flex items-start gap-3"><MapPin className="size-4 text-action shrink-0 mt-1" /> إربد - شارع الجامعة<br/>الأردن</p>
+              <p className="flex items-start gap-3"><MapPin className="size-4 text-action shrink-0 mt-1" /> إربد - بشرى<br/>بالقرب من إشارة بردى</p>
             </div>
           </div>
           <div>
