@@ -1,68 +1,47 @@
-# Ababneh Security: Smart Home Guardian
+﻿<div align="center">
+  <br />
+  <img src="public/favicon.svg" alt="Ababneh Security Logo" width="100" />
+  <br />
+  <h1>🛡️ عبابنة للأنظمة الأمنية | Ababneh Security</h1>
+  <p>
+    <strong>منظومة أمان ذكية، لحماية عائلتك وعملك بأحدث تقنيات 2026</strong>
+  </p>
+  <br />
+</div>
 
-Build a modern, professional, and highly converting landing page for a security systems and CCTV installation company named "Ababneh Security". 
+## 🌟 نظرة عامة (Overview)
+**عبابنة للأنظمة الأمنية** هي منصة ويب متطورة (SaaS-style Landing Page) صُممت لتقديم أحدث حلول المراقبة وأنظمة الأمان الذكية في الأردن (إربد). 
+تم بناء هذا المشروع بأحدث تقنيات الـ UI/UX لعام 2026/2027، مع التركيز التام على تقديم **تجربة مستخدم تفاعلية (Interactive UX)**، **حاسبة أسعار ذكية**، وتصميم يتفاعل مع نية الزائر (Intent-based Design).
 
-Design Requirements:
+---
 
-- The UI must be Right-to-Left (RTL) to support Arabic text natively.
+## ✨ الميزات التقنية والتفاعلية (Key Features)
 
-- Use a trustworthy color palette: Navy Blue (Primary), Clean White (Background), and Neon/Electric Blue or Green (for Call-to-Action buttons).
+- **🤖 الترحيب الذكي (Intent-Based Greeting):** رسائل ترحيبية تتغير ديناميكياً بناءً على وقت زيارة العميل للموقع.
+- **📱 حاسبة التكلفة الميكانيكية:** حاسبة تفاعلية مع عداد أرقام فيزيائي (Number Ticker) لمعرفة التكلفة التقديرية فوراً بناءً على عدد الكاميرات والدقة.
+- **✨ تفاعلات دقيقة متطورة (Micro-interactions):**
+  - أنيميشن النجوم السائلة (Liquid Star Fill) في قسم آراء العملاء.
+  - السحب بالقصور الذاتي للبطاقات (Draggable Carousel).
+  - تأثير تموج المياه (Ripple Effect) عند النقر على أزرار الاتصال.
+  - ظهور العناصر تدريجياً بطريقة هيكلية (Skeleton Fade-in).
+- **💡 تلميحات سياقية (Contextual Hints):** توجيهات ذكية تظهر في الوقت المناسب (مثل تلميح السعة التخزينية، وتلميح انقطاع الإنترنت).
+- **🌐 تكامل مع WhatsApp:** ربط مباشر وذكي مع واتساب لإرسال تفاصيل الباقات والحاسبة بضغطة زر.
+- **⚡ تصميم فائق السرعة:** مبني باستخدام `Vite`, `React`, و `TailwindCSS` لضمان أداء لا يضاهى.
 
-- Use a modern web framework with smooth scroll animations, glass-morphism effects for cards, and responsive design for mobile screens (Crucial!).
+---
 
-Website Structure & Content (Please populate with beautiful Arabic placeholder text where appropriate):
+## 🛠️ التقنيات المستخدمة (Tech Stack)
+- **Framework:** [React 18](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool:** [Vite](https://vitejs.dev/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **Routing:** [TanStack Router](https://tanstack.com/router)
+- **Deployment:** [Lovable.dev](https://lovable.dev) / Cloudflare Pages
 
-1. Hero Section: 
+---
 
-- A striking background image of a smart home or glowing camera lens. 
-
-- Headline: "أنظمة حماية متطورة لأمان عائلتك وعملك" (Advanced Security Systems).
-
-- Sub-headline mentioning ColorVu tech and 24/7 monitoring.
-
-- Two CTA buttons: Primary "احجز كشفاً مجانياً" (Book Free Survey) and Secondary "عرض الباقات" (View Packages).
-
-2. Trust Badges (Below Hero):
-
-- 4 icons horizontally: "كفالة حقيقية سنتين" (2-Year Warranty), "فنيون معتمدون" (Certified Techs), "تصوير ملون ليلاً" (Full Color Night Vision), "دعم فني سريع" (Fast Support).
-
-3. Interactive Packages Section (Card Layout):
-
-- Card 1 (Economic): "باقة 2 ميجابكسل ColorVu". Features: 3 Cameras (Hikvision DS-2CE10DF3T-F), 4-CH DVR, 1TB HDD, Full Installation. Price: 150 JOD.
-
-- Card 2 (Professional - Highlighted): "باقة 5 ميجابكسل ColorVu". Features: 3 Cameras (Hikvision DS-2CE12HFT-F), 5MP DVR, 1TB HDD, Full Installation. Price: 190 JOD. 
-
-- Both cards should have a "طلب عبر واتساب" (Order via WhatsApp) button.
-
-4. Build Your Own System (Custom Quote Form):
-
-- A sleek interactive form where users can select:
-
-  * Number of cameras (Slider: 1 to 16)
-
-  * Camera Resolution (Dropdown: 2MP, 5MP, IP 4K)
-
-  * Need Smart Alarm? (Toggle switch for Hikvision AX PRO)
-
-- Button: "احصل على السعر فوراً" (Get Quote Now).
-
-5. Services Section:
-
-- Grid showing other services: Smart Alarms, Intercom Systems, Access Control, Smart Home Automation.
-
-6. Floating WhatsApp Button:
-
-- Fixed at the bottom right corner of the screen, pulsating gently.
-
-7. Footer:
-
-- Company Logo, Contact Info, Working Hours, and Social Media links.
-
-Tech spec: Use Tailwind CSS, Lucide React icons, and make all buttons have satisfying hover states. Ensure the typography uses a nice Arabic font like 'Cairo' or 'Tajawal' via Google Fonts.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
+## 🚀 Build with Lovable
 
 Continue developing this project in the [Lovable editor](https://lovable.dev/projects/849bc036-95a2-48dc-8df4-8dc65db07b96).
 
@@ -70,13 +49,18 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.
 - **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
-## Development
+## 💻 Development (التطوير المحلي)
 
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+git clone https://github.com/ahmad00haddad/ababneh-security-smart-home-guardian.git
+cd ababneh-security-smart-home-guardian
+npm install
 npm run dev
 ```
+
+<div align="center">
+  <br />
+  <p>Built with ❤️ for Ababneh Security</p>
+</div>
