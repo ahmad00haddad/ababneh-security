@@ -863,20 +863,23 @@ function Index() {
       </section>
 
       
-      <footer className="bg-footer px-5 pb-8 pt-12 text-footer-foreground sm:px-8 lg:px-12 border-t border-footer-border">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 sm:flex-row">
-          <div className="flex flex-col items-center sm:items-start gap-4">
-            <Brand light />
-            <p className="text-xs text-footer-muted max-w-xs text-center sm:text-right">أنظمة حماية متكاملة، لحياة أكثر أماناً وراحة بالك.</p>
+      
+      <footer className="bg-background px-5 pb-28 pt-8 sm:px-8 lg:px-12 sm:pb-8 border-t border-border/30">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 sm:flex-row text-xs text-muted-foreground">
+          
+          <div className="order-2 sm:order-1">
+             <p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p>
           </div>
-          <div className="flex gap-4">
-            <a href="#" aria-label="فيسبوك" className="grid size-10 place-items-center rounded-full bg-footer-border/30 hover:bg-action hover:text-action-foreground transition-colors"><Facebook className="size-5" /></a>
-            <a href="#" aria-label="إنستغرام" className="grid size-10 place-items-center rounded-full bg-footer-border/30 hover:bg-action hover:text-action-foreground transition-colors"><Instagram className="size-5" /></a>
+          
+          <div className="order-1 sm:order-2 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 scale-90">
+            <Brand />
           </div>
-        </div>
-        <div className="mx-auto mt-8 flex max-w-7xl flex-col gap-4 border-t border-footer-border/50 pt-8 text-center text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between sm:text-right pb-24 sm:pb-0">
-          <p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p>
-          <p className="flex items-center justify-center gap-2 sm:justify-end"><LockKeyhole className="size-3" /> حماية متكاملة، خصوصية تامة</p>
+
+          <div className="flex items-center gap-5 order-3">
+            <a href="#" aria-label="فيسبوك" className="hover:text-action transition-colors"><Facebook className="size-4" /></a>
+            <a href="#" aria-label="إنستغرام" className="hover:text-action transition-colors"><Instagram className="size-4" /></a>
+          </div>
+
         </div>
       </footer>
 
