@@ -160,14 +160,41 @@ function Brand({ light = false }: { light?: boolean }) {
       <span className="min-w-0 leading-tight">
         <strong className="flex items-center gap-2 truncate font-display text-lg group-hover:animate-glitch">
           Ababneh Security
-          <span className="relative flex size-2">
+          <span className="relative flex size-2" title="System Online">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
             <span className="relative inline-flex size-2 rounded-full bg-red-600" />
           </span>
         </strong>
-        <span className={`block text-[11px] ${light ? "text-hero-muted" : "text-muted-foreground"}`}>أنظمة حماية متكاملة</span>
+        {/* Contextual hover hint */}
+        <span className="relative block h-4 overflow-hidden">
+          <span className={`absolute inset-0 block text-[11px] transition-transform duration-300 group-hover:-translate-y-full ${light ? "text-hero-muted" : "text-muted-foreground"}`}>أنظمة حماية متكاملة</span>
+          <span className="absolute inset-0 top-full block text-[11px] font-bold text-action transition-transform duration-300 group-hover:-translate-y-full">■ SECURE CONNECTION</span>
+        </span>
       </span>
     </a>
+  );
+}
+
+function CCTVTime({ className = "" }: { className?: string }) {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      setTime(now.toISOString().replace("T", " ").substring(0, 19));
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  
+  return (
+    <div className={`pointer-events-none flex items-center gap-2 font-mono text-[10px] sm:text-xs font-bold tracking-widest text-white/70 drop-shadow-md ${className}`}>
+      <span className="flex items-center gap-1.5 text-red-500">
+        <span className="size-2 rounded-full bg-red-500 animate-pulse" />
+        REC
+      </span>
+      {time}
+    </div>
   );
 }
 
@@ -368,6 +395,7 @@ function Index() {
         <section className="block bg-hero text-hero-foreground sm:hidden">
           {/* Mobile Video — full width, natural ratio, no cropping */}
           <div className="relative w-full bg-black">
+            <CCTVTime className="absolute right-4 top-4 z-40" />
             <video ref={mobileVideoRef} autoPlay loop muted playsInline poster={heroMan} className="w-full aspect-video object-contain">
               <source src="/hero-video.mp4" type="video/mp4" />
             </video>
@@ -405,6 +433,7 @@ function Index() {
 
         {/* ====== HERO: DESKTOP LAYOUT (full-screen video + overlaid text) ====== */}
         <section className="relative hidden min-h-[calc(92svh-5rem)] overflow-hidden bg-hero text-hero-foreground sm:block">
+          <CCTVTime className="absolute right-10 top-10 z-40 text-sm" />
           {/* Desktop background video */}
           <video ref={desktopVideoRef} autoPlay loop muted playsInline poster={heroMan} className="absolute inset-0 h-full w-full object-cover object-center">
             <source src="/hero-video.mp4" type="video/mp4" />
@@ -539,6 +568,9 @@ function Index() {
                 <div className="pointer-events-none absolute right-3 top-3 size-6 border-r-2 border-t-2 border-action opacity-0 transition-all duration-300 group-hover:right-0 group-hover:top-0 group-hover:opacity-100" />
                 <div className="pointer-events-none absolute bottom-3 left-3 size-6 border-b-2 border-l-2 border-action opacity-0 transition-all duration-300 group-hover:bottom-0 group-hover:left-0 group-hover:opacity-100" />
                 <div className="pointer-events-none absolute bottom-3 right-3 size-6 border-b-2 border-r-2 border-action opacity-0 transition-all duration-300 group-hover:bottom-0 group-hover:right-0 group-hover:opacity-100" />
+                
+                {/* Micro-interaction: Radar Scanline on Hover */}
+                <div className="pointer-events-none absolute -left-full top-0 h-full w-[200%] -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 transition-all duration-700 group-hover:left-full group-hover:opacity-100" />
 
                 {item.featured && <div className="absolute left-0 top-0 rounded-br-lg bg-action px-4 py-2 text-xs font-black text-action-foreground">الأكثر طلباً</div>}
                 <span className={`text-sm font-bold ${item.featured ? "text-primary-foreground opacity-80" : "text-primary"}`}>{item.label}</span>
@@ -611,6 +643,17 @@ function Index() {
                   <p className="flex items-center gap-2 px-1 text-xs font-bold text-red-500">
                     <ShieldAlert className="size-4 animate-pulse" /> تم تأمين النظام (System Armed)
                   </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Contextual Hint when selecting many cameras */}
+            <div className={`mt-6 overflow-hidden rounded-md border border-action/20 bg-action/5 transition-all duration-500 ${cameras > 8 ? "max-h-24 opacity-100 p-4" : "max-h-0 opacity-0 p-0 border-transparent"}`}>
+              <div className="flex items-start gap-3">
+                <Settings className="size-5 text-action shrink-0 mt-0.5 animate-[spin_4s_linear_infinite]" />
+                <div>
+                  <p className="text-sm font-bold text-action">نظام متقدم (Commercial Scale)</p>
+                  <p className="text-xs text-muted-foreground mt-1">الأنظمة الأكبر من 8 كاميرات تتطلب أجهزة تسجيل (DVR/NVR) مخصصة لتحمل الضغط العالي. سيتم احتساب ترقية الجهاز تلقائياً.</p>
                 </div>
               </div>
             </div>
