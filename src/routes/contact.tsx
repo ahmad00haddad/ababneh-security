@@ -1,35 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  AlarmClock,
-  ArrowLeft,
-  BadgeCheck,
-  Building2,
-  Camera,
-  Check,
-  ChevronDown,
-  Clock3,
-  Facebook,
-  Fingerprint,
-  Headphones,
-  Home,
-  Instagram,
-  KeyRound,
-  LockKeyhole,
-  MapPin,
-  Menu,
-  MessageCircle,
-  MoonStar,
-  Phone,
-  Settings,
-  ShieldAlert,
-  ShieldCheck,
-  Sparkles,
-  Users,
-  Volume2,
-  VolumeX,
-  X,
-  Zap,
-Download} from "lucide-react";
+import { AlarmClock, ArrowLeft, BadgeCheck, Building2, Camera, Check, ChevronDown, Clock3, Facebook, Fingerprint, Headphones, Home, Instagram, KeyRound, LockKeyhole, MapPin, Menu, MessageCircle, MoonStar, Phone, Settings, ShieldAlert, ShieldCheck, Sparkles, Users, Volume2, VolumeX, X, Zap, Download, ScanSearch } from "lucide-react";
 import { useMemo, useState, useEffect, useRef, type ReactNode } from "react";
 import heroMan from "../assets/hero-man.jpg";
 import cameraCloseup from "../assets/camera-closeup.jpg";
@@ -178,6 +148,24 @@ function Brand({ light = false }: { light?: boolean }) {
 
 function CCTVTime({ className = "" }: { className?: string }) {
   const [time, setTime] = useState("");
+  
+    // Check Peak Time (Outside 9 AM - 7 PM)
+    useEffect(() => {
+      const hour = new Date().getHours();
+      if (hour < 9 || hour >= 19) {
+        setPeakTimeNudge("نحن خارج أوقات الدوام، لكن اترك رسالتك وسنرد فوراً في الصباح!");
+      }
+    }, []);
+
+    // Smart PWA Prompt based on visits
+    useEffect(() => {
+      const visits = parseInt(localStorage.getItem("visitCount") || "0");
+      if (visits > 0) {
+        setPwaHint(true);
+      }
+      localStorage.setItem("visitCount", (visits + 1).toString());
+    }, []);
+  
   useEffect(() => {
     const update = () => {
       const now = new Date();
@@ -326,6 +314,11 @@ function Contact() {
   const [threats, setThreats] = useState(24051);
   const [glitch, setGlitch] = useState(false);
   const [fabVisible, setFabVisible] = useState(true);
+  const [peakTimeNudge, setPeakTimeNudge] = useState("");
+  const [faqHint, setFaqHint] = useState("");
+  const [pwaHint, setPwaHint] = useState(false);
+  const faqTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   const [fabText, setFabText] = useState("تحدث مع خبير");
   const [fingerprint, setFingerprint] = useState(false);
   const [scarcityHint, setScarcityHint] = useState(false);
@@ -511,10 +504,16 @@ function Contact() {
               <p className="mt-4 text-muted-foreground">نحن هنا لخدمتك والإجابة على كافة استفساراتك، قبل وبعد التركيب.</p>
               
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                 <button onClick={handleInstallClick} className="flex items-center gap-2 rounded-full bg-action px-6 py-3 text-sm font-bold text-action-foreground transition-all hover:bg-action-hover hover:scale-105 shadow-lg shadow-action/20 mx-auto">
+                 <div className="relative"><button onClick={handleInstallClick} className="flex items-center gap-2 rounded-full bg-action px-6 py-3 text-sm font-bold text-action-foreground transition-all hover:bg-action-hover hover:scale-105 shadow-lg shadow-action/20 mx-auto">
                     <Download className="size-4" />
                     تثبيت التطبيق السريع (PWA)
                  </button>
+                 {pwaHint && (
+                   <div className="absolute -top-10 left-1/2 w-max -translate-x-1/2 rounded-full bg-foreground text-background px-3 py-1 text-[10px] font-bold animate-bounce z-20 shadow-xl after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-foreground">
+                     تزورنا كثيراً؟ ثبت التطبيق للوصول بضغطة واحدة!
+                   </div>
+                 )}
+                 </div>
               </div>
             </div>
           </section>
@@ -625,7 +624,13 @@ function Contact() {
         </a>
         
         {/* WhatsApp Button (Smart FAB) */}
-        <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50, 50, 50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 overflow-hidden rounded-full border border-action/30 bg-action/10 pl-2 pr-6 text-foreground shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-action/20 hover:shadow-action/20 sm:h-16">
+        <div className="relative group/fab">
+            {peakTimeNudge && (
+              <div className="absolute -top-14 right-0 w-max max-w-[200px] rounded-t-xl rounded-bl-xl rounded-br-sm bg-background border border-border p-3 text-[10px] font-bold text-muted-foreground shadow-xl animate-in fade-in slide-in-from-bottom-2 z-50">
+                <Clock3 className="inline size-3 text-amber-500 mr-1" /> {peakTimeNudge}
+              </div>
+            )}
+            <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50, 50, 50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 overflow-hidden rounded-full border border-action/30 bg-action/10 pl-2 pr-6 text-foreground shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-action/20 hover:shadow-action/20 sm:h-16">
           <div className="relative grid size-10 shrink-0 place-items-center rounded-full bg-action text-action-foreground shadow-lg sm:size-12">
             <span className="absolute inset-0 animate-ping rounded-full bg-action opacity-40 duration-1000" />
             <MessageCircle className="relative size-5 transition-transform group-hover:rotate-12 group-hover:scale-110 sm:size-6" fill="currentColor" />
@@ -635,6 +640,7 @@ function Contact() {
             <span className="text-sm font-bold tracking-wide transition-all duration-300 text-action-foreground drop-shadow-md">{fabText}</span>
           </div>
         </a>
+          </div>
       </div>
 
             )}

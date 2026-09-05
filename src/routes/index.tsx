@@ -178,6 +178,34 @@ function Brand({ light = false }: { light?: boolean }) {
 
 function CCTVTime({ className = "" }: { className?: string }) {
   const [time, setTime] = useState("");
+  
+    // Live Security Counter
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setLiveProjects(p => p + Math.floor(Math.random() * 2));
+      }, 8000);
+      return () => clearInterval(interval);
+    }, []);
+
+    // Location-Aware Nudge
+    useEffect(() => {
+      setTimeout(() => {
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition((pos) => {
+             setLocationNudge("أنت قريب من فرعنا في إربد، شرفنا لزيارة المعرض!");
+          }, () => {}, { timeout: 5000 });
+        }
+      }, 4000);
+    }, []);
+
+    // Calculator Hesitation
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setCalcHesitation(true);
+      }, 30000);
+      return () => clearTimeout(timer);
+    }, []);
+  
   useEffect(() => {
     const update = () => {
       const now = new Date();
@@ -328,6 +356,14 @@ function Index() {
   const [fabVisible, setFabVisible] = useState(true);
   const [fabText, setFabText] = useState("تحدث مع خبير");
   const [fingerprint, setFingerprint] = useState(false);
+  const [liveProjects, setLiveProjects] = useState(500);
+  const [locationNudge, setLocationNudge] = useState("");
+  const [videoHint, setVideoHint] = useState("");
+  const [calcHesitation, setCalcHesitation] = useState(false);
+  const [trustHint, setTrustHint] = useState("");
+  const [pkgHint, setPkgHint] = useState(false);
+  const [hoveredHotspot, setHoveredHotspot] = useState("");
+
   const [scarcityHint, setScarcityHint] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
@@ -510,6 +546,11 @@ function Index() {
             <video ref={mobileVideoRef} autoPlay loop muted playsInline poster={heroMan} className="w-full aspect-video object-contain">
               <source src="/hero-video.mp4" type="video/mp4" />
             </video>
+            {videoHint && (
+              <div className="absolute bottom-10 left-10 z-20 flex items-center gap-2 rounded-lg bg-black/80 px-4 py-2 font-mono text-xs font-bold text-white border border-white/10 backdrop-blur-md animate-in fade-in slide-in-from-bottom-5">
+                <ScanSearch className="size-4 text-action animate-spin" /> {videoHint}
+              </div>
+            )}
             <div className="pointer-events-none absolute left-0 top-0 h-px w-full animate-scanline bg-action" />
             <button
               onClick={() => setIsMuted(!isMuted)}
@@ -546,7 +587,11 @@ function Index() {
         <section className="relative hidden min-h-[100svh] pt-20 overflow-hidden bg-hero text-hero-foreground sm:block">
           <CCTVTime className="absolute right-10 top-10 z-40 text-sm" />
           {/* Desktop background video */}
-          <video ref={desktopVideoRef} autoPlay loop muted playsInline poster={heroMan} className="absolute inset-0 h-full w-full object-cover object-center">
+          <video ref={desktopVideoRef} onTimeUpdate={(e) => {
+              const t = e.currentTarget.currentTime;
+              if (t > 5 && t < 10) setVideoHint("مراقبة مستمرة بلا توقف 24/7 🔴");
+              else setVideoHint("");
+            }} autoPlay loop muted playsInline poster={heroMan} className="absolute inset-0 h-full w-full object-cover object-center">
             <source src="/hero-video.mp4" type="video/mp4" />
           </video>
 
