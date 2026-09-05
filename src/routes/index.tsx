@@ -474,23 +474,13 @@ function Index() {
               </div>
             </div>
             <nav className="hidden items-center gap-8 text-sm font-bold text-hero-muted lg:flex">
-              <Link className="transition-colors hover:text-hero-foreground" to="/" onClick={triggerGlitch}>الرئيسية</a>
+              <Link className="transition-colors hover:text-hero-foreground" to="/" onClick={triggerGlitch}>الرئيسية</Link>
               <a className="transition-colors hover:text-hero-foreground" href="#packages" onClick={triggerGlitch}>باقات الحماية</a>
               <a className="transition-colors hover:text-hero-foreground" href="#custom" onClick={triggerGlitch}>احسب تكلفتك</a>
-              <Link className="transition-colors hover:text-hero-foreground" to="/contact" onClick={triggerGlitch}></Link>
+              <Link className="transition-colors hover:text-hero-foreground" to="/contact" onClick={triggerGlitch}>تواصل معنا</Link>
             </nav>
             <div className="flex items-center gap-4 sm:gap-6">
               
-              {/* Idea 6: Cyber Threat Counter */}
-              <div className="hidden lg:flex flex-col items-end gap-1 text-[9px] font-mono text-muted-foreground mr-4">
-                <span className="flex items-center gap-1.5" dir="ltr"><ShieldAlert className="size-3 text-action animate-pulse" /> THREATS BLOCKED</span>
-                <span className="font-bold text-action tracking-widest" dir="ltr">{threats.toLocaleString()}</span>
-              </div>
-
-              <a href="tel:0788757801" onClick={triggerGlitch} className="hidden items-center gap-2 text-sm font-bold text-hero-foreground transition-colors hover:text-action sm:flex" dir="ltr">
-                <Phone className="size-4 text-action" /> 078 875 7801
-              </a>
-              <ActionLink href="#packages" onClick={triggerGlitch} className="hidden sm:inline-flex">عرض الباقات</ActionLink>
               <button
                 type="button"
                 onClick={() => setMenuOpen((v) => !v)}
