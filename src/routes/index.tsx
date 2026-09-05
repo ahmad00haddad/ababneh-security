@@ -180,32 +180,6 @@ function Brand({ light = false }: { light?: boolean }) {
 function CCTVTime({ className = "" }: { className?: string }) {
   const [time, setTime] = useState("");
   
-    // Live Security Counter
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setLiveProjects(p => p + Math.floor(Math.random() * 2));
-      }, 8000);
-      return () => clearInterval(interval);
-    }, []);
-
-    // Location-Aware Nudge
-    useEffect(() => {
-      setTimeout(() => {
-        if ("geolocation" in navigator) {
-          navigator.geolocation.getCurrentPosition((pos) => {
-             setLocationNudge("أنت قريب من فرعنا في إربد، شرفنا لزيارة المعرض!");
-          }, () => {}, { timeout: 5000 });
-        }
-      }, 4000);
-    }, []);
-
-    // Calculator Hesitation
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setCalcHesitation(true);
-      }, 30000);
-      return () => clearTimeout(timer);
-    }, []);
   
   useEffect(() => {
     const update = () => {
@@ -274,8 +248,8 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
       ref={trackRef}
       dir="rtl"
       className="relative h-14 w-full select-none overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner cursor-pointer touch-none"
-      onTouchStart={(e) => onStart(e.touches[0].clientX)}
-      onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+      onTouchStart={(e) => onStart(e.touches[0]?.clientX || 0)}
+      onTouchMove={(e) => handleMove(e.touches[0]?.clientX || 0)}
       onTouchEnd={onEnd}
       onTouchCancel={onEnd}
       onMouseDown={(e) => onStart(e.clientX)}
@@ -342,6 +316,32 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 }
 
 function Index() {
+    // Live Security Counter
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setLiveProjects(p => p + Math.floor(Math.random() * 2));
+      }, 8000);
+      return () => clearInterval(interval);
+    }, []);
+
+    // Location-Aware Nudge
+    useEffect(() => {
+      setTimeout(() => {
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition((pos) => {
+             setLocationNudge("أنت قريب من فرعنا في إربد، شرفنا لزيارة المعرض!");
+          }, () => {}, { timeout: 5000 });
+        }
+      }, 4000);
+    }, []);
+
+    // Calculator Hesitation
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setCalcHesitation(true);
+      }, 30000);
+      return () => clearTimeout(timer);
+    }, []);
   const [appReady, setAppReady] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [cameras, setCameras] = useState(4);

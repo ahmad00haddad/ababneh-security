@@ -149,22 +149,6 @@ function Brand({ light = false }: { light?: boolean }) {
 function CCTVTime({ className = "" }: { className?: string }) {
   const [time, setTime] = useState("");
   
-    // Check Peak Time (Outside 9 AM - 7 PM)
-    useEffect(() => {
-      const hour = new Date().getHours();
-      if (hour < 9 || hour >= 19) {
-        setPeakTimeNudge("نحن خارج أوقات الدوام، لكن اترك رسالتك وسنرد فوراً في الصباح!");
-      }
-    }, []);
-
-    // Smart PWA Prompt based on visits
-    useEffect(() => {
-      const visits = parseInt(localStorage.getItem("visitCount") || "0");
-      if (visits > 0) {
-        setPwaHint(true);
-      }
-      localStorage.setItem("visitCount", (visits + 1).toString());
-    }, []);
   
   useEffect(() => {
     const update = () => {
@@ -233,8 +217,8 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
       ref={trackRef}
       dir="rtl"
       className="relative h-14 w-full select-none overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner cursor-pointer touch-none"
-      onTouchStart={(e) => onStart(e.touches[0].clientX)}
-      onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+      onTouchStart={(e) => onStart(e.touches[0]?.clientX || 0)}
+      onTouchMove={(e) => handleMove(e.touches[0]?.clientX || 0)}
       onTouchEnd={onEnd}
       onTouchCancel={onEnd}
       onMouseDown={(e) => onStart(e.clientX)}
@@ -301,6 +285,22 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 }
 
 function Contact() {
+    // Check Peak Time (Outside 9 AM - 7 PM)
+    useEffect(() => {
+      const hour = new Date().getHours();
+      if (hour < 9 || hour >= 19) {
+        setPeakTimeNudge("نحن خارج أوقات الدوام، لكن اترك رسالتك وسنرد فوراً في الصباح!");
+      }
+    }, []);
+
+    // Smart PWA Prompt based on visits
+    useEffect(() => {
+      const visits = parseInt(localStorage.getItem("visitCount") || "0");
+      if (visits > 0) {
+        setPwaHint(true);
+      }
+      localStorage.setItem("visitCount", (visits + 1).toString());
+    }, []);
   const [appReady, setAppReady] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [cameras, setCameras] = useState(4);
