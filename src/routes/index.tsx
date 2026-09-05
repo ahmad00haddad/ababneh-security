@@ -32,8 +32,10 @@ import {
   ScanSearch,
 } from "lucide-react";
 import { useMemo, useState, useEffect, useRef, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import heroMan from "../assets/hero-man.jpg";
 import cameraCloseup from "../assets/camera-closeup.jpg";
+import { Testimonials } from "../components/Testimonials";
 import camerasCluster from "../assets/cameras-cluster.jpg";
 
 export const Route = createFileRoute("/")({
@@ -316,6 +318,19 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 }
 
 function Index() {
+
+    const [hddHint, setHddHint] = useState(false);
+    const [offlineHint, setOfflineHint] = useState(false);
+
+
+    const [greeting, setGreeting] = useState("مرحباً بك في");
+    useEffect(() => {
+      const hour = new Date().getHours();
+      if (hour >= 5 && hour < 12) setGreeting("صباح الخير، هل تؤمن منزلك اليوم؟");
+      else if (hour >= 12 && hour < 18) setGreeting("مساء الخير، نحن هنا لحمايتك");
+      else setGreeting("مساء الخير، هل تبحث عن الأمان الليلة؟");
+    }, []);
+
     // Live Security Counter
     useEffect(() => {
       const interval = setInterval(() => {
@@ -716,8 +731,8 @@ function Index() {
         <div className="mx-auto max-w-6xl">
           <SectionHeading eyebrow="باقات جاهزة" title="حماية موثوقة، بسعر واضح" text="اختر الدقة التي تناسبك. جميع الباقات تشمل الأجهزة الأصلية والتركيب والبرمجة الكاملة." />
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
-            {packages.map((item) => (
-              <article key={item.name} className={`group relative overflow-hidden rounded-lg border p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-8 ${item.featured ? "border-primary bg-primary text-primary-foreground shadow-premium" : "border-border bg-card text-card-foreground shadow-card"}`}>
+            {packages.map((item, idx) => (
+              <motion.article initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{delay: idx*0.1}} key={item.name} className={`group relative overflow-hidden rounded-lg border p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-8 ${item.featured ? "border-primary bg-primary text-primary-foreground shadow-premium" : "border-border bg-card text-card-foreground shadow-card"}`}>
                 
                 {/* Micro-interaction: Targeting Brackets */}
                 <div className="pointer-events-none absolute left-3 top-3 size-6 border-l-2 border-t-2 border-action opacity-0 transition-all duration-300 group-hover:left-0 group-hover:top-0 group-hover:opacity-100" />
@@ -746,7 +761,7 @@ function Index() {
                 <ActionLink href={`${whatsappBase}${encodeURIComponent(`مرحباً، أريد طلب ${item.name} بسعر ${item.price} د.أ`)}`} variant={item.featured ? "primary" : "outline"} className="w-full">
                   <Check className="size-5" /> اختيار هذه الباقة
                 </ActionLink>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>
@@ -790,7 +805,7 @@ function Index() {
               </div>
               <div>
                 <div className={`grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-md border p-4 transition-colors ${alarm ? "border-red-500/50 bg-red-500/5" : "border-border bg-background"}`}>
-                  <div className="min-w-0"><label htmlFor="alarm" className="block font-bold">نظام إنذار ذكي</label><span className="text-sm text-muted-foreground">Hikvision AX PRO لاسلكي</span></div>
+                  <div className="min-w-0"><label htmlFor="alarm" className="block font-bold">نظام إنذار ذكي</label><span className="text-sm text-muted-foreground"><span className="group/partner relative inline-block text-action border-b border-dashed border-action/50 cursor-help">Hikvision AX PRO<span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max rounded bg-foreground text-background px-2 py-1 text-[10px] font-bold opacity-0 transition-opacity group-hover/partner:opacity-100 z-10 shadow-xl pointer-events-none">موزع معتمد بضمان الوكيل</span></span> لاسلكي</span></div>
                   <button id="alarm" type="button" role="switch" aria-checked={alarm} onClick={() => setAlarm((value) => !value)} className={`relative h-7 w-13 shrink-0 rounded-full transition-all duration-300 ${alarm ? "bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.6)]" : "bg-muted-foreground/35"}`} aria-label="إضافة نظام إنذار ذكي">
                     <span className={`absolute top-1 size-5 rounded-full bg-background shadow-sm transition-all ${alarm ? "right-7" : "right-1"}`} />
                   </button>
@@ -850,12 +865,12 @@ function Index() {
           <SectionHeading eyebrow="خدماتنا" title="منظومة أمان واحدة، لكل تفاصيل يومك" text="حلول مترابطة للمنزل والعمل، ننفذها بعناية ونبقى قريبين منك بعد التركيب." />
           <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
             {services.map(({ icon: Icon, title, text }) => (
-              <article key={title} className="group bg-card p-7 transition-colors hover:bg-accent sm:p-8">
+              <motion.article initial={{opacity:0, y:20}} whileInView={{opacity:1, y:0}} viewport={{once:true}} key={title} className="group bg-card p-7 transition-colors hover:bg-accent sm:p-8">
                 <span className="grid size-13 place-items-center rounded-md bg-primary text-primary-foreground transition-transform duration-300 group-hover:-translate-y-1"><Icon className="size-6" /></span>
                 <h3 className="mt-6 font-display text-xl font-black">{title}</h3>
                 <p className="mt-3 text-sm leading-7 text-muted-foreground">{text}</p>
                 <a href={`${whatsappBase}${encodeURIComponent(`مرحباً، أريد الاستفسار عن ${title}`)}`} className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary">استفسر الآن <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" /></a>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>

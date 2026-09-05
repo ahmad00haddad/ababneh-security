@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AlarmClock, ArrowLeft, BadgeCheck, Building2, Camera, Check, ChevronDown, Clock3, Facebook, Fingerprint, Headphones, Home, Instagram, KeyRound, LockKeyhole, MapPin, Menu, MessageCircle, MoonStar, Phone, Settings, ShieldAlert, ShieldCheck, Sparkles, Users, Volume2, VolumeX, X, Zap, Download, ScanSearch } from "lucide-react";
 import { useMemo, useState, useEffect, useRef, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import heroMan from "../assets/hero-man.jpg";
 import cameraCloseup from "../assets/camera-closeup.jpg";
 import camerasCluster from "../assets/cameras-cluster.jpg";
@@ -285,6 +286,13 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 }
 
 function Contact() {
+  const [copied, setCopied] = useState(false);
+  const [ripple, setRipple] = useState<{x:number, y:number, id:number}[]>([]);
+  const addRipple = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setRipple([...ripple, { x: e.clientX - rect.left, y: e.clientY - rect.top, id: Date.now() }]);
+  };
+
     // Check Peak Time (Outside 9 AM - 7 PM)
     useEffect(() => {
       const hour = new Date().getHours();
@@ -568,7 +576,7 @@ function Contact() {
                  {/* Overlay hint that fades out on hover */}
                  <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-sm transition-all duration-700 group-hover:backdrop-blur-none group-hover:bg-transparent pointer-events-none">
                     <div className="flex flex-col items-center gap-2 bg-background/90 p-4 rounded-xl border border-border shadow-xl backdrop-blur-md transition-opacity duration-300 group-hover:opacity-0">
-                       <MapPin className="size-8 text-action animate-bounce" />
+                       <motion.div initial={{ y: -100, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} transition={{ type: "spring", bounce: 0.7, duration: 1 }}><MapPin className="size-8 text-action" /></motion.div>
                        <span className="font-bold">موقعنا على الخريطة</span>
                     </div>
                  </div>
@@ -586,7 +594,7 @@ function Contact() {
               { q: "كم متراً من الأسلاك يشمل التركيب المجاني؟", a: "يشمل التركيب المجاني تمديدات تصل إلى 15-20 متراً لكل كاميرا كحد أقصى (تغطي 90% من المنازل والمحلات). الأمتار الإضافية يتم احتسابها بسعر التكلفة وبشفافية تامة قبل بدء العمل." },
               { q: "كم مدة الكفالة؟ وماذا تغطي؟", a: "نوفر كفالة حقيقية لمدة عامين (24 شهراً) على الكاميرات وأجهزة التسجيل ضد العيوب المصنعية مع استبدال فوري. الكفالة لا تشمل التلف الناتج عن سوء الاستخدام، العبث، الكسر، أو الحوادث الناتجة عن تماس كهربائي خارجي." }
             ].map((faq, i) => (
-              <details key={i} className="group rounded-lg border border-border bg-surface [&_summary::-webkit-details-marker]:hidden">
+              <motion.details key={i} layout transition={{ type: "spring", stiffness: 300, damping: 30 }} className="group rounded-lg border border-border bg-surface [&_summary::-webkit-details-marker]:hidden">
                 <summary className="flex cursor-pointer items-center justify-between p-5 font-bold text-foreground outline-none">
                   {faq.q}
                   <ChevronDown className="size-5 transition-transform group-open:rotate-180" />
@@ -594,7 +602,7 @@ function Contact() {
                 <div className="border-t border-border p-5 text-sm leading-7 text-muted-foreground">
                   {faq.a}
                 </div>
-              </details>
+              </motion.details>
             ))}
           </div>
         </div>
