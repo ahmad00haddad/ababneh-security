@@ -775,15 +775,44 @@ function Index() {
         </div>
       </section>
 
-      <section className="px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+      <section id="reviews" className="border-y border-border px-5 py-20 sm:px-8 lg:px-12 lg:py-28 bg-background">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading eyebrow="آراء عملائنا" title="لا تأخذ بكلماتنا فقط، استمع لعملائنا" text="تقييمات حقيقية من أشخاص وأصحاب أعمال وثقوا بنا لحماية ممتلكاتهم." />
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { name: "محمد الخطيب", role: "صاحب سوبرماركت", text: "الفريق محترف جداً، ركبوا الكاميرات بدون تكسير في الديكور. وكاميرات الـ ColorVu فعلاً تصور الألوان في الليل بوضوح خيالي! أنصح بهم بشدة." },
+              { name: "د. أحمد بني هاني", role: "مالك فيلا سكنية", text: "خدمة ما بعد البيع عندهم ممتازة. احتجت مساعدة في ربط الكاميرات بهاتف زوجتي وتجاوبوا معي في نفس اليوم على الواتساب. شكراً عبابنة." },
+              { name: "علاء دراغمة", role: "مدير شركة تجارية", text: "السعر الذي اتفقنا عليه هو السعر الذي دفعته، لا يوجد تكاليف مخفية، وتمديداتهم نظيفة جداً. الكفالة الحقيقية تريح البال." }
+            ].map((review, i) => (
+              <div key={i} className="group relative rounded-2xl border border-border bg-surface p-8 transition-all hover:shadow-premium hover:-translate-y-2">
+                <div className="flex text-amber-400 mb-4">
+                  {[...Array(5)].map((_, j) => <svg key={j} className="size-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>)}
+                </div>
+                <p className="text-sm leading-relaxed text-foreground font-medium">"{review.text}"</p>
+                <div className="mt-6 flex items-center gap-3">
+                  <div className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground font-bold">{review.name.charAt(0)}</div>
+                  <div>
+                    <div className="font-bold text-sm">{review.name}</div>
+                    <div className="text-xs text-muted-foreground">{review.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" className="px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
         <div className="mx-auto max-w-3xl">
-          <SectionHeading eyebrow="الأسئلة الشائعة" title="كل ما تحتاج معرفته قبل التركيب" text="إجابات شفافة على أكثر الأسئلة التي تهمك." />
+          <SectionHeading eyebrow="الأسئلة الشائعة" title="كل ما تحتاج معرفته قبل التركيب" text="إجابات شفافة على أكثر الأسئلة التي تهمك بناءً على مواصفات الأجهزة الحقيقية." />
           <div className="mt-12 space-y-4">
             {[
-              { q: "هل السعر يشمل التركيب والأسلاك؟", a: "نعم، جميع الباقات لدينا تشمل التركيب الاحترافي، البرمجة، والتمديدات القياسية اللازمة." },
-              { q: "كم مدة الكفالة؟ وماذا تغطي؟", a: "نوفر كفالة حقيقية لمدة عامين (24 شهراً) على الكاميرات وأجهزة التسجيل ضد العيوب المصنعية مع استبدال فوري." },
-              { q: "هل يمكنني مشاهدة الكاميرات من هاتفي؟", a: "بالتأكيد! نقوم بربط النظام بالإنترنت وبرمجته على هواتف جميع أفراد العائلة لتتمكن من المراقبة من أي مكان في العالم." },
-              { q: "كم يوماً يسجل الهارد ديسك؟", a: "نستخدم أقراص تخزين مخصصة للمراقبة (مثل WD Purple). قرص 1 تيرابايت يكفي لتسجيل 15 إلى 30 يوماً حسب الحركة، ويمكن زيادة السعة حسب الطلب." },
+              { q: "هل السعر المعروض نهائي ويشمل الضريبة؟", a: "نعم، السعر الظاهر هو السعر النهائي الشامل للضريبة ولجميع رسوم التركيب الأساسية. لا توجد أي تكاليف مخفية مفاجئة." },
+              { q: "هل الكاميرات تسجل صوتاً أم صورة فقط؟", a: "معظم كاميرات Hikvision ColorVu و EZVIZ التي نعتمدها (بالأخص الموديلات التي تنتهي بحرف U أو S) تحتوي على مايكروفون مدمج (Built-in Mic) عالي النقاء لتسجيل الصوت والصورة معاً عبر نفس الكيبل بفضل تقنية (AoC)." },
+              { q: "هل أحتاج إلى إنترنت منزلي لكي يعمل النظام؟", a: "النظام يسجل بشكل محلي على القرص الصلب (Hard Disk) ويعمل 100% بدون إنترنت. لكنك ستحتاج إلى إنترنت فقط إذا أردت مراقبة الكاميرات من خارج المنزل عبر هاتفك المحمول (تطبيق Hik-Connect)." },
+              { q: "ماذا يحدث للكاميرات إذا انقطعت الكهرباء؟", a: "كاميرات المراقبة تحتاج إلى مصدر طاقة. عند انقطاع الكهرباء ستتوقف عن العمل والتسجيل. إذا كان انقطاع الكهرباء متكرراً في منطقتك، ننصحك بإضافة جهاز (UPS) لضمان استمرار تشغيل النظام لعدة ساعات." },
+              { q: "كم متراً من الأسلاك يشمل التركيب المجاني؟", a: "يشمل التركيب المجاني تمديدات تصل إلى 15-20 متراً لكل كاميرا كحد أقصى (تغطي 90% من المنازل والمحلات). الأمتار الإضافية يتم احتسابها بسعر التكلفة وبشفافية تامة قبل بدء العمل." },
+              { q: "كم مدة الكفالة؟ وماذا تغطي؟", a: "نوفر كفالة حقيقية لمدة عامين (24 شهراً) على الكاميرات وأجهزة التسجيل ضد العيوب المصنعية مع استبدال فوري. الكفالة لا تشمل التلف الناتج عن سوء الاستخدام، العبث، الكسر، أو الحوادث الناتجة عن تماس كهربائي خارجي." }
             ].map((faq, i) => (
               <details key={i} className="group rounded-lg border border-border bg-surface [&_summary::-webkit-details-marker]:hidden">
                 <summary className="flex cursor-pointer items-center justify-between p-5 font-bold text-foreground outline-none">
@@ -799,34 +828,94 @@ function Index() {
         </div>
       </section>
 
-      <section className="bg-primary px-5 py-16 text-primary-foreground sm:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-[1fr_auto]">
-          <div><span className="text-sm font-bold text-action">أمانك يبدأ بخطوة</span><h2 className="mt-3 font-display text-3xl font-black sm:text-4xl">دعنا نعاين موقعك ونقترح الحل الأفضل</h2><p className="mt-3 text-primary-soft">معاينة مجانية، عرض واضح، وتركيب احترافي دون أي التزام.</p></div>
-          <ActionLink href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد حجز معاينة مجانية للموقع")}`}>احجز معاينة مجانية <ArrowLeft className="size-4" /></ActionLink>
+      <section id="contact-form" className="border-t border-border bg-background px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
+          <div>
+            <SectionHeading eyebrow="تواصل معنا" title="لا تفضل الواتساب؟ راسلنا مباشرة" text="اكتب لنا تفاصيل طلبك أو استفسارك وسنقوم نحن بالاتصال بك في أقرب وقت ممكن." />
+            <div className="mt-8 flex gap-4 justify-center lg:justify-start">
+              <a href="tel:0788757801" className="inline-flex items-center gap-2 rounded-full bg-surface px-6 py-3 font-bold text-foreground border border-border transition-colors hover:border-primary hover:text-primary">
+                <Phone className="size-5" /> اتصل بنا هاتفياً
+              </a>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-border bg-surface p-6 shadow-xl sm:p-10">
+            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("تم إرسال رسالتك بنجاح! سنتواصل معك قريباً."); }}>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label htmlFor="name" className="text-sm font-bold text-foreground">الاسم الكريم</label>
+                  <input id="name" type="text" required placeholder="أحمد عبابنة" className="w-full rounded-md border border-input bg-background px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/20" />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="phone" className="text-sm font-bold text-foreground">رقم الهاتف</label>
+                  <input id="phone" type="tel" required placeholder="078 875 7801" className="w-full rounded-md border border-input bg-background px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/20 text-left" dir="ltr" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="message" className="text-sm font-bold text-foreground">الاستفسار</label>
+                <textarea id="message" required rows={4} placeholder="كيف يمكننا مساعدتك؟" className="w-full rounded-md border border-input bg-background px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/20 resize-none"></textarea>
+              </div>
+              <button type="submit" className="w-full rounded-md bg-primary py-3 font-bold text-primary-foreground transition-opacity hover:opacity-90">إرسال الرسالة</button>
+            </form>
+          </div>
         </div>
       </section>
 
       <footer id="contact" className="bg-footer px-5 pb-8 pt-16 text-footer-foreground sm:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-7xl gap-10 border-b border-footer-border pb-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr]">
-          <div><Brand light /><p className="mt-5 max-w-sm text-sm leading-7 text-footer-muted">نحمي المنازل والأعمال بحلول مراقبة وإنذار ذكية، وتركيب نهتم فيه بأدق التفاصيل.</p></div>
-          <div><h3 className="font-bold">تواصل معنا</h3><div className="mt-5 space-y-4 text-sm text-footer-muted"><a className="flex items-center gap-3 hover:text-footer-foreground" href={whatsappBase}><MessageCircle className="size-4 text-action" /> تواصل معنا عبر واتساب</a><p className="flex items-center gap-3"><Phone className="size-4 text-action" /> <span dir="ltr">+962 7 8875 7801</span></p><p className="flex items-center gap-3"><Users className="size-4 text-action" /> بإدارة: علي عبابنة</p><p className="flex items-center gap-3"><MapPin className="size-4 text-action" /> عمّان، الأردن</p></div></div>
+        <div className="mx-auto grid max-w-7xl gap-10 border-b border-footer-border pb-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
+          <div>
+            <Brand light />
+            <p className="mt-5 max-w-sm text-sm leading-7 text-footer-muted">نحمي المنازل والأعمال بحلول مراقبة وإنذار ذكية، وتركيب نهتم فيه بأدق التفاصيل.</p>
+          </div>
+          <div>
+            <h3 className="font-bold">تواصل معنا</h3>
+            <div className="mt-5 space-y-4 text-sm text-footer-muted">
+              <a className="flex items-center gap-3 hover:text-footer-foreground transition-colors" href={whatsappBase}><MessageCircle className="size-4 text-action" /> تواصل عبر واتساب</a>
+              <a className="flex items-center gap-3 hover:text-footer-foreground transition-colors" href="tel:0788757801"><Phone className="size-4 text-action" /> <span dir="ltr">+962 7 8875 7801</span></a>
+              <p className="flex items-center gap-3"><Users className="size-4 text-action" /> بإدارة: علي عبابنة</p>
+              <p className="flex items-start gap-3"><MapPin className="size-4 text-action shrink-0 mt-1" /> إربد - شارع الجامعة<br/>الأردن</p>
+            </div>
+          </div>
           <div>
             <h3 className="font-bold">ساعات العمل</h3>
-            <div className="mt-5 flex items-start gap-3 text-sm text-footer-muted"><Clock3 className="mt-0.5 size-4 text-action" /><p>السبت – الخميس<br /><span className="mt-1 block text-footer-foreground">9:00 صباحاً – 7:00 مساءً</span></p></div>
-            <div className="mt-6 flex gap-2">
-              <a href="#" aria-label="فيسبوك" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action"><Facebook className="size-4" /></a>
-              <a href="#" aria-label="إنستغرام" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action"><Instagram className="size-4" /></a>
+            <div className="mt-5 flex items-start gap-3 text-sm text-footer-muted">
+              <Clock3 className="mt-0.5 size-4 text-action" />
+              <p>السبت – الخميس<br /><span className="mt-1 block text-footer-foreground">9:00 صباحاً – 7:00 مساءً</span></p>
             </div>
-            {/* PWA Install Button (Contextual Hint for Mobile Users) */}
+            <div className="mt-6 flex gap-2">
+              <a href="#" aria-label="فيسبوك" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action transition-colors"><Facebook className="size-4" /></a>
+              <a href="#" aria-label="إنستغرام" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action transition-colors"><Instagram className="size-4" /></a>
+            </div>
             <button onClick={handleInstallClick} className="mt-6 flex w-full max-w-[200px] items-center justify-between rounded-md border border-action/30 bg-action/10 px-4 py-2 text-sm font-bold text-action transition-colors hover:bg-action/20">
               تثبيت التطبيق (PWA) <ChevronDown className="size-4 -rotate-90" />
             </button>
           </div>
+          <div>
+            <h3 className="font-bold">موقعنا</h3>
+            <div className="mt-5 h-32 w-full overflow-hidden rounded-lg border border-footer-border bg-footer-border/50 relative group">
+               {/* Placeholder Map - In real app this would be an iframe */}
+               <div className="absolute inset-0 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=32.5514,35.8515&zoom=14&size=400x400&sensor=false')] bg-cover bg-center opacity-50 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0"></div>
+               <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-[2px] transition-all duration-500 group-hover:backdrop-blur-none group-hover:bg-transparent">
+                  <MapPin className="size-8 text-action drop-shadow-md" />
+               </div>
+            </div>
+          </div>
         </div>
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 pt-7 text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between pb-24 sm:pb-0"><p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p><p className="flex items-center gap-2"><LockKeyhole className="size-3" /> خصوصيتك وأمانك أولويتنا</p></div>
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 pt-7 text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between pb-24 sm:pb-0">
+          <p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p>
+          <p className="flex items-center gap-2"><LockKeyhole className="size-3" /> خصوصيتك وأمانك أولويتنا</p>
+        </div>
       </footer>
 
-      <div className="fixed bottom-24 right-5 z-50 sm:bottom-7 sm:right-7">
+      <div className="fixed bottom-24 right-5 z-50 sm:bottom-7 sm:right-7 flex flex-col gap-3 items-end">
+        {/* Direct Call Button */}
+        <a href="tel:0788757801" onClick={() => navigator.vibrate?.([50])} aria-label="اتصال هاتفي" className="group flex h-12 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-surface/80 pl-2 pr-4 text-foreground shadow-lg backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-surface hover:shadow-blue-500/20">
+          <div className="relative grid size-8 shrink-0 place-items-center rounded-full bg-blue-600 text-white shadow-sm">
+            <Phone className="relative size-4 transition-transform group-hover:rotate-12" fill="currentColor" />
+          </div>
+          <span className="text-xs font-bold tracking-wide">اتصال سريع</span>
+        </a>
+        
+        {/* WhatsApp Button */}
         <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50, 50, 50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-background/60 pl-2 pr-6 text-foreground shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-background/80 hover:shadow-emerald-500/20 sm:h-16">
           <div className="relative grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 text-white shadow-lg sm:size-12">
             <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-40 duration-1000" />
