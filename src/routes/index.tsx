@@ -370,11 +370,42 @@ function Index() {
   return (
     <>
       {!appReady && <Preloader onComplete={() => setAppReady(true)} />}
-      {/* PWA Toast — replaces alert() */}
+      {/* PWA Install Guide Modal */}
       {pwaToast && (
-        <div className="fixed bottom-24 right-4 z-[200] max-w-xs rounded-xl border border-action/30 bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-2xl sm:bottom-8 sm:right-8" dir="rtl">
-          <p className="text-action mb-1">📲 تثبيت التطبيق</p>
-          <p className="text-muted-foreground text-xs leading-5">افتح قائمة المتصفح ← اختر "إضافة إلى الشاشة الرئيسية"</p>
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-background/80 p-5 backdrop-blur-sm" onClick={() => setPwaToast(false)}>
+          <div className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-2xl" onClick={e => e.stopPropagation()} dir="rtl">
+            <button onClick={() => setPwaToast(false)} className="absolute left-4 top-4 text-muted-foreground hover:text-foreground">
+              <X className="size-5" />
+            </button>
+            <div className="mb-6 flex flex-col items-center text-center">
+              <div className="mb-4 grid size-16 place-items-center rounded-2xl bg-action/10 text-action">
+                <svg className="size-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </div>
+              <h3 className="font-display text-xl font-black">كيفية تثبيت التطبيق</h3>
+              <p className="mt-2 text-sm text-muted-foreground">ثبّت التطبيق للوصول السريع لخدماتنا بنقرة واحدة من شاشتك الرئيسية.</p>
+            </div>
+            
+            <div className="space-y-3 text-sm font-semibold">
+              <div className="flex items-center gap-4 rounded-lg bg-surface p-3 border border-border">
+                <div className="grid size-7 shrink-0 place-items-center rounded-full bg-background text-foreground shadow-sm">1</div>
+                <p>انقر على أيقونة <strong className="text-action text-base leading-none px-1">⍐</strong> أو <strong className="text-action text-lg leading-none px-1">⋮</strong> في متصفحك.</p>
+              </div>
+              <div className="flex items-center gap-4 rounded-lg bg-surface p-3 border border-border">
+                <div className="grid size-7 shrink-0 place-items-center rounded-full bg-background text-foreground shadow-sm">2</div>
+                <p>اختر <strong>"إضافة إلى الشاشة الرئيسية"</strong><br/><span className="text-xs text-muted-foreground font-normal">(Add to Home Screen)</span></p>
+              </div>
+              <div className="flex items-center gap-4 rounded-lg bg-surface p-3 border border-border">
+                <div className="grid size-7 shrink-0 place-items-center rounded-full bg-background text-foreground shadow-sm">3</div>
+                <p>أكّد العملية بالضغط على <strong>"إضافة"</strong>.</p>
+              </div>
+            </div>
+            
+            <button onClick={() => setPwaToast(false)} className="mt-8 w-full rounded-lg bg-action py-3 font-bold text-action-foreground transition-all hover:bg-action/90 shadow-premium">
+              حسناً، فهمت
+            </button>
+          </div>
         </div>
       )}
       <main id="top" dir="rtl" className={`relative bg-background text-foreground ${!appReady ? "h-screen overflow-hidden" : "overflow-x-hidden"}`}>
