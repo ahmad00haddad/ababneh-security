@@ -655,9 +655,8 @@ function Index() {
               <li className="flex items-center gap-3"><Check className="size-5 text-action" /> مشاريع منجزة في كافة محافظات المملكة.</li>
             </ul>
           </div>
-          <div className="group relative aspect-video overflow-hidden rounded-2xl border border-border shadow-2xl sm:aspect-[4/3] lg:aspect-square">
-            <img src={cameraCloseup} alt="كاميرا مراقبة دقيقة عالية الوضوح" className="h-full w-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-primary/20 mix-blend-multiply pointer-events-none" />
+          <div className="group relative aspect-video overflow-hidden rounded-2xl border border-border shadow-2xl sm:aspect-[4/3] lg:aspect-square bg-black">
+            <img src={cameraCloseup} alt="كاميرا مراقبة" className="h-full w-full object-cover grayscale opacity-90 transition-all duration-1000 group-hover:scale-105" />
             
             {/* Live REC Indicator */}
             <div className="absolute left-4 top-4 flex items-center gap-2 rounded bg-background/80 px-2 py-1 font-mono text-[10px] text-foreground backdrop-blur-sm">
