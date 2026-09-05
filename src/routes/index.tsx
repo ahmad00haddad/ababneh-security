@@ -173,13 +173,22 @@ function Brand({ light = false }: { light?: boolean }) {
 
 function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string }) {
   const [unlocked, setUnlocked] = useState(false);
+  const [value, setValue] = useState(0);
+
   const handleSlide = (e: any) => {
-    if (e.target.value >= 99 && !unlocked) {
+    const val = e.target.value;
+    setValue(val);
+    if (val >= 99 && !unlocked) {
       setUnlocked(true);
       navigator.vibrate?.([100, 50, 100]); // Success vibration
       onUnlock();
     }
   };
+
+  const resetSlide = () => {
+    if (!unlocked) setValue(0);
+  };
+
   return (
     <div className="relative h-14 w-full overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner">
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm font-bold text-muted-foreground">
@@ -188,12 +197,17 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
       <input 
         type="range" 
         min="0" max="100" 
-        defaultValue="0"
-        onChange={handleSlide}
-        className="relative z-10 h-full w-full cursor-pointer appearance-none bg-transparent opacity-0"
+        value={value}
+        onInput={handleSlide}
+        onMouseUp={resetSlide}
+        onTouchEnd={resetSlide}
+        className="relative z-10 h-full w-full cursor-pointer appearance-none bg-transparent opacity-0 touch-none"
       />
-      <div className="pointer-events-none absolute left-1 top-1 bottom-1 aspect-square rounded-full bg-action grid place-items-center text-action-foreground shadow-md transition-all">
-        <LockKeyhole className="size-5" />
+      <div 
+        className="pointer-events-none absolute top-1 bottom-1 aspect-square rounded-full bg-action grid place-items-center text-action-foreground shadow-md transition-all duration-75"
+        style={{ left: `calc(4px + ${value}% * (100% - 48px) / 100)` }}
+      >
+        {unlocked ? <Check className="size-5" /> : <LockKeyhole className="size-5" />}
       </div>
     </div>
   );
@@ -318,30 +332,40 @@ function Index() {
         </div>
       )}
       <main id="top" dir="rtl" className={`relative bg-background text-foreground ${!appReady ? "h-screen overflow-hidden" : "overflow-x-hidden"}`}>
+        {/* ====== UNIFIED HEADER ====== */}
+        <header className="relative z-50 border-b border-hero-border bg-hero text-hero-foreground">
+          <div className="mx-auto grid min-h-16 sm:min-h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 sm:px-8 lg:px-12">
+            <Brand light />
+            {/* Desktop Nav */}
+            <nav className="hidden items-center gap-8 text-sm font-semibold text-hero-muted lg:flex">
+              <a className="transition-colors hover:text-hero-foreground" href="#about">من نحن</a>
+              <a className="transition-colors hover:text-hero-foreground" href="#packages">الباقات</a>
+              <a className="transition-colors hover:text-hero-foreground" href="#custom">كوّن نظامك</a>
+              <a className="transition-colors hover:text-hero-foreground" href="#services">خدماتنا</a>
+              <a className="transition-colors hover:text-hero-foreground" href="#contact">تواصل معنا</a>
+            </nav>
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              onClick={() => setMenuOpen((v) => !v)}
+              className="grid size-10 sm:size-11 place-items-center rounded-md border border-hero-border bg-hero-glass text-hero-foreground lg:hidden"
+              aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+            >
+              {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            </button>
+          </div>
+          {/* Mobile Nav */}
+          {menuOpen && (
+            <nav className="absolute left-0 top-full w-full border-b border-hero-border bg-hero-glass px-5 py-3 backdrop-blur-xl lg:hidden">
+              {[["من نحن","#about"],["الباقات","#packages"],["كوّن نظامك","#custom"],["خدماتنا","#services"],["تواصل معنا","#contact"]].map(([label, href]) => (
+                <a key={href} href={href} onClick={() => setMenuOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold text-hero-muted hover:bg-hero-glass-hover hover:text-hero-foreground">{label}</a>
+              ))}
+            </nav>
+          )}
+        </header>
+
         {/* ====== HERO: MOBILE LAYOUT (video first, then text below) ====== */}
         <section className="block bg-hero text-hero-foreground sm:hidden">
-          {/* Mobile Header */}
-          <header className="relative z-20 border-b border-hero-border">
-            <div className="grid min-h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5">
-              <Brand light />
-              <button
-                type="button"
-                onClick={() => setMenuOpen((v) => !v)}
-                className="grid size-10 place-items-center rounded-md border border-hero-border bg-hero-glass text-hero-foreground"
-                aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
-              >
-                {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-              </button>
-            </div>
-            {menuOpen && (
-              <nav className="border-t border-hero-border bg-hero-glass px-5 py-3 backdrop-blur-xl">
-                {[["من نحن","#about"],["الباقات","#packages"],["كوّن نظامك","#custom"],["خدماتنا","#services"],["تواصل معنا","#contact"]].map(([label, href]) => (
-                  <a key={href} href={href} onClick={() => setMenuOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold text-hero-muted hover:bg-hero-glass-hover hover:text-hero-foreground">{label}</a>
-                ))}
-              </nav>
-            )}
-          </header>
-
           {/* Mobile Video — full width, natural ratio, no cropping */}
           <div className="relative w-full bg-black">
             <video ref={mobileVideoRef} autoPlay loop muted playsInline poster={heroMan} className="w-full aspect-video object-contain">
@@ -380,7 +404,7 @@ function Index() {
         </section>
 
         {/* ====== HERO: DESKTOP LAYOUT (full-screen video + overlaid text) ====== */}
-        <section className="relative hidden min-h-[92svh] overflow-hidden bg-hero text-hero-foreground sm:block">
+        <section className="relative hidden min-h-[calc(92svh-5rem)] overflow-hidden bg-hero text-hero-foreground sm:block">
           {/* Desktop background video */}
           <video ref={desktopVideoRef} autoPlay loop muted playsInline poster={heroMan} className="absolute inset-0 h-full w-full object-cover object-center">
             <source src="/hero-video.mp4" type="video/mp4" />
@@ -408,20 +432,6 @@ function Index() {
           >
             {isMuted ? <VolumeX className="size-5" /> : <Volume2 className="size-5" />}
           </button>
-
-          {/* Desktop Header */}
-          <header className="relative z-20 border-b border-hero-border">
-            <div className="mx-auto grid min-h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-8 lg:px-12">
-              <Brand light />
-              <nav className="hidden items-center gap-8 text-sm font-semibold text-hero-muted lg:flex">
-                <a className="transition-colors hover:text-hero-foreground" href="#about">من نحن</a>
-                <a className="transition-colors hover:text-hero-foreground" href="#packages">الباقات</a>
-                <a className="transition-colors hover:text-hero-foreground" href="#custom">كوّن نظامك</a>
-                <a className="transition-colors hover:text-hero-foreground" href="#services">خدماتنا</a>
-                <a className="transition-colors hover:text-hero-foreground" href="#contact">تواصل معنا</a>
-              </nav>
-            </div>
-          </header>
 
           {/* Desktop Text — bottom anchored, staggered after preloader */}
           <div className="relative z-10 mx-auto flex h-[calc(92svh-5rem)] max-w-7xl flex-col justify-end px-8 pb-24 lg:px-12">
