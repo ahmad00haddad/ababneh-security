@@ -552,17 +552,28 @@ function Contact() {
           </section>
 
           {/* Map Section */}
-          <section className="bg-background px-5 pb-16 sm:px-8 lg:px-12">
-            <div className="mx-auto max-w-7xl h-[400px] w-full overflow-hidden rounded-3xl border border-border bg-surface relative group">
-               <div className="absolute inset-0 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=32.5514,35.8515&zoom=14&size=800x400&sensor=false')] bg-cover bg-center opacity-70 grayscale transition-all duration-700 group-hover:opacity-100 group-hover:grayscale-0"></div>
-               <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-sm transition-all duration-700 group-hover:backdrop-blur-none group-hover:bg-transparent pointer-events-none">
-                  <div className="flex flex-col items-center gap-2 bg-background/90 p-4 rounded-xl border border-border shadow-xl backdrop-blur-md transition-opacity duration-300 group-hover:opacity-0">
-                     <MapPin className="size-8 text-action animate-bounce" />
-                     <span className="font-bold">موقعنا على الخريطة</span>
-                  </div>
-               </div>
-            </div>
-          </section>
+            <section className="bg-background px-5 pb-16 sm:px-8 lg:px-12">
+              <div className="mx-auto max-w-7xl h-[400px] w-full overflow-hidden rounded-3xl border border-border bg-surface relative group shadow-2xl">
+                 <iframe 
+                   src="https://maps.google.com/maps?q=32.546595,35.886633&z=15&output=embed" 
+                   width="100%" 
+                   height="100%" 
+                   style={{ border: 0, filter: 'grayscale(1) contrast(1.2) opacity(0.8)' }} 
+                   className="transition-all duration-700 group-hover:filter-none"
+                   allowFullScreen 
+                   loading="lazy" 
+                   referrerPolicy="no-referrer-when-downgrade"
+                 ></iframe>
+                 
+                 {/* Overlay hint that fades out on hover */}
+                 <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-sm transition-all duration-700 group-hover:backdrop-blur-none group-hover:bg-transparent pointer-events-none">
+                    <div className="flex flex-col items-center gap-2 bg-background/90 p-4 rounded-xl border border-border shadow-xl backdrop-blur-md transition-opacity duration-300 group-hover:opacity-0">
+                       <MapPin className="size-8 text-action animate-bounce" />
+                       <span className="font-bold">موقعنا على الخريطة</span>
+                    </div>
+                 </div>
+              </div>
+            </section>
 <section id="faq" className="px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
         <div className="mx-auto max-w-3xl">
           <SectionHeading eyebrow="الأسئلة الشائعة" title="كل ما تحتاج معرفته قبل التركيب" text="إجابات شفافة على أكثر الأسئلة التي تهمك بناءً على مواصفات الأجهزة الحقيقية." />
