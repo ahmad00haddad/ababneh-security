@@ -474,10 +474,10 @@ function Contact() {
               </div>
             </div>
             <nav className="hidden items-center gap-8 text-sm font-bold text-hero-muted lg:flex">
-              <Link className="transition-colors hover:text-hero-foreground" to="/" onClick={triggerGlitch}>الرئيسية</a>
+              <Link className="transition-colors hover:text-hero-foreground" to="/" onClick={triggerGlitch}>الرئيسية</Link>
               <a className="transition-colors hover:text-hero-foreground" href="/#packages" onClick={triggerGlitch}>باقات الحماية</a>
               <a className="transition-colors hover:text-hero-foreground" href="/#custom" onClick={triggerGlitch}>احسب تكلفتك</a>
-              <Link className="transition-colors hover:text-hero-foreground" to="/contact" onClick={triggerGlitch}></Link>
+              <Link className="transition-colors hover:text-hero-foreground" to="/contact" onClick={triggerGlitch}>تواصل معنا</Link>
             </nav>
             <div className="flex items-center gap-4 sm:gap-6">
               
