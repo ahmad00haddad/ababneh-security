@@ -1,6 +1,6 @@
 ﻿<div align="center">
   <br />
-  <img src="public/favicon.svg" alt="Ababneh Security Logo" width="100" />
+  <img src="public/logo.png" alt="Ababneh Security Logo" width="100" />
   <br />
   <h1>🛡️ عبابنة للأنظمة الأمنية | Ababneh Security</h1>
   <p>
