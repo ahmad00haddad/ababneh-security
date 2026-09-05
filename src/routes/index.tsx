@@ -325,6 +325,7 @@ function Index() {
   // 10 Ideas: Interaction States
   const [threats, setThreats] = useState(24051);
   const [glitch, setGlitch] = useState(false);
+  const [fabVisible, setFabVisible] = useState(true);
   const [fabText, setFabText] = useState("تحدث مع خبير");
   const [fingerprint, setFingerprint] = useState(false);
   const [scarcityHint, setScarcityHint] = useState(false);
@@ -907,7 +908,11 @@ function Index() {
         </div>
       </footer>
 
-      <div className="fixed bottom-24 right-5 z-50 sm:bottom-7 sm:right-7 flex flex-col gap-3 items-end">
+            {fabVisible && (
+        <div className="fixed bottom-24 right-5 z-50 sm:bottom-7 sm:right-7 flex flex-col gap-3 items-end animate-in fade-in slide-in-from-bottom-5">
+          <button onClick={() => setFabVisible(false)} aria-label="Dismiss" className="grid size-6 place-items-center rounded-full bg-background/80 border border-border text-muted-foreground shadow-sm backdrop-blur-md transition-colors hover:bg-background hover:text-foreground">
+            <X className="size-3" />
+          </button>
         {/* Direct Call Button */}
         <a href="tel:0788757801" onClick={() => navigator.vibrate?.([50])} aria-label="اتصال هاتفي" className="group flex h-12 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-surface/80 pl-2 pr-4 text-foreground shadow-lg backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-action/40 hover:bg-surface hover:shadow-action/10">
           <div className="relative grid size-8 shrink-0 place-items-center rounded-full bg-background border border-border/50 text-foreground shadow-sm">
@@ -929,9 +934,14 @@ function Index() {
         </a>
       </div>
 
+            )}
+
       {/* Mobile Bottom App Bar */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-border bg-background/90 pb-safe backdrop-blur-xl sm:hidden">
-        <Link to="/" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-action"></Link>
+        <Link to="/" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-action">
+          <ShieldCheck className="size-5" />
+          <span className="text-[10px] font-bold">????????</span>
+        </Link>
         <a href="#packages" onClick={() => navigator.vibrate?.(50)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-action">
           <Zap className="size-5" />
           <span className="text-[10px] font-bold">الباقات</span>
@@ -940,7 +950,10 @@ function Index() {
           <Settings className="size-5" />
           <span className="text-[10px] font-bold">حاسبة</span>
         </a>
-        <Link to="/contact" className="flex flex-col items-center gap-1 text-action hover:text-action-hover"></Link>
+        <Link to="/contact" className="flex flex-col items-center gap-1 text-action hover:text-action-hover">
+          <MessageCircle className="size-5" />
+          <span className="text-[10px] font-bold">????? ????</span>
+        </Link>
       </nav>
     </main>
     </>
