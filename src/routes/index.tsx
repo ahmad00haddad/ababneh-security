@@ -202,26 +202,40 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
   const [unlocked, setUnlocked] = useState(false);
   const [value, setValue] = useState(0); // 0 to 100
   const trackRef = useRef<HTMLDivElement>(null);
+  const startAllowed = useRef(false);
 
   const handleMove = (clientX: number) => {
-    if (unlocked || !trackRef.current) return;
+    if (unlocked || !trackRef.current || !startAllowed.current) return;
     const rect = trackRef.current.getBoundingClientRect();
     const thumbW = 48; // 56px (h-14) - 8px (p-1 * 2)
     const trackW = rect.width - thumbW - 8;
-    // Calculate physical x relative to the left of the track
     const x = Math.max(0, Math.min(clientX - rect.left - thumbW / 2, trackW));
     const val = Math.round((x / trackW) * 100);
     
     setValue(val);
-    if (val >= 98) {
+    if (val >= 95) {
       setUnlocked(true);
       navigator.vibrate?.([100, 50, 100]);
       setValue(100);
-      onUnlock();
+      // Add delay so user visually sees the checkmark and text before redirecting
+      setTimeout(() => {
+        onUnlock();
+      }, 800);
+    }
+  };
+
+  const onStart = (clientX: number) => {
+    if (unlocked || !trackRef.current) return;
+    const rect = trackRef.current.getBoundingClientRect();
+    // Only allow drag if starting on the left half of the slider
+    if (clientX - rect.left < rect.width / 2) {
+      startAllowed.current = true;
+      handleMove(clientX);
     }
   };
 
   const onEnd = () => {
+    startAllowed.current = false;
     if (!unlocked) setValue(0);
   };
 
@@ -230,11 +244,11 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
       ref={trackRef}
       dir="ltr"
       className="relative h-14 w-full select-none overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner cursor-pointer touch-none"
-      onTouchStart={(e) => handleMove(e.touches[0].clientX)}
+      onTouchStart={(e) => onStart(e.touches[0].clientX)}
       onTouchMove={(e) => handleMove(e.touches[0].clientX)}
       onTouchEnd={onEnd}
       onTouchCancel={onEnd}
-      onMouseDown={(e) => handleMove(e.clientX)}
+      onMouseDown={(e) => onStart(e.clientX)}
       onMouseMove={(e) => {
         if (e.buttons === 1) handleMove(e.clientX);
       }}
