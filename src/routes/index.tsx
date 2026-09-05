@@ -202,23 +202,18 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
   const [unlocked, setUnlocked] = useState(false);
   const [value, setValue] = useState(0); // 0 to 100
   const trackRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
 
-  const computeValue = (clientX: number) => {
-    if (!trackRef.current) return 0;
+  const handleMove = (clientX: number) => {
+    if (unlocked || !trackRef.current) return;
     const rect = trackRef.current.getBoundingClientRect();
-    const thumbW = 48;
-    const trackW = rect.width - thumbW - 8; // 4px padding on each side
+    const thumbW = 48; // 56px (h-14) - 8px (p-1 * 2)
+    const trackW = rect.width - thumbW - 8;
+    // Calculate physical x relative to the left of the track
     const x = Math.max(0, Math.min(clientX - rect.left - thumbW / 2, trackW));
-    return Math.round((x / trackW) * 100);
-  };
-
-  const onMove = (clientX: number) => {
-    if (!isDragging.current || unlocked) return;
-    const val = computeValue(clientX);
+    const val = Math.round((x / trackW) * 100);
+    
     setValue(val);
     if (val >= 98) {
-      isDragging.current = false;
       setUnlocked(true);
       navigator.vibrate?.([100, 50, 100]);
       setValue(100);
@@ -227,25 +222,26 @@ function SlideToUnlock({ onUnlock, text }: { onUnlock: () => void, text: string 
   };
 
   const onEnd = () => {
-    isDragging.current = false;
     if (!unlocked) setValue(0);
   };
 
   return (
     <div
       ref={trackRef}
-      className="relative h-14 w-full select-none overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner cursor-pointer"
-      style={{ touchAction: "none" }}
-      onPointerDown={(e) => {
-        e.currentTarget.setPointerCapture(e.pointerId);
-        isDragging.current = true;
-        onMove(e.clientX);
+      dir="ltr"
+      className="relative h-14 w-full select-none overflow-hidden rounded-full border border-action/30 bg-card p-1 shadow-inner cursor-pointer touch-none"
+      onTouchStart={(e) => handleMove(e.touches[0].clientX)}
+      onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+      onTouchEnd={onEnd}
+      onTouchCancel={onEnd}
+      onMouseDown={(e) => handleMove(e.clientX)}
+      onMouseMove={(e) => {
+        if (e.buttons === 1) handleMove(e.clientX);
       }}
-      onPointerMove={(e) => onMove(e.clientX)}
-      onPointerUp={() => onEnd()}
-      onPointerCancel={() => onEnd()}
+      onMouseUp={onEnd}
+      onMouseLeave={onEnd}
     >
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm font-bold text-muted-foreground">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm font-bold text-muted-foreground" dir="rtl">
         {unlocked ? "✓ تم تأكيد الاتصال" : text}
       </div>
       <div
