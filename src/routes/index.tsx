@@ -29,6 +29,7 @@ import {
   VolumeX,
   X,
   Zap,
+  ScanSearch,
 } from "lucide-react";
 import { useMemo, useState, useEffect, useRef, type ReactNode } from "react";
 import heroMan from "../assets/hero-man.jpg";
