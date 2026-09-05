@@ -978,22 +978,22 @@ function Index() {
 
       <div className="fixed bottom-24 right-5 z-50 sm:bottom-7 sm:right-7 flex flex-col gap-3 items-end">
         {/* Direct Call Button */}
-        <a href="tel:0788757801" onClick={() => navigator.vibrate?.([50])} aria-label="اتصال هاتفي" className="group flex h-12 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-surface/80 pl-2 pr-4 text-foreground shadow-lg backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-surface hover:shadow-blue-500/20">
-          <div className="relative grid size-8 shrink-0 place-items-center rounded-full bg-blue-600 text-white shadow-sm">
-            <Phone className="relative size-4 transition-transform group-hover:rotate-12" fill="currentColor" />
+        <a href="tel:0788757801" onClick={() => navigator.vibrate?.([50])} aria-label="اتصال هاتفي" className="group flex h-12 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-surface/80 pl-2 pr-4 text-foreground shadow-lg backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-action/40 hover:bg-surface hover:shadow-action/10">
+          <div className="relative grid size-8 shrink-0 place-items-center rounded-full bg-background border border-border/50 text-foreground shadow-sm">
+            <Phone className="relative size-4 transition-transform group-hover:rotate-12 text-action" />
           </div>
           <span className="text-xs font-bold tracking-wide">اتصال سريع</span>
         </a>
         
         {/* WhatsApp Button (Smart FAB) */}
-        <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50, 50, 50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-background/60 pl-2 pr-6 text-foreground shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-background/80 hover:shadow-emerald-500/20 sm:h-16">
-          <div className="relative grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 text-white shadow-lg sm:size-12">
-            <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-40 duration-1000" />
+        <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50, 50, 50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 overflow-hidden rounded-full border border-action/30 bg-action/10 pl-2 pr-6 text-foreground shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-action/20 hover:shadow-action/20 sm:h-16">
+          <div className="relative grid size-10 shrink-0 place-items-center rounded-full bg-action text-action-foreground shadow-lg sm:size-12">
+            <span className="absolute inset-0 animate-ping rounded-full bg-action opacity-40 duration-1000" />
             <MessageCircle className="relative size-5 transition-transform group-hover:rotate-12 group-hover:scale-110 sm:size-6" fill="currentColor" />
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] font-medium text-muted-foreground">تحتاج مساعدة؟</span>
-            <span className="text-sm font-bold tracking-wide transition-all duration-300">{fabText}</span>
+            <span className="text-[10px] font-medium text-action/80">تحتاج مساعدة؟</span>
+            <span className="text-sm font-bold tracking-wide transition-all duration-300 text-action-foreground drop-shadow-md">{fabText}</span>
           </div>
         </a>
       </div>
