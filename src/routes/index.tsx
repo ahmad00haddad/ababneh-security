@@ -478,7 +478,7 @@ function Index() {
               <Link className="transition-colors hover:text-hero-foreground" to="/" onClick={triggerGlitch}>الرئيسية</Link>
               <a className="transition-colors hover:text-hero-foreground" href="#packages" onClick={triggerGlitch}>باقات الحماية</a>
               <a className="transition-colors hover:text-hero-foreground" href="#custom" onClick={triggerGlitch}>احسب تكلفتك</a>
-              <Link className="transition-colors hover:text-hero-foreground" to="/contact" onClick={triggerGlitch}>تواصل معنا</Link>
+              <Link className="transition-colors hover:text-hero-foreground" to="/contact" onClick={triggerGlitch}>الدعم</Link>
             </nav>
             <div className="flex items-center gap-4 sm:gap-6">
               
@@ -862,49 +862,21 @@ function Index() {
         </div>
       </section>
 
-      <footer id="contact" className="bg-footer px-5 pb-8 pt-16 text-footer-foreground sm:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-7xl gap-10 border-b border-footer-border pb-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
-          <div>
+      
+      <footer className="bg-footer px-5 pb-8 pt-12 text-footer-foreground sm:px-8 lg:px-12 border-t border-footer-border">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 sm:flex-row">
+          <div className="flex flex-col items-center sm:items-start gap-4">
             <Brand light />
-            <p className="mt-5 max-w-sm text-sm leading-7 text-footer-muted">نحمي المنازل والأعمال بحلول مراقبة وإنذار ذكية، وتركيب نهتم فيه بأدق التفاصيل.</p>
+            <p className="text-xs text-footer-muted max-w-xs text-center sm:text-right">أنظمة حماية متكاملة، لحياة أكثر أماناً وراحة بالك.</p>
           </div>
-          <div>
-            <h3 className="font-bold">تواصل معنا</h3>
-            <div className="mt-5 space-y-4 text-sm text-footer-muted">
-              <a className="flex items-center gap-3 hover:text-footer-foreground transition-colors" href={whatsappBase}><MessageCircle className="size-4 text-action" /> تواصل عبر واتساب</a>
-              <a className="flex items-center gap-3 hover:text-footer-foreground transition-colors" href="tel:0788757801"><Phone className="size-4 text-action" /> <span dir="ltr">+962 7 8875 7801</span></a>
-              <p className="flex items-center gap-3"><Users className="size-4 text-action" /> بإدارة: علي عبابنة</p>
-              <p className="flex items-start gap-3"><MapPin className="size-4 text-action shrink-0 mt-1" /> إربد - بشرى<br/>بالقرب من إشارة بردى</p>
-            </div>
-          </div>
-          <div>
-            <h3 className="font-bold">ساعات العمل</h3>
-            <div className="mt-5 flex items-start gap-3 text-sm text-footer-muted">
-              <Clock3 className="mt-0.5 size-4 text-action" />
-              <p>السبت – الخميس<br /><span className="mt-1 block text-footer-foreground">9:00 صباحاً – 7:00 مساءً</span></p>
-            </div>
-            <div className="mt-6 flex gap-2">
-              <a href="#" aria-label="فيسبوك" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action transition-colors"><Facebook className="size-4" /></a>
-              <a href="#" aria-label="إنستغرام" className="grid size-9 place-items-center rounded-md border border-footer-border hover:border-action hover:text-action transition-colors"><Instagram className="size-4" /></a>
-            </div>
-            <button onClick={handleInstallClick} className="mt-6 flex w-full max-w-[200px] items-center justify-between rounded-md border border-action/30 bg-action/10 px-4 py-2 text-sm font-bold text-action transition-colors hover:bg-action/20">
-              تثبيت التطبيق (PWA) <ChevronDown className="size-4 -rotate-90" />
-            </button>
-          </div>
-          <div>
-            <h3 className="font-bold">موقعنا</h3>
-            <div className="mt-5 h-32 w-full overflow-hidden rounded-lg border border-footer-border bg-footer-border/50 relative group">
-               {/* Placeholder Map - In real app this would be an iframe */}
-               <div className="absolute inset-0 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=32.5514,35.8515&zoom=14&size=400x400&sensor=false')] bg-cover bg-center opacity-50 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0"></div>
-               <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-[2px] transition-all duration-500 group-hover:backdrop-blur-none group-hover:bg-transparent">
-                  <MapPin className="size-8 text-action drop-shadow-md" />
-               </div>
-            </div>
+          <div className="flex gap-4">
+            <a href="#" aria-label="فيسبوك" className="grid size-10 place-items-center rounded-full bg-footer-border/30 hover:bg-action hover:text-action-foreground transition-colors"><Facebook className="size-5" /></a>
+            <a href="#" aria-label="إنستغرام" className="grid size-10 place-items-center rounded-full bg-footer-border/30 hover:bg-action hover:text-action-foreground transition-colors"><Instagram className="size-5" /></a>
           </div>
         </div>
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 pt-7 text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between pb-24 sm:pb-0">
+        <div className="mx-auto mt-8 flex max-w-7xl flex-col gap-4 border-t border-footer-border/50 pt-8 text-center text-xs text-footer-muted sm:flex-row sm:items-center sm:justify-between sm:text-right pb-24 sm:pb-0">
           <p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p>
-          <p className="flex items-center gap-2"><LockKeyhole className="size-3" /> خصوصيتك وأمانك أولويتنا</p>
+          <p className="flex items-center justify-center gap-2 sm:justify-end"><LockKeyhole className="size-3" /> حماية متكاملة، خصوصية تامة</p>
         </div>
       </footer>
 
@@ -952,7 +924,7 @@ function Index() {
         </a>
         <Link to="/contact" className="flex flex-col items-center gap-1 text-action hover:text-action-hover">
           <MessageCircle className="size-5" />
-          <span className="text-[10px] font-bold">????? ????</span>
+          <span className="text-[10px] font-bold">الدعم</span>
         </Link>
       </nav>
     </main>
