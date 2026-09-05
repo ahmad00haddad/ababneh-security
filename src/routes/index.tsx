@@ -323,7 +323,7 @@ function Index() {
     const [offlineHint, setOfflineHint] = useState(false);
 
 
-    const [greeting, setGreeting] = useState("مرحباً بك في");
+        const [greeting, setGreeting] = useState("مرحباً بك في");
     useEffect(() => {
       const hour = new Date().getHours();
       if (hour >= 5 && hour < 12) setGreeting("صباح الخير، هل تؤمن منزلك اليوم؟");
@@ -586,10 +586,7 @@ function Index() {
               </span>
               حماية متصلة على مدار الساعة
             </div>
-            <h1 className="mt-2 font-display text-3xl font-black leading-[1.2]">
-              أنظمة حماية متطورة<br />
-              <span className="text-action">لأمان عائلتك وعملك</span>
-            </h1>
+            <h1 className="mt-2 font-display text-2xl font-black leading-[1.2]"><span className="block text-sm font-bold text-muted-foreground mb-1">{greeting}</span>أنظمة حماية متطورة<br /><span className="text-action">لأمان عائلتك وعملك</span></h1>
             <div className="mt-6 flex flex-col gap-3">
               <ActionLink href="#packages" variant="primary" className="w-full">
                 عرض الباقات <ArrowLeft className="size-4" />
@@ -645,11 +642,7 @@ function Index() {
               حماية متصلة على مدار الساعة
             </div>
 
-            <h1 className="max-w-2xl font-display text-5xl font-black leading-[1.15] lg:text-6xl xl:text-7xl"
-                style={appReady ? { animation: "reveal 1s 2.5s ease-out both" } : { opacity: 0 }}>
-              أنظمة حماية متطورة<br />
-              <span className="text-action">لأمان عائلتك وعملك</span>
-            </h1>
+            <h1 className="max-w-2xl font-display text-4xl font-black leading-[1.15] lg:text-5xl xl:text-6xl" style={appReady ? { animation: "reveal 1s 2.5s ease-out both" } : { opacity: 0 }}><span className="block text-xl font-bold text-hero-muted mb-2">{greeting}</span>أنظمة حماية متطورة<br /><span className="text-action">لأمان عائلتك وعملك</span></h1>
 
             <div className="mt-8 flex items-center gap-4"
                  style={appReady ? { animation: "reveal 0.8s 5.5s ease-out both" } : { opacity: 0 }}>
