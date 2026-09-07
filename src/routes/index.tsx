@@ -32,7 +32,7 @@ import {
   ScanSearch,
 } from "lucide-react";
 import { useMemo, useState, useEffect, useRef, type ReactNode } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import heroMan from "../assets/hero-man.jpg";
 import cameraCloseup from "../assets/camera-closeup.jpg";
 import { Testimonials } from "../components/Testimonials";
@@ -319,6 +319,43 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 
 function Index() {
 
+    const { scrollYProgress, scrollY } = useScroll();
+    const [logoFlash, setLogoFlash] = useState(false);
+    const [readHint, setReadHint] = useState(false);
+    const [readHintShown, setReadHintShown] = useState(false);
+    const [slowNetHint, setSlowNetHint] = useState(false);
+
+    const progressBarColor = useTransform(
+      scrollYProgress,
+      [0, 0.3, 0.6, 1],
+      ["#ef4444", "#3b82f6", "#10b981", "#f59e0b"]
+    );
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+      const prev = scrollY.getPrevious();
+      if (latest <= 10 && prev > 10) {
+        setLogoFlash(true);
+        setTimeout(() => setLogoFlash(false), 1000);
+      }
+    });
+
+    useMotionValueEvent(scrollYProgress, "change", (latest) => {
+      if (latest > 0.6 && !readHintShown) {
+        setReadHint(true);
+        setReadHintShown(true);
+        setTimeout(() => setReadHint(false), 8000);
+      }
+    });
+
+    useEffect(() => {
+      const conn = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+      if (conn && (conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g' || conn.downlink < 1.0)) {
+        setSlowNetHint(true);
+        setTimeout(() => setSlowNetHint(false), 6000);
+      }
+    }, []);
+
+
     const [hddHint, setHddHint] = useState(false);
     const [offlineHint, setOfflineHint] = useState(false);
 
@@ -505,10 +542,12 @@ function Index() {
           <div className="pointer-events-none fixed inset-0 z-[9999] opacity-20 mix-blend-difference bg-[url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')]"></div>
         )}
 
-        <header className="fixed left-0 right-0 top-0 z-50 border-b border-hero-border bg-hero-glass/95 backdrop-blur-md shadow-sm">
+        
+          <motion.div className="fixed top-0 left-0 right-0 h-1 z-[100] origin-right" style={{ scaleX: scrollYProgress, backgroundColor: progressBarColor }} />
+<header className="fixed left-0 right-0 top-0 z-50 border-b border-hero-border bg-hero-glass/95 backdrop-blur-md shadow-sm">
           <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
             <div className="flex items-center gap-3 text-hero-foreground">
-              <LogoMark className="size-8 sm:size-10 text-action" />
+              <div className="relative"><LogoMark className="size-8 sm:size-10 text-action" style={{ animation: "pulse 8s infinite" }} /><AnimatePresence>{logoFlash && <motion.div initial={{ x: "100%", opacity: 0.5 }} animate={{ x: "-100%", opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} className="absolute inset-0 z-10 w-full bg-gradient-to-r from-transparent via-white to-transparent mix-blend-overlay skew-x-12" />}</AnimatePresence></div>
               <div className="group relative">
                 <div className="absolute inset-0 bg-action/20 blur-md transition-opacity duration-300 group-hover:opacity-100 opacity-0" />
                 <h1 className="font-display text-xl sm:text-2xl font-black tracking-tight leading-none">Ababneh <span className="text-action">Security</span></h1>
@@ -517,11 +556,11 @@ function Index() {
               </div>
             </div>
             <nav className="hidden items-center gap-8 text-sm font-bold text-hero-muted lg:flex">
-              <Link className="transition-colors hover:text-hero-foreground" to="/" onClick={triggerGlitch}>الرئيسية</Link>
-              <a className="transition-colors hover:text-hero-foreground" href="#packages" onClick={triggerGlitch}>باقات الحماية</a>
-              <a className="transition-colors hover:text-hero-foreground" href="#custom" onClick={triggerGlitch}>احسب تكلفتك</a>
-              <Link className="transition-colors hover:text-hero-foreground" to="/contact" onClick={triggerGlitch}>الدعم</Link>
-            </nav>
+                <Link className="relative inline-block transition-colors hover:text-hero-foreground after:content-[''] after:absolute after:bottom-[-4px] after:right-0 after:w-0 after:h-0.5 after:bg-action hover:after:w-full after:transition-all after:duration-300" to="/" onClick={triggerGlitch}>الرئيسية</Link>
+                <a className="relative inline-block transition-colors hover:text-hero-foreground after:content-[''] after:absolute after:bottom-[-4px] after:right-0 after:w-0 after:h-0.5 after:bg-action hover:after:w-full after:transition-all after:duration-300" href="#packages" onClick={triggerGlitch}>باقات الحماية</a>
+                <a className="relative inline-block transition-colors hover:text-hero-foreground after:content-[''] after:absolute after:bottom-[-4px] after:right-0 after:w-0 after:h-0.5 after:bg-action hover:after:w-full after:transition-all after:duration-300" href="#custom" onClick={triggerGlitch}>احسب تكلفتك</a>
+                <Link className="relative inline-block transition-colors hover:text-hero-foreground after:content-[''] after:absolute after:bottom-[-4px] after:right-0 after:w-0 after:h-0.5 after:bg-action hover:after:w-full after:transition-all after:duration-300" to="/contact" onClick={triggerGlitch}>الدعم</Link>
+              </nav>
             <div className="flex items-center gap-4 sm:gap-6">
               
               <button
@@ -955,7 +994,24 @@ function Index() {
 
             )}
 
-      {/* Mobile Bottom App Bar */}
+      
+      {/* Contextual Hints */}
+      <AnimatePresence>
+        {readHint && (
+          <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, scale: 0.9 }} className="fixed bottom-24 right-6 z-50 flex items-center gap-3 rounded-lg border border-action/30 bg-surface/95 px-4 py-3 shadow-2xl backdrop-blur-md">
+            <div className="size-2 animate-ping rounded-full bg-action" />
+            <span className="text-sm font-bold text-foreground">وجدت ما يناسبك؟ <a href="#contact" className="text-action underline hover:text-action/80">احجز معاينة مجانية</a></span>
+          </motion.div>
+        )}
+        {slowNetHint && (
+          <motion.div initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -50 }} className="fixed top-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 shadow-lg backdrop-blur-md">
+            <span className="text-xs font-bold text-yellow-500">⚡ وضع خفيف مفعّل لتصفح أسرع</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+
+        {/* Mobile Bottom App Bar */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-border bg-background/90 pb-safe backdrop-blur-xl sm:hidden">
         <Link to="/" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-action">
           <ShieldCheck className="size-5" />
