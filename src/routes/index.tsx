@@ -821,7 +821,7 @@ function Index() {
           <SectionHeading eyebrow="باقات جاهزة" title="حماية موثوقة، بسعر واضح" text="اختر الدقة التي تناسبك. جميع الباقات تشمل الأجهزة الأصلية والتركيب والبرمجة الكاملة." />
             {/* Honest Scarcity Hint */}
             <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} className="mx-auto mt-6 flex max-w-fit items-center gap-2 rounded-full border border-action/20 bg-action/5 px-4 py-1.5 text-sm text-action shadow-inner">
-              <Clock className="size-4 animate-pulse" />
+              <Clock3 className="size-4 animate-pulse" />
               <span className="font-semibold">خصم التركيب ينتهي خلال 3 أيام</span>
             </motion.div>
 
