@@ -339,16 +339,7 @@ function Index() {
       return () => clearInterval(interval);
     }, []);
 
-    // Location-Aware Nudge
-    useEffect(() => {
-      setTimeout(() => {
-        if ("geolocation" in navigator) {
-          navigator.geolocation.getCurrentPosition((pos) => {
-             setLocationNudge("أنت قريب من فرعنا في إربد، شرفنا لزيارة المعرض!");
-          }, () => {}, { timeout: 5000 });
-        }
-      }, 4000);
-    }, []);
+
 
     // Calculator Hesitation
     useEffect(() => {
@@ -373,7 +364,6 @@ function Index() {
   const [fabText, setFabText] = useState("تحدث مع خبير");
   const [fingerprint, setFingerprint] = useState(false);
   const [liveProjects, setLiveProjects] = useState(500);
-  const [locationNudge, setLocationNudge] = useState("");
   const [videoHint, setVideoHint] = useState("");
   const [calcHesitation, setCalcHesitation] = useState(false);
   const [trustHint, setTrustHint] = useState("");
