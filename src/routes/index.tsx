@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
+import { 
   AlarmClock,
   ArrowLeft,
   BadgeCheck,
@@ -29,8 +29,7 @@ import {
   VolumeX,
   X,
   Zap,
-  ScanSearch,
-} from "lucide-react";
+  ScanSearch, Settings2 } from 'lucide-react';
 import { useMemo, useState, useEffect, useRef, type ReactNode } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import heroMan from "../assets/hero-man.jpg";
@@ -820,6 +819,12 @@ function Index() {
       <section id="packages" className="scroll-mt-20 px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
         <div className="mx-auto max-w-6xl">
           <SectionHeading eyebrow="باقات جاهزة" title="حماية موثوقة، بسعر واضح" text="اختر الدقة التي تناسبك. جميع الباقات تشمل الأجهزة الأصلية والتركيب والبرمجة الكاملة." />
+            {/* Honest Scarcity Hint */}
+            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} className="mx-auto mt-6 flex max-w-fit items-center gap-2 rounded-full border border-action/20 bg-action/5 px-4 py-1.5 text-sm text-action shadow-inner">
+              <Clock className="size-4 animate-pulse" />
+              <span className="font-semibold">خصم التركيب ينتهي خلال 3 أيام</span>
+            </motion.div>
+
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
             {packages.map((item, idx) => (
               <motion.article initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{delay: idx*0.1}} key={item.name} className={`group relative overflow-hidden rounded-lg border p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-8 ${item.featured ? "border-primary bg-primary text-primary-foreground shadow-premium" : "border-border bg-card text-card-foreground shadow-card"}`}>
@@ -854,7 +859,24 @@ function Index() {
               </motion.article>
             ))}
           </div>
-        </div>
+
+            {/* Custom Package Hint */}
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="mt-8 mx-auto flex max-w-md items-center justify-between rounded-xl border border-dashed border-border bg-card/50 p-4 transition-colors hover:border-action/50 hover:bg-action/5">
+              <div className="flex items-center gap-3">
+                <div className="flex size-10 items-center justify-center rounded-full bg-hero-glass/10 text-action">
+                  <Settings2 className="size-5" />
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-bold text-foreground">تحتاج شيئاً مختلفاً؟</p>
+                  <p className="text-xs text-muted-foreground">نصمم باقة خاصة تناسب احتياجاتك بدقة.</p>
+                </div>
+              </div>
+              <a href="#custom" onClick={triggerGlitch} className="rounded-full bg-action px-4 py-2 text-xs font-bold text-white transition-transform hover:scale-105">
+                تخصيص
+              </a>
+            </motion.div>
+
+</div>
       </section>
 
       <section id="custom" className="scroll-mt-20 bg-section px-5 py-20 sm:px-8 lg:px-12 lg:py-28">

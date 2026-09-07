@@ -322,9 +322,40 @@ function Contact() {
   const [threats, setThreats] = useState(24051);
   const [glitch, setGlitch] = useState(false);
   const [fabVisible, setFabVisible] = useState(true);
-  const [peakTimeNudge, setPeakTimeNudge] = useState("");
+  
+    const [peakTimeNudge, setPeakTimeNudge] = useState("");
+    const [hesitationHint, setHesitationHint] = useState(false);
+    const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+    useEffect(() => {
+      const h = new Date().getHours();
+      if (h >= 17 || h < 9) {
+        setPeakTimeNudge("خارج الدوام — نرد صباحاً 9:00");
+      } else {
+        setPeakTimeNudge("متوسط الرد على واتساب: 4 دقائق");
+      }
+
+      let t = setTimeout(() => {
+        setHesitationHint(true);
+      }, 5000);
+      return () => clearTimeout(t);
+    }, []);
+
   const [faqHint, setFaqHint] = useState("");
-  const [pwaHint, setPwaHint] = useState(false);
+  
+    const [pwaHint, setPwaHint] = useState(false);
+
+    useEffect(() => {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
+      const visitedBefore = localStorage.getItem('visited_ababneh');
+      
+      if (!isStandalone && visitedBefore) {
+        let t = setTimeout(() => setPwaHint(true), 8000);
+        return () => clearTimeout(t);
+      }
+      localStorage.setItem('visited_ababneh', 'true');
+    }, []);
+
   const faqTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const [fabText, setFabText] = useState("تحدث مع خبير");
@@ -594,15 +625,21 @@ function Contact() {
               { q: "كم متراً من الأسلاك يشمل التركيب المجاني؟", a: "يشمل التركيب المجاني تمديدات تصل إلى 15-20 متراً لكل كاميرا كحد أقصى (تغطي 90% من المنازل والمحلات). الأمتار الإضافية يتم احتسابها بسعر التكلفة وبشفافية تامة قبل بدء العمل." },
               { q: "كم مدة الكفالة؟ وماذا تغطي؟", a: "نوفر كفالة حقيقية لمدة عامين (24 شهراً) على الكاميرات وأجهزة التسجيل ضد العيوب المصنعية مع استبدال فوري. الكفالة لا تشمل التلف الناتج عن سوء الاستخدام، العبث، الكسر، أو الحوادث الناتجة عن تماس كهربائي خارجي." }
             ].map((faq, i) => (
-              <motion.details key={i} layout transition={{ type: "spring", stiffness: 300, damping: 30 }} className="group rounded-lg border border-border bg-surface [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex cursor-pointer items-center justify-between p-5 font-bold text-foreground outline-none">
+              <motion.div key={i} layout transition={{ type: "spring", stiffness: 300, damping: 30 }} className={`group overflow-hidden rounded-lg border transition-all duration-300 ${openFaq === i ? "border-action shadow-lg bg-surface" : openFaq !== null ? "border-border/50 bg-background opacity-40 hover:opacity-100" : "border-border bg-surface"}`}>
+                <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="flex w-full cursor-pointer items-center justify-between p-5 font-bold text-foreground outline-none text-right">
                   {faq.q}
-                  <ChevronDown className="size-5 transition-transform group-open:rotate-180" />
-                </summary>
-                <div className="border-t border-border p-5 text-sm leading-7 text-muted-foreground">
-                  {faq.a}
-                </div>
-              </motion.details>
+                  <ChevronDown className={`size-5 transition-transform duration-300 ${openFaq === i ? "rotate-180 text-action" : ""}`} />
+                </button>
+                <AnimatePresence initial={false}>
+                  {openFaq === i && (
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: "easeInOut" }}>
+                      <div className="border-t border-border/50 p-5 text-sm leading-7 text-muted-foreground">
+                        {faq.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -635,15 +672,40 @@ function Contact() {
             <X className="size-3" />
           </button>
         {/* Direct Call Button */}
-        <a href="tel:0788757801" onClick={() => navigator.vibrate?.([50])} aria-label="اتصال هاتفي" className="group flex h-12 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-surface/80 pl-2 pr-4 text-foreground shadow-lg backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-action/40 hover:bg-surface hover:shadow-action/10">
+        <div className="relative group/phone">
+          <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-max rounded-md bg-background border border-border px-3 py-1.5 text-[10px] font-bold text-muted-foreground shadow-xl opacity-0 group-hover/phone:opacity-100 transition-opacity pointer-events-none">تفضل الاتصال؟ الرقم مباشر بدون مقسّم</div>
+<a href="tel:0788757801" onClick={() => navigator.vibrate?.([50])} aria-label="اتصال هاتفي" className="group flex h-12 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-surface/80 pl-2 pr-4 text-foreground shadow-lg backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-action/40 hover:bg-surface hover:shadow-action/10">
           <div className="relative grid size-8 shrink-0 place-items-center rounded-full bg-background border border-border/50 text-foreground shadow-sm">
             <Phone className="relative size-4 transition-transform group-hover:rotate-12 text-action" />
           </div>
           <span className="text-xs font-bold tracking-wide">اتصال سريع</span>
         </a>
+</div>
         
+        
+            <AnimatePresence>
+              {pwaHint && (
+                <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="absolute bottom-24 right-0 w-max rounded-lg bg-surface border border-action/30 p-4 text-xs font-bold text-foreground shadow-2xl z-50 flex items-start gap-3">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-action text-sm">تلميح للزائر المتكرر</span>
+                    <span className="text-muted-foreground font-medium">قم بتثبيت التطبيق (Add to Home Screen) للوصول السريع بدون إنترنت.</span>
+                  </div>
+                  <button onClick={() => setPwaHint(false)} className="text-muted-foreground hover:text-foreground"><X className="size-4" /></button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
         {/* WhatsApp Button (Smart FAB) */}
         <div className="relative group/fab">
+            <AnimatePresence>
+              {hesitationHint && (
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="absolute -left-48 top-2 w-max rounded-lg bg-surface border border-action/30 p-3 text-xs font-bold text-foreground shadow-2xl z-50 flex items-center gap-2">
+                  <div className="size-2 rounded-full bg-action animate-ping" />
+                  لم يتضح؟ اسأل مهندسنا
+                </motion.div>
+              )}
+            </AnimatePresence>
+    
             {peakTimeNudge && (
               <div className="absolute -top-14 right-0 w-max max-w-[200px] rounded-t-xl rounded-bl-xl rounded-br-sm bg-background border border-border p-3 text-[10px] font-bold text-muted-foreground shadow-xl animate-in fade-in slide-in-from-bottom-2 z-50">
                 <Clock3 className="inline size-3 text-amber-500 mr-1" /> {peakTimeNudge}
