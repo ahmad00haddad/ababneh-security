@@ -29,7 +29,7 @@ import {
   VolumeX,
   X,
   Zap,
-  ScanSearch, Settings2 } from 'lucide-react';
+  ScanSearch, Settings2, Clock } from 'lucide-react';
 import { useMemo, useState, useEffect, useRef, type ReactNode } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import heroMan from "../assets/hero-man.jpg";
