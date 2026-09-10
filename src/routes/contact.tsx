@@ -321,41 +321,11 @@ function Contact() {
   // 10 Ideas: Interaction States
   const [threats, setThreats] = useState(24051);
   const [glitch, setGlitch] = useState(false);
-  const [fabVisible, setFabVisible] = useState(true);
-  
-    const [peakTimeNudge, setPeakTimeNudge] = useState("");
-    const [hesitationHint, setHesitationHint] = useState(false);
+  const [whatsappHintVisible, setWhatsappHintVisible] = useState(true);
     const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-    useEffect(() => {
-      const h = new Date().getHours();
-      if (h >= 17 || h < 9) {
-        setPeakTimeNudge("خارج الدوام — نرد صباحاً 9:00");
-      } else {
-        setPeakTimeNudge("متوسط الرد على واتساب: 4 دقائق");
-      }
-
-      let t = setTimeout(() => {
-        setHesitationHint(true);
-      }, 5000);
-      return () => clearTimeout(t);
-    }, []);
 
   const [faqHint, setFaqHint] = useState("");
   
-    const [pwaHint, setPwaHint] = useState(false);
-
-    useEffect(() => {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
-      const visitedBefore = localStorage.getItem('visited_ababneh');
-      
-      if (!isStandalone && visitedBefore) {
-        let t = setTimeout(() => setPwaHint(true), 8000);
-        return () => clearTimeout(t);
-      }
-      localStorage.setItem('visited_ababneh', 'true');
-    }, []);
-
   const faqTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const [fabText, setFabText] = useState("تحدث مع خبير");
@@ -547,11 +517,6 @@ function Contact() {
                     <Download className="size-4" />
                     تثبيت التطبيق السريع (PWA)
                  </button>
-                 {pwaHint && (
-                   <div className="absolute -top-10 left-1/2 w-max -translate-x-1/2 rounded-full bg-foreground text-background px-3 py-1 text-[10px] font-bold animate-bounce z-20 shadow-xl after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-foreground">
-                     تزورنا كثيراً؟ ثبت التطبيق للوصول بضغطة واحدة!
-                   </div>
-                 )}
                  </div>
               </div>
             </div>
@@ -666,65 +631,21 @@ function Contact() {
         </div>
       </footer>
 
-            {fabVisible && (
-        <div className="fixed bottom-24 right-5 z-50 sm:bottom-7 sm:right-7 flex flex-col gap-3 items-end animate-in fade-in slide-in-from-bottom-5">
-          <button onClick={() => setFabVisible(false)} aria-label="Dismiss" className="grid size-6 place-items-center rounded-full bg-background/80 border border-border text-muted-foreground shadow-sm backdrop-blur-md transition-colors hover:bg-background hover:text-foreground">
-            <X className="size-3" />
-          </button>
-        {/* Direct Call Button */}
-        <div className="relative group/phone">
-          <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-max rounded-md bg-background border border-border px-3 py-1.5 text-[10px] font-bold text-muted-foreground shadow-xl opacity-0 group-hover/phone:opacity-100 transition-opacity pointer-events-none">تفضل الاتصال؟ الرقم مباشر بدون مقسّم</div>
-<a href="tel:0788757801" onClick={() => navigator.vibrate?.([50])} aria-label="اتصال هاتفي" className="group flex h-12 items-center gap-3 overflow-hidden rounded-full border border-border/40 bg-surface/80 pl-2 pr-4 text-foreground shadow-lg backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-action/40 hover:bg-surface hover:shadow-action/10">
-          <div className="relative grid size-8 shrink-0 place-items-center rounded-full bg-background border border-border/50 text-foreground shadow-sm">
-            <Phone className="relative size-4 transition-transform group-hover:rotate-12 text-action" />
-          </div>
-          <span className="text-xs font-bold tracking-wide">اتصال سريع</span>
+      <div className="fixed bottom-20 right-4 z-40 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2 sm:bottom-7 sm:right-7">
+        <AnimatePresence>
+          {whatsappHintVisible && (
+            <motion.div initial={{ opacity: 0, y: 8, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 6, scale: 0.96 }} className="relative max-w-[250px] rounded-lg rounded-bl-sm border border-border bg-surface/95 px-4 py-3 shadow-xl backdrop-blur-xl">
+              <button type="button" onClick={() => setWhatsappHintVisible(false)} aria-label="إخفاء التلميح" className="absolute left-2 top-2 grid size-6 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"><X className="size-3.5" /></button>
+              <p className="pl-6 text-sm font-bold text-foreground">كيف يمكننا مساعدتك؟</p>
+              <p className="mt-1 flex items-center gap-1.5 text-[11px] text-muted-foreground"><span className="size-1.5 rounded-full bg-whatsapp" />نرد عادةً خلال 4 دقائق</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 rounded-full border border-border bg-surface/95 py-1.5 pl-2 pr-4 text-foreground shadow-2xl backdrop-blur-xl transition-transform duration-300 hover:-translate-y-0.5 sm:h-16">
+          <span className="hidden text-sm font-bold sm:block">{fabText}</span>
+          <span className="grid size-11 shrink-0 place-items-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-whatsapp sm:size-12"><MessageCircle className="size-6 transition-transform group-hover:rotate-6" fill="currentColor" /></span>
         </a>
-</div>
-        
-        
-            <AnimatePresence>
-              {pwaHint && (
-                <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="absolute bottom-24 right-0 w-max rounded-lg bg-surface border border-action/30 p-4 text-xs font-bold text-foreground shadow-2xl z-50 flex items-start gap-3">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-action text-sm">تلميح للزائر المتكرر</span>
-                    <span className="text-muted-foreground font-medium">قم بتثبيت التطبيق (Add to Home Screen) للوصول السريع بدون إنترنت.</span>
-                  </div>
-                  <button onClick={() => setPwaHint(false)} className="text-muted-foreground hover:text-foreground"><X className="size-4" /></button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-        {/* WhatsApp Button (Smart FAB) */}
-        <div className="relative group/fab">
-            <AnimatePresence>
-              {hesitationHint && (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="absolute -left-48 top-2 w-max rounded-lg bg-surface border border-action/30 p-3 text-xs font-bold text-foreground shadow-2xl z-50 flex items-center gap-2">
-                  <div className="size-2 rounded-full bg-action animate-ping" />
-                  لم يتضح؟ اسأل مهندسنا
-                </motion.div>
-              )}
-            </AnimatePresence>
-    
-            {peakTimeNudge && (
-              <div className="absolute -top-14 right-0 w-max max-w-[200px] rounded-t-xl rounded-bl-xl rounded-br-sm bg-background border border-border p-3 text-[10px] font-bold text-muted-foreground shadow-xl animate-in fade-in slide-in-from-bottom-2 z-50">
-                <Clock3 className="inline size-3 text-amber-500 mr-1" /> {peakTimeNudge}
-              </div>
-            )}
-            <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50, 50, 50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 overflow-hidden rounded-full border border-action/30 bg-action/10 pl-2 pr-6 text-foreground shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:bg-action/20 hover:shadow-action/20 sm:h-16">
-          <div className="relative grid size-10 shrink-0 place-items-center rounded-full bg-action text-action-foreground shadow-lg sm:size-12">
-            <span className="absolute inset-0 animate-ping rounded-full bg-action opacity-40 duration-1000" />
-            <MessageCircle className="relative size-5 transition-transform group-hover:rotate-12 group-hover:scale-110 sm:size-6" fill="currentColor" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] font-medium text-action/80">تحتاج مساعدة؟</span>
-            <span className="text-sm font-bold tracking-wide transition-all duration-300 text-action-foreground drop-shadow-md">{fabText}</span>
-          </div>
-        </a>
-          </div>
       </div>
-
-            )}
 
       {/* Mobile Bottom App Bar */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-border bg-background/90 pb-safe backdrop-blur-xl sm:hidden">
