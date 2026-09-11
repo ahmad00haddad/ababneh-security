@@ -293,22 +293,6 @@ function Contact() {
     setRipple([...ripple, { x: e.clientX - rect.left, y: e.clientY - rect.top, id: Date.now() }]);
   };
 
-    // Check Peak Time (Outside 9 AM - 7 PM)
-    useEffect(() => {
-      const hour = new Date().getHours();
-      if (hour < 9 || hour >= 19) {
-        setPeakTimeNudge("نحن خارج أوقات الدوام، لكن اترك رسالتك وسنرد فوراً في الصباح!");
-      }
-    }, []);
-
-    // Smart PWA Prompt based on visits
-    useEffect(() => {
-      const visits = parseInt(localStorage.getItem("visitCount") || "0");
-      if (visits > 0) {
-        setPwaHint(true);
-      }
-      localStorage.setItem("visitCount", (visits + 1).toString());
-    }, []);
   const [appReady, setAppReady] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [cameras, setCameras] = useState(4);
