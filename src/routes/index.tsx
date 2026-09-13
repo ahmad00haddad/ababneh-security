@@ -36,6 +36,9 @@ import heroMan from "../assets/hero-man.jpg";
 import cameraCloseup from "../assets/camera-closeup.jpg";
 import { Testimonials } from "../components/Testimonials";
 import camerasCluster from "../assets/cameras-cluster.jpg";
+import { getSiteContent } from "../lib/public.functions";
+import { getServiceIcon } from "../lib/site-content";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -55,14 +58,16 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  loader: () => getSiteContent(),
   component: Index,
 });
+
 
 // قم بوضع رقم هاتف المبيعات هنا (بدون أصفار بالبداية وبدون علامة +) مثال للأردن: 962790000000
 const whatsappNumber = "962788757801";
 const whatsappBase = `https://wa.me/${whatsappNumber}?text=`;
 
-const services = [
+const fallbackServices = [
   {
     icon: AlarmClock,
     title: "أنظمة الإنذار الذكية",
@@ -85,7 +90,7 @@ const services = [
   },
 ];
 
-const packages = [
+const fallbackPackages = [
   {
     name: "باقة 2 ميجابكسل ColorVu",
     label: "الاقتصادية",
@@ -446,6 +451,22 @@ function Index() {
 
   const [scarcityHint, setScarcityHint] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const siteContent = Route.useLoaderData();
+  const packages = siteContent.packages.length
+    ? siteContent.packages.map((p) => ({
+        name: p.name,
+        label: p.label,
+        price: p.price,
+        featured: p.featured,
+        features: p.features,
+      }))
+    : fallbackPackages;
+  const services = siteContent.services.length
+    ? siteContent.services.map((s) => ({ icon: getServiceIcon(s.icon), title: s.title, text: s.text }))
+    : fallbackServices;
+
+
 
   const triggerGlitch = () => {
     setGlitch(true);
