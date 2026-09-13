@@ -1,12 +1,17 @@
 ﻿import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Loader2 } from "lucide-react";
+import { submitLead } from "../lib/public.functions";
+
 
 export function SmartForm() {
+  const sendLead = useServerFn(submitLead);
   const [phone, setPhone] = useState("");
   const [phoneErr, setPhoneErr] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const [shake, setShake] = useState(false);
+
 
   const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value.replace(/\D/g, "");
@@ -21,7 +26,7 @@ export function SmartForm() {
     if (val.length === 13) setPhoneErr("");
   };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (phone.length < 13) {
       setPhoneErr("يرجى إدخال رقم هاتف صحيح");
@@ -30,8 +35,15 @@ export function SmartForm() {
       return;
     }
     setStatus("loading");
-    setTimeout(() => setStatus("success"), 1500);
+    try {
+      await sendLead({ data: { phone, source: "نموذج الموقع" } });
+      setStatus("success");
+    } catch {
+      setStatus("idle");
+      setPhoneErr("تعذر إرسال الطلب، حاول مرة أخرى");
+    }
   };
+
 
   return (
     <motion.form 
