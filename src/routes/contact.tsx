@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import heroMan from "../assets/hero-man.jpg";
 import cameraCloseup from "../assets/camera-closeup.jpg";
 import camerasCluster from "../assets/cameras-cluster.jpg";
+import { SmartForm } from "../components/SmartForm";
+
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
