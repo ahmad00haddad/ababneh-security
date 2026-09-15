@@ -562,6 +562,13 @@ function Contact() {
                  </div>
               </div>
             </section>
+
+            <section className="bg-background px-5 pb-16 sm:px-8 lg:px-12">
+              <div className="mx-auto max-w-xl">
+                <SmartForm />
+              </div>
+            </section>
+
 <section id="faq" className="px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
         <div className="mx-auto max-w-3xl">
           <SectionHeading eyebrow="الأسئلة الشائعة" title="كل ما تحتاج معرفته قبل التركيب" text="إجابات شفافة على أكثر الأسئلة التي تهمك بناءً على مواصفات الأجهزة الحقيقية." />
