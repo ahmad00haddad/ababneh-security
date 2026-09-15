@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import heroMan from "../assets/hero-man.jpg";
 import cameraCloseup from "../assets/camera-closeup.jpg";
 import camerasCluster from "../assets/cameras-cluster.jpg";
+import { SmartForm } from "../components/SmartForm";
+
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -562,6 +564,13 @@ function Contact() {
                  </div>
               </div>
             </section>
+
+            <section className="bg-background px-5 pb-16 sm:px-8 lg:px-12">
+              <div className="mx-auto max-w-xl">
+                <SmartForm />
+              </div>
+            </section>
+
 <section id="faq" className="px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
         <div className="mx-auto max-w-3xl">
           <SectionHeading eyebrow="الأسئلة الشائعة" title="كل ما تحتاج معرفته قبل التركيب" text="إجابات شفافة على أكثر الأسئلة التي تهمك بناءً على مواصفات الأجهزة الحقيقية." />
