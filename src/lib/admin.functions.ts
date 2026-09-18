@@ -57,17 +57,38 @@ export const adminStatus = createServerFn({ method: "GET" }).handler(async () =>
 export const adminGetData = createServerFn({ method: "GET" }).handler(async () => {
   await requireAdmin();
   const supabase = await db();
-  const [packages, services, leads] = await Promise.all([
+  const [packages, services, leads, settingsRes] = await Promise.all([
     supabase.from("packages").select("*").order("sort_order"),
     supabase.from("services").select("*").order("sort_order"),
     supabase.from("leads").select("*").order("created_at", { ascending: false }).limit(200),
+    supabase.from("site_settings").select("key, value"),
   ]);
+  const settings: Record<string, string> = {};
+  for (const row of (settingsRes.data ?? []) as { key: string; value: string }[]) {
+    settings[row.key] = row.value;
+  }
   return {
     packages: (packages.data ?? []) as unknown as PackageItem[],
     services: (services.data ?? []) as unknown as ServiceItem[],
     leads: (leads.data ?? []) as unknown as LeadItem[],
+    settings,
   };
 });
+
+export const saveSettings = createServerFn({ method: "POST" })
+  .inputValidator((data: Record<string, string>) => data)
+  .handler(async ({ data }) => {
+    await requireAdmin();
+    const supabase = await db();
+    const rows = Object.entries(data).map(([key, value]) => ({
+      key: String(key).slice(0, 60),
+      value: String(value ?? "").slice(0, 1000),
+    }));
+    if (rows.length === 0) return { ok: true as const };
+    const { error } = await supabase.from("site_settings").upsert(rows, { onConflict: "key" });
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
+  });
 
 export const savePackage = createServerFn({ method: "POST" })
   .inputValidator((data: Partial<PackageItem>) => data)

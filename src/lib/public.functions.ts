@@ -22,14 +22,21 @@ function publicClient() {
 
 export const getSiteContent = createServerFn({ method: "GET" }).handler(async () => {
   const supabase = publicClient();
-  const [packagesRes, servicesRes] = await Promise.all([
+  const [packagesRes, servicesRes, settingsRes] = await Promise.all([
     supabase.from("packages").select("*").eq("visible", true).order("sort_order"),
     supabase.from("services").select("*").eq("visible", true).order("sort_order"),
+    supabase.from("site_settings").select("key, value"),
   ]);
+
+  const settings: Record<string, string> = {};
+  for (const row of (settingsRes.data ?? []) as { key: string; value: string }[]) {
+    settings[row.key] = row.value;
+  }
 
   return {
     packages: (packagesRes.data ?? []) as unknown as PackageItem[],
     services: (servicesRes.data ?? []) as unknown as ServiceItem[],
+    settings,
   };
 });
 
