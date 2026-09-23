@@ -1061,8 +1061,9 @@ function Index() {
       <footer className="bg-background px-5 pb-28 pt-8 sm:px-8 lg:px-12 sm:pb-8 border-t border-border/30">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 sm:flex-row text-xs text-muted-foreground">
           
-          <div className="order-2 sm:order-1">
+          <div className="order-2 flex flex-col items-center gap-2 sm:order-1 sm:items-start">
              <p>© 2026 Ababneh Security. جميع الحقوق محفوظة.</p>
+             <p className="text-[10px] text-muted-foreground/60">تم التصميم بواسطة: <a href="https://haddad-dev.lovable.app/" target="_blank" rel="noopener noreferrer" className="hover:text-action transition-colors font-bold underline underline-offset-2">أحمد حداد</a></p>
           </div>
           
           <div className="order-1 sm:order-2 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 scale-90">
