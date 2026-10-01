@@ -13,6 +13,7 @@ import {
   deleteService,
   savePackage,
   saveService,
+  saveSettings,
   updateLead,
 } from "../lib/admin.functions";
 import { serviceIconNames, type LeadItem, type PackageItem, type ServiceItem } from "../lib/site-content";
@@ -49,12 +50,13 @@ function AdminPage() {
   const [checking, setChecking] = useState(true);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [tab, setTab] = useState<"leads" | "packages" | "services">("leads");
+  const [tab, setTab] = useState<"leads" | "home" | "packages" | "services">("leads");
   const [data, setData] = useState<{
     packages: PackageItem[];
     services: ServiceItem[];
     leads: LeadItem[];
-  }>({ packages: [], services: [], leads: [] });
+    settings: Record<string, string>;
+  }>({ packages: [], services: [], leads: [], settings: {} });
   const [loading, setLoading] = useState(false);
 
   const refresh = useCallback(async () => {
@@ -143,6 +145,7 @@ function AdminPage() {
           {(
             [
               ["leads", `الطلبات (${data.leads.length})`],
+              ["home", "الصفحة الرئيسية"],
               ["packages", "الباقات"],
               ["services", "الخدمات"],
             ] as const
@@ -160,6 +163,7 @@ function AdminPage() {
         </nav>
 
         {tab === "leads" && <LeadsTab leads={data.leads} refresh={refresh} />}
+        {tab === "home" && <HomeTab settings={data.settings} refresh={refresh} />}
         {tab === "packages" && <PackagesTab packages={data.packages} refresh={refresh} />}
         {tab === "services" && <ServicesTab services={data.services} refresh={refresh} />}
       </div>
@@ -420,6 +424,92 @@ function ServicesTab({ services, refresh }: { services: ServiceItem[]; refresh: 
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+const settingFields: { group: string; fields: { key: string; label: string; type?: "number" | "textarea" }[] }[] = [
+  {
+    group: "العنوان الرئيسي والتواصل",
+    fields: [
+      { key: "hero_line1", label: "العنوان الرئيسي (السطر الأول)" },
+      { key: "hero_line2", label: "العنوان الرئيسي (السطر الملون)" },
+      { key: "whatsapp_number", label: "رقم واتساب (مثال: 962790000000)" },
+    ],
+  },
+  {
+    group: "قسم الباقات",
+    fields: [
+      { key: "packages_title", label: "عنوان قسم الباقات" },
+      { key: "packages_text", label: "وصف قسم الباقات", type: "textarea" },
+    ],
+  },
+  {
+    group: "أسعار الحاسبة (د.أ)",
+    fields: [
+      { key: "calc_base_2mp", label: "2MP — التكلفة الأساسية", type: "number" },
+      { key: "calc_unit_2mp", label: "2MP — سعر الكاميرا", type: "number" },
+      { key: "calc_base_5mp", label: "5MP — التكلفة الأساسية", type: "number" },
+      { key: "calc_unit_5mp", label: "5MP — سعر الكاميرا", type: "number" },
+      { key: "calc_base_4k", label: "IP 4K — التكلفة الأساسية", type: "number" },
+      { key: "calc_unit_4k", label: "IP 4K — سعر الكاميرا", type: "number" },
+      { key: "calc_alarm", label: "سعر نظام الإنذار AX PRO", type: "number" },
+    ],
+  },
+];
+
+function HomeTab({ settings, refresh }: { settings: Record<string, string>; refresh: () => Promise<void> }) {
+  const save = useServerFn(saveSettings);
+  const [values, setValues] = useState<Record<string, string>>(settings);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => setValues(settings), [settings]);
+
+  return (
+    <div className="space-y-4">
+      {settingFields.map((g) => (
+        <div key={g.group} className={`${card} space-y-3`}>
+          <h2 className="font-black">{g.group}</h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {g.fields.map((f) => (
+              <label key={f.key} className={`space-y-1 text-xs font-bold ${f.type === "textarea" ? "sm:col-span-2" : ""}`}>
+                {f.label}
+                {f.type === "textarea" ? (
+                  <textarea rows={3} className={input} value={values[f.key] ?? ""} onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))} />
+                ) : (
+                  <input
+                    type={f.type === "number" ? "number" : "text"}
+                    className={input}
+                    value={values[f.key] ?? ""}
+                    onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))}
+                  />
+                )}
+              </label>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div className="flex items-center gap-3">
+        <button
+          disabled={saving}
+          onClick={async () => {
+            setSaving(true);
+            setSaved(false);
+            try {
+              await save({ data: values });
+              await refresh();
+              setSaved(true);
+            } finally {
+              setSaving(false);
+            }
+          }}
+          className={`${btn} bg-action text-white`}
+        >
+          {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} حفظ التغييرات
+        </button>
+        {saved && <span className="text-xs font-bold text-muted-foreground">تم الحفظ — التغييرات ظاهرة الآن في الصفحة الرئيسية</span>}
+      </div>
     </div>
   );
 }

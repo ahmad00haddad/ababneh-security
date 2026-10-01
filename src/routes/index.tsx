@@ -65,7 +65,6 @@ export const Route = createFileRoute("/")({
 
 // قم بوضع رقم هاتف المبيعات هنا (بدون أصفار بالبداية وبدون علامة +) مثال للأردن: 962790000000
 const whatsappNumber = "962788757801";
-const whatsappBase = `https://wa.me/${whatsappNumber}?text=`;
 
 const fallbackServices = [
   {
