@@ -466,10 +466,10 @@ function Index() {
     : fallbackServices;
   const cfg = siteContent.settings ?? {};
   const num = (k: string, d: number) => { const v = Number(cfg[k]); return Number.isFinite(v) && cfg[k] !== "" && cfg[k] !== undefined ? v : d; };
-  const waNumber = (cfg.whatsapp_number || whatsappNumber).replace(/\D/g, "");
+  const waNumber = (cfg["whatsapp_number"] || whatsappNumber).replace(/\D/g, "");
   const waBase = `https://wa.me/${waNumber}?text=`;
-  const heroLine1 = cfg.hero_line1 || "أنظمة حماية متطورة";
-  const heroLine2 = cfg.hero_line2 || "لأمان عائلتك وعملك";
+  const heroLine1 = cfg["hero_line1"] || "أنظمة حماية متطورة";
+  const heroLine2 = cfg["hero_line2"] || "لأمان عائلتك وعملك";
 
 
 
@@ -845,7 +845,7 @@ function Index() {
 
       <section id="packages" className="scroll-mt-20 px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
         <div className="mx-auto max-w-6xl">
-          <SectionHeading eyebrow="باقات جاهزة" title={cfg.packages_title || "حماية موثوقة، بسعر واضح"} text={cfg.packages_text || "اختر الدقة التي تناسبك. جميع الباقات تشمل الأجهزة الأصلية والتركيب والبرمجة الكاملة."} />
+          <SectionHeading eyebrow="باقات جاهزة" title={cfg["packages_title"] || "حماية موثوقة، بسعر واضح"} text={cfg["packages_text"] || "اختر الدقة التي تناسبك. جميع الباقات تشمل الأجهزة الأصلية والتركيب والبرمجة الكاملة."} />
             {/* Honest Scarcity Hint */}
             <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} className="mx-auto mt-6 flex max-w-fit items-center gap-2 rounded-full border border-action/20 bg-action/5 px-4 py-1.5 text-sm text-action shadow-inner">
               <Clock3 className="size-4 animate-pulse" />
