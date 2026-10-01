@@ -465,6 +465,12 @@ function Index() {
   const services = siteContent.services.length
     ? siteContent.services.map((s) => ({ icon: getServiceIcon(s.icon), title: s.title, text: s.text }))
     : fallbackServices;
+  const cfg = siteContent.settings ?? {};
+  const num = (k: string, d: number) => { const v = Number(cfg[k]); return Number.isFinite(v) && cfg[k] !== "" && cfg[k] !== undefined ? v : d; };
+  const waNumber = (cfg.whatsapp_number || whatsappNumber).replace(/\D/g, "");
+  const waBase = `https://wa.me/${waNumber}?text=`;
+  const heroLine1 = cfg.hero_line1 || "أنظمة حماية متطورة";
+  const heroLine2 = cfg.hero_line2 || "لأمان عائلتك وعملك";
 
 
 
@@ -533,17 +539,18 @@ function Index() {
   };
 
   const estimate = useMemo(() => {
-    let base = 60; // التكلفة الأساسية (جهاز التسجيل، التركيب الأساسي، هارد ديسك)
-    let unit = 35; // تكلفة الكاميرا الواحدة مع هامش ربح وتمديداتها
+    let base = num("calc_base_2mp", 60);
+    let unit = num("calc_unit_2mp", 35);
     if (resolution === "5MP ColorVu") {
-      base = 64;
-      unit = 45;
+      base = num("calc_base_5mp", 64);
+      unit = num("calc_unit_5mp", 45);
     } else if (resolution === "IP 4K") {
-      base = 150; // أجهزة شبكية NVR متقدمة
-      unit = 80;
+      base = num("calc_base_4k", 150);
+      unit = num("calc_unit_4k", 80);
     }
-    return base + (cameras * unit) + (alarm ? 185 : 0);
-  }, [alarm, cameras, resolution]);
+    return base + (cameras * unit) + (alarm ? num("calc_alarm", 185) : 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alarm, cameras, resolution, cfg]);
 
   const cameraHint = cameras <= 4 ? "مثالي للشقق والمكاتب الصغيرة" : cameras <= 8 ? "ممتاز للفلل والمحلات التجارية" : "مصمم للمستودعات والشركات الكبيرة";
   const resolutionHint = resolution === "2MP ColorVu" ? "وضوح ممتاز للمراقبة العامة" : resolution === "5MP ColorVu" ? "دقة عالية للوجوه ولوحات السيارات" : "أقصى دقة للمنشآت الحساسة";
@@ -676,7 +683,7 @@ function Index() {
               </span>
               حماية متصلة على مدار الساعة
             </div>
-            <h1 className="mt-2 font-display text-2xl font-black leading-[1.2]"><span className="block text-sm font-bold text-muted-foreground mb-1">{greeting}</span>أنظمة حماية متطورة<br /><span className="text-action">لأمان عائلتك وعملك</span></h1>
+            <h1 className="mt-2 font-display text-2xl font-black leading-[1.2]"><span className="block text-sm font-bold text-muted-foreground mb-1">{greeting}</span>{heroLine1}<br /><span className="text-action">{heroLine2}</span></h1>
             <div className="mt-6 flex flex-col gap-3">
               <ActionLink href="#packages" variant="primary" className="w-full">
                 عرض الباقات <ArrowLeft className="size-4" />
@@ -747,7 +754,7 @@ function Index() {
               حماية متصلة على مدار الساعة
             </div>
 
-            <h1 className="max-w-2xl font-display text-4xl font-black leading-[1.15] lg:text-5xl xl:text-6xl" style={appReady ? { animation: "reveal 1s 2.5s ease-out both" } : { opacity: 0 }}><span className="block text-xl font-bold text-hero-muted mb-2">{greeting}</span>أنظمة حماية متطورة<br /><span className="text-action">لأمان عائلتك وعملك</span></h1>
+            <h1 className="max-w-2xl font-display text-4xl font-black leading-[1.15] lg:text-5xl xl:text-6xl" style={appReady ? { animation: "reveal 1s 2.5s ease-out both" } : { opacity: 0 }}><span className="block text-xl font-bold text-hero-muted mb-2">{greeting}</span>{heroLine1}<br /><span className="text-action">{heroLine2}</span></h1>
 
             <div className="mt-8 flex items-center gap-4"
                  style={appReady ? { animation: "reveal 0.8s 5.5s ease-out both" } : { opacity: 0 }}>
@@ -839,7 +846,7 @@ function Index() {
 
       <section id="packages" className="scroll-mt-20 px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
         <div className="mx-auto max-w-6xl">
-          <SectionHeading eyebrow="باقات جاهزة" title="حماية موثوقة، بسعر واضح" text="اختر الدقة التي تناسبك. جميع الباقات تشمل الأجهزة الأصلية والتركيب والبرمجة الكاملة." />
+          <SectionHeading eyebrow="باقات جاهزة" title={cfg.packages_title || "حماية موثوقة، بسعر واضح"} text={cfg.packages_text || "اختر الدقة التي تناسبك. جميع الباقات تشمل الأجهزة الأصلية والتركيب والبرمجة الكاملة."} />
             {/* Honest Scarcity Hint */}
             <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} className="mx-auto mt-6 flex max-w-fit items-center gap-2 rounded-full border border-action/20 bg-action/5 px-4 py-1.5 text-sm text-action shadow-inner">
               <Clock3 className="size-4 animate-pulse" />
@@ -874,7 +881,7 @@ function Index() {
                     </li>
                   ))}
                 </ul>
-                <ActionLink href={`${whatsappBase}${encodeURIComponent(`مرحباً، أريد طلب ${item.name} بسعر ${item.price} د.أ`)}`} variant={item.featured ? "primary" : "outline"} className="w-full">
+                <ActionLink href={`${waBase}${encodeURIComponent(`مرحباً، أريد طلب ${item.name} بسعر ${item.price} د.أ`)}`} variant={item.featured ? "primary" : "outline"} className="w-full">
                   <Check className="size-5" /> اختيار هذه الباقة
                 </ActionLink>
               </motion.article>
@@ -970,12 +977,12 @@ function Index() {
                       text="اسحب لطلب النظام" 
                       onUnlock={() => {
                          setFingerprint(true);
-                         setTimeout(() => window.location.href = `${whatsappBase}${quoteMessage}`, 1000);
+                         setTimeout(() => window.location.href = `${waBase}${quoteMessage}`, 1000);
                       }} 
                     />
                   </div>
                   <div className="hidden sm:block">
-                    <a href={`${whatsappBase}${quoteMessage}`} onClick={() => setFingerprint(true)} className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-action">
+                    <a href={`${waBase}${quoteMessage}`} onClick={() => setFingerprint(true)} className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-action">
                        {fingerprint ? "جاري التأكيد..." : "تأكيد عبر واتساب"} {fingerprint ? <Fingerprint className="size-4 animate-pulse text-action" /> : <ArrowLeft className="size-4" />}
                     </a>
                   </div>
@@ -1087,7 +1094,7 @@ function Index() {
             </motion.div>
           )}
         </AnimatePresence>
-        <a href={`${whatsappBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 rounded-full border border-border bg-surface/95 py-1.5 pl-2 pr-4 text-foreground shadow-2xl backdrop-blur-xl transition-transform duration-300 hover:-translate-y-0.5 sm:h-16">
+        <a href={`${waBase}${encodeURIComponent("مرحباً، أريد الاستفسار عن أنظمة الحماية")}`} onClick={() => navigator.vibrate?.([50])} aria-label="تواصل عبر واتساب" className="group flex h-14 items-center gap-3 rounded-full border border-border bg-surface/95 py-1.5 pl-2 pr-4 text-foreground shadow-2xl backdrop-blur-xl transition-transform duration-300 hover:-translate-y-0.5 sm:h-16">
           <span className="hidden text-sm font-bold sm:block">{fabText}</span>
           <span className="grid size-11 shrink-0 place-items-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-whatsapp sm:size-12"><MessageCircle className="size-6 transition-transform group-hover:rotate-6" fill="currentColor" /></span>
         </a>
