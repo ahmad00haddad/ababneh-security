@@ -6,9 +6,17 @@ import type { LeadItem, PackageItem, ServiceItem } from "./site-content";
 
 type AdminSession = { unlocked?: boolean };
 
+function sessionSecret() {
+  const secret = process.env["SESSION_SECRET"];
+  if (secret && secret.length >= 32) return secret;
+  const fallback = process.env["ADMIN_PASSWORD"] || process.env["SUPABASE_SERVICE_ROLE_KEY"];
+  if (!fallback) throw new Error("ADMIN_SESSION_NOT_CONFIGURED");
+  return createHash("sha256").update(`ababneh-admin:${fallback}`).digest("hex");
+}
+
 function sessionConfig() {
   return {
-    password: process.env["SESSION_SECRET"]!,
+    password: sessionSecret(),
     name: "ababneh-admin",
     maxAge: 60 * 60 * 12,
     cookie: { httpOnly: true, secure: true, sameSite: "lax" as const, path: "/" },
