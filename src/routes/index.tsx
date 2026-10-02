@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { 
   AlarmClock,
   ArrowLeft,
@@ -452,6 +452,20 @@ function Index() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const siteContent = Route.useLoaderData();
+  const router = useRouter();
+  useEffect(() => {
+    const refreshContent = () => {
+      if (document.visibilityState === "visible") void router.invalidate();
+    };
+    window.addEventListener("focus", refreshContent);
+    document.addEventListener("visibilitychange", refreshContent);
+    const timer = setInterval(refreshContent, 20000);
+    return () => {
+      window.removeEventListener("focus", refreshContent);
+      document.removeEventListener("visibilitychange", refreshContent);
+      clearInterval(timer);
+    };
+  }, [router]);
   const packages = siteContent.packages.length
     ? siteContent.packages.map((p) => ({
         name: p.name,
