@@ -61,11 +61,25 @@ function AdminPage() {
 
   const refresh = useCallback(async () => {
     setLoading(true);
-    try {
-      setData(await getData({}));
-    } finally {
-      setLoading(false);
+    setError("");
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        setData(await getData({}));
+        setLoading(false);
+        return;
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        if (msg.includes("UNAUTHORIZED")) {
+          setUnlocked(false);
+          setError("انتهت الجلسة، الرجاء إدخال كلمة المرور مجدداً");
+          setLoading(false);
+          return;
+        }
+        if (attempt === 1) setError("تعذر تحميل البيانات، اضغط تحديث");
+        else await new Promise((r) => setTimeout(r, 800));
+      }
     }
+    setLoading(false);
   }, [getData]);
 
   useEffect(() => {
@@ -141,6 +155,8 @@ function AdminPage() {
           </div>
         </header>
 
+        {error && <p className="rounded-xl border border-border bg-surface p-3 text-sm font-bold text-red-500">{error}</p>}
+        {loading && <p className="text-sm text-muted-foreground">جارٍ تحميل البيانات...</p>}
         <nav className="flex gap-2 rounded-2xl border border-border bg-surface p-2">
           {(
             [

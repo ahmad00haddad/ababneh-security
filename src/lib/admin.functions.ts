@@ -71,6 +71,8 @@ export const adminGetData = createServerFn({ method: "GET" }).handler(async () =
     supabase.from("leads").select("*").order("created_at", { ascending: false }).limit(200),
     supabase.from("site_settings").select("key, value"),
   ]);
+  const failed = [packages, services, leads, settingsRes].find((r) => r.error);
+  if (failed?.error) throw new Error(failed.error.message);
   const settings: Record<string, string> = {};
   for (const row of (settingsRes.data ?? []) as { key: string; value: string }[]) {
     settings[row.key] = row.value;
