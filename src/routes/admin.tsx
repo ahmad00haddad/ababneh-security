@@ -155,6 +155,8 @@ function AdminPage() {
           </div>
         </header>
 
+        {error && <p className="rounded-xl border border-border bg-surface p-3 text-sm font-bold text-red-500">{error}</p>}
+        {loading && <p className="text-sm text-muted-foreground">جارٍ تحميل البيانات...</p>}
         <nav className="flex gap-2 rounded-2xl border border-border bg-surface p-2">
           {(
             [
